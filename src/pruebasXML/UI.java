@@ -66,6 +66,8 @@ public class UI {
 
     private static void menuPrincipal() {
         System.out.println("1. Listar tareas y proyectos.");
+        System.out.println("2. Generar XML.");
+        System.out.println("3. Cargar datos desde XML.");
         System.out.println("0. Salir.");
         System.out.println("Elija una opción:");
     }
@@ -97,6 +99,15 @@ public class UI {
                         System.out.println("Tarea: " + t.getTitulo() + " " + t.getDescripcion());
                     }
                 }
+                break;
+                
+            //Generar XML
+                
+            case '2':
+                break;
+                
+            //Cargar datos desde XML
+            case '3':
                 break;
 
             //Salir
