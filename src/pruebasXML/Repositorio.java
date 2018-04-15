@@ -6,6 +6,9 @@
 package pruebasXML;
 
 import java.util.ArrayList;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -42,37 +45,97 @@ public class Repositorio {
         listadoProyectos.add(unProyecto);
     }
 
-    public boolean buscarProyecto(String titulo) {
-        for(Proyecto p:listadoProyectos){
-            if (p.getTitulo().equals(titulo)){
-                return true;
+    public Proyecto buscarProyecto(String titulo) {
+        Proyecto proyectoBuscado = null;
+        for (Proyecto p : listadoProyectos) {
+            if (p.getTitulo().equals(titulo)) {
+                proyectoBuscado = p;
             }
         }
-        return false;
+        return proyectoBuscado;
     }
 
     public void borrarProyecto(Proyecto unProyecto) {
-        if (buscarProyecto(unProyecto.getTitulo())){
+        if (buscarProyecto(unProyecto.getTitulo()) != null) {
             listadoProyectos.remove(unProyecto);
         }
     }
-    
-    public void guardarTarea(Tarea unaTarea){
+
+    public void guardarTarea(Tarea unaTarea) {
         listadoTareas.add(unaTarea);
     }
-    
-    public boolean buscarTarea(String titulo){
-        for(Tarea t : listadoTareas){
-            if (t.getTitulo().equals(titulo)){
-                return true;
+
+    public Tarea buscarTarea(String titulo) {
+        Tarea tareaBuscada = null;
+        for (Tarea t : listadoTareas) {
+            if (t.getTitulo().equals(titulo)) {
+                tareaBuscada = t;
             }
         }
-        return false;
+        return tareaBuscada;
     }
-    
-    public void borrarTarea(Tarea unaTarea){
-        if (buscarTarea(unaTarea.getTitulo())){
+
+    public void borrarTarea(Tarea unaTarea) {
+        if (buscarTarea(unaTarea.getTitulo()) != null) {
             listadoTareas.remove(unaTarea);
         }
+    }
+
+    public void generarXml(String ruta) {
+
+        //Crear DOM vacío
+        Document xml = DOMUtil.crearDOMVacio("gtd");
+
+        //Añadimos las etiquetas
+        for (Tarea t : listadoTareas) {
+
+            //Primero para las tareas que no pertenecen a un proyecto
+            if (t.getProyecto() == null) {
+                Element dirTarea = xml.createElement("tarea");
+                xml.getDocumentElement().appendChild(dirTarea);
+
+                Element dirTitulo = xml.createElement("titulo");
+                dirTitulo.setTextContent(t.getTitulo());
+                dirTarea.appendChild(dirTitulo);
+
+                Element dirDescripcion = xml.createElement("descripcion");
+                dirDescripcion.setTextContent(t.getDescripcion());
+                dirTarea.appendChild(dirDescripcion);
+            }
+        }
+
+        //Después para las tareas asociadas a un proyecto
+        for (Proyecto p : listadoProyectos) {
+
+            Element dirProyecto = xml.createElement("proyecto");
+            dirProyecto.setAttribute("titulo", p.getTitulo());
+            xml.getDocumentElement().appendChild(dirProyecto);
+
+            Element dirDescripcionProyecto = xml.createElement("descripcionProyecto");
+            dirDescripcionProyecto.setTextContent(p.getDescripcion());
+            dirProyecto.appendChild(dirDescripcionProyecto);
+
+            Element dirTareas = xml.createElement("tareas");
+            dirProyecto.appendChild(dirTareas);
+
+            for (Tarea t : p.getListaTareas()) {
+                Element dirTarea = xml.createElement("tarea");
+                dirTareas.appendChild(dirTarea);
+
+                Element dirTitulo = xml.createElement("titulo");
+                dirTitulo.setTextContent(t.getTitulo());
+                dirTarea.appendChild(dirTitulo);
+
+                Element dirDescripcion = xml.createElement("descripcion");
+                dirDescripcion.setTextContent(t.getDescripcion());
+                dirTarea.appendChild(dirDescripcion);
+            }
+        }
+
+        System.out.println(DOMUtil.DOM2XML(xml, ruta));
+    }
+
+    public void cargarDesdeXml(String ruta) {
+        
     }
 }

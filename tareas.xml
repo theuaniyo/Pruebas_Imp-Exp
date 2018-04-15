@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<gtd>
+<tarea>
+<titulo>Tarea 1</titulo>
+<descripcion>Esta es la primera tarea.</descripcion>
+</tarea>
+<tarea>
+<titulo>Tarea 7</titulo>
+<descripcion>Esta es la septima tarea.</descripcion>
+</tarea>
+<tarea>
+<titulo>Tarea 8</titulo>
+<descripcion>Esta es la octava tarea.</descripcion>
+</tarea>
+<proyecto titulo="Proyecto 1">
+<descripcionProyecto>Este ese el primer proyecto.</descripcionProyecto>
+<tareas>
+<tarea>
+<titulo>Tarea 2</titulo>
+<descripcion>Esta es la segunda tarea.</descripcion>
+</tarea>
+<tarea>
+<titulo>Tarea 3</titulo>
+<descripcion>Esta es la tercera tarea.</descripcion>
+</tarea>
+</tareas>
+</proyecto>
+<proyecto titulo="Proyecto 2">
+<descripcionProyecto>Este es el segundo proyecto.</descripcionProyecto>
+<tareas>
+<tarea>
+<titulo>Tarea 3</titulo>
+<descripcion>Esta es la cuarta tarea.</descripcion>
+</tarea>
+<tarea>
+<titulo>Tarea 5</titulo>
+<descripcion>Esta es la quinta tarea.</descripcion>
+</tarea>
+<tarea>
+<titulo>Tarea 6</titulo>
+<descripcion>Esta es la sexta tarea.</descripcion>
+</tarea>
+</tareas>
+</proyecto>
+<proyecto titulo="Proyecto 3">
+<descripcionProyecto>Este es el tercer proyecto.</descripcionProyecto>
+<tareas>
+<tarea>
+<titulo>Tarea 9</titulo>
+<descripcion>Esta es la novena tarea.</descripcion>
+</tarea>
+<tarea>
+<titulo>Tarea 10</titulo>
+<descripcion>Esta es la décima tarea.</descripcion>
+</tarea>
+</tareas>
+</proyecto>
+</gtd>

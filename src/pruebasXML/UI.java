@@ -41,7 +41,7 @@ public class UI {
         Tarea tarea9 = new Tarea("Tarea 9", "Esta es la novena tarea.");
         miRepositorio.guardarTarea(tarea9);
         Tarea tarea10 = new Tarea("Tarea 10", "Esta es la décima tarea.");
-        miRepositorio.guardarTarea(tarea9);
+        miRepositorio.guardarTarea(tarea10);
         
         Proyecto proyecto1 = new Proyecto("Proyecto 1", "Este ese el primer proyecto.");
         proyecto1.addTarea(tarea2);
@@ -102,12 +102,17 @@ public class UI {
                 break;
                 
             //Generar XML
-                
             case '2':
+                miRepositorio.generarXml("tareas.xml");
+                menuPrincipal();
+                elegirOpcion(leerTeclado());
                 break;
                 
             //Cargar datos desde XML
             case '3':
+                System.out.println("No implementada todavía.");
+                menuPrincipal();
+                elegirOpcion(leerTeclado());
                 break;
 
             //Salir
