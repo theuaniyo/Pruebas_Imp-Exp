@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <gtd>
-<tarea>
+<tareaSimple>
 <titulo>Tarea 1</titulo>
 <descripcion>Esta es la primera tarea.</descripcion>
-</tarea>
-<tarea>
+</tareaSimple>
+<tareaSimple>
 <titulo>Tarea 7</titulo>
 <descripcion>Esta es la septima tarea.</descripcion>
-</tarea>
-<tarea>
+</tareaSimple>
+<tareaSimple>
 <titulo>Tarea 8</titulo>
 <descripcion>Esta es la octava tarea.</descripcion>
-</tarea>
+</tareaSimple>
 <proyecto titulo="Proyecto 1">
 <descripcionProyecto>Este ese el primer proyecto.</descripcionProyecto>
 <tareas>
