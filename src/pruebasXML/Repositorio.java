@@ -91,7 +91,7 @@ public class Repositorio {
 
             //Primero para las tareas que no pertenecen a un proyecto
             if (t.getProyecto() == null) {
-                Element dirTarea = xml.createElement("tarea");
+                Element dirTarea = xml.createElement("tareaSimple");
                 xml.getDocumentElement().appendChild(dirTarea);
 
                 Element dirTitulo = xml.createElement("titulo");
