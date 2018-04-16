@@ -6,6 +6,11 @@
 package pruebasXML;
 
 import java.util.ArrayList;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -15,7 +20,10 @@ public class Repositorio {
 
     ArrayList<Tarea> listadoTareas;
     ArrayList<Proyecto> listadoProyectos;
-
+    Tarea tarea;
+    Proyecto proyecto;
+    
+    
     private Repositorio() {
         listadoTareas = new ArrayList<>();
         listadoProyectos = new ArrayList<>();
@@ -75,4 +83,61 @@ public class Repositorio {
             listadoTareas.remove(unaTarea);
         }
     }
+    
+    public void xml2Object(String ruta){
+        
+        Document doc = DOMUtil.XML2DOM(ruta);
+        String titulo = "";
+        String descripcion = "";
+        String tituloProyecto = "";
+        String descripcionProyecto = "";
+      
+        
+        NodeList children = doc.getDocumentElement().getChildNodes();
+   
+        for(int i=0; i<children.getLength(); i++){
+            Node c = children.item(i);
+            
+            switch(c.getNodeType()){
+                case Node.ELEMENT_NODE: Element e = (Element)c;
+                if(e.getTagName().equals("tareaSimple")){
+                    NodeList t = e.getElementsByTagName("titulo");
+                    NodeList d = e.getElementsByTagName("descripcion");
+                    titulo = t.item(0).getTextContent();
+                    descripcion = d.item(0).getTextContent();
+                    tarea = new Tarea(titulo,descripcion);
+                    listadoTareas.add(tarea);
+                }
+                else if(e.getTagName().equals("proyecto")){
+                    NodeList dp = e.getElementsByTagName("descripcionProyecto");
+                    NodeList t = e.getElementsByTagName("titulo");
+                    NodeList d = e.getElementsByTagName("descripcion");
+                    
+                    tituloProyecto = e.getAttribute("titulo");
+                    descripcionProyecto = dp.item(0).getTextContent();
+                    
+                    for(int j=0; j<t.getLength(); j++){
+                        titulo = t.item(j).getTextContent();
+                        descripcion = d.item(j).getTextContent();
+                        tarea = new Tarea(titulo,descripcion);
+                        listadoTareas.add(tarea);    
+                    }
+
+                    proyecto = new Proyecto(tituloProyecto,descripcionProyecto);
+                    listadoProyectos.add(proyecto);
+                    }                   
+              
+                
+                break;
+
+            }
+            
+            
+        }
+        
+        
+        
+    }
+    
+    
 }
