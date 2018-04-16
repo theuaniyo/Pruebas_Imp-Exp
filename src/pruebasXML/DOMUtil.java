@@ -128,14 +128,14 @@ public class DOMUtil {
     public static Document crearDOMVacio(String etiquetaRaiz) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
+        Document d = null;
         try {
             db = dbf.newDocumentBuilder();
-            Document d = db.newDocument();
+            d = db.newDocument();
             d.appendChild(d.createElement(etiquetaRaiz));
-            return d;
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(DOMUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return d;
     }
 }

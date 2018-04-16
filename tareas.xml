@@ -1,11 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <gtd>
-
 <tareaSimple>
 <titulo>Tarea 1</titulo>
 <descripcion>Esta es la primera tarea.</descripcion>
 </tareaSimple>
-
 <tareaSimple>
 <titulo>Tarea 7</titulo>
 <descripcion>Esta es la septima tarea.</descripcion>
@@ -14,7 +12,6 @@
 <titulo>Tarea 8</titulo>
 <descripcion>Esta es la octava tarea.</descripcion>
 </tareaSimple>
-
 <proyecto titulo="Proyecto 1">
 <descripcionProyecto>Este ese el primer proyecto.</descripcionProyecto>
 <tareas>
@@ -28,7 +25,6 @@
 </tarea>
 </tareas>
 </proyecto>
-
 <proyecto titulo="Proyecto 2">
 <descripcionProyecto>Este es el segundo proyecto.</descripcionProyecto>
 <tareas>
@@ -46,7 +42,6 @@
 </tarea>
 </tareas>
 </proyecto>
-
 <proyecto titulo="Proyecto 3">
 <descripcionProyecto>Este es el tercer proyecto.</descripcionProyecto>
 <tareas>
@@ -60,6 +55,4 @@
 </tarea>
 </tareas>
 </proyecto>
-
-
 </gtd>
