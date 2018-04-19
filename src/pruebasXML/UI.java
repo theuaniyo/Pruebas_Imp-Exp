@@ -21,7 +21,7 @@ public class UI {
     public static void main(String[] args) {
 
         miRepositorio = Repositorio.getInstance();
-        
+        /*
         Tarea tarea1 = new Tarea("Tarea 1", "Esta es la primera tarea.");
         miRepositorio.guardarTarea(tarea1);
         Tarea tarea2 = new Tarea("Tarea 2", "Esta es la segunda tarea.");
@@ -58,7 +58,7 @@ public class UI {
         proyecto3.addTarea(tarea9);
         proyecto3.addTarea(tarea10);
         miRepositorio.guardarProyecto(proyecto3);
-
+        */
         menuPrincipal();
         elegirOpcion(leerTeclado());
 
@@ -82,6 +82,7 @@ public class UI {
     private static void elegirOpcion(String entrada) {
 
         char opcion = entrada.charAt(0);
+        String ruta = "tareas.xml";
 
         switch (opcion) {
 
@@ -110,9 +111,11 @@ public class UI {
                 
             //Cargar datos desde XML
             case '3':
-                System.out.println("No implementada todavía.");
-                menuPrincipal();
-                elegirOpcion(leerTeclado());
+
+                miRepositorio.xml2Object(ruta);
+                        menuPrincipal();
+                        elegirOpcion(leerTeclado());
+
                 break;
 
             //Salir
