@@ -112,7 +112,7 @@ public class UI {
             //Cargar datos desde XML
             case '3':
 
-                miRepositorio.xml2Object(ruta);
+                miRepositorio.cargarDesdeXml(ruta);
                         menuPrincipal();
                         elegirOpcion(leerTeclado());
 

@@ -87,7 +87,7 @@ public class Repositorio {
         }
     }
 
-    public void xml2Object(String ruta) {
+    public void cargarDesdeXml(String ruta) {
 
         Document doc = DOMUtil.XML2DOM(ruta);
         String titulo = "";
@@ -190,9 +190,5 @@ public class Repositorio {
         }
 
         System.out.println(DOMUtil.DOM2XML(xml, ruta));
-    }
-
-    public void cargarDesdeXml(String ruta) {
-
     }
 }
