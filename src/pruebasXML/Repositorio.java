@@ -120,15 +120,17 @@ public class Repositorio {
                     
                     tituloProyecto = e.getAttribute("titulo");
                     descripcionProyecto = dp.item(0).getTextContent();
+                    proyecto = new Proyecto(tituloProyecto,descripcionProyecto);
                     
                     for(int j=0; j<t.getLength(); j++){
                         titulo = t.item(j).getTextContent();
                         descripcion = d.item(j).getTextContent();
                         tarea = new Tarea(titulo,descripcion);
                         listadoTareas.add(tarea);    
+                        proyecto.addTarea(tarea);
                     }
 
-                    proyecto = new Proyecto(tituloProyecto,descripcionProyecto);
+                    
                     listadoProyectos.add(proyecto);
                     }                   
               
