@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package FiltradoAgenda;
+package pruebas_integracion.FiltradoAgenda;
 
-import FiltradoSimple.InterfazTareaSimple;
+import pruebas_integracion.FiltradoSimple.InterfazTareaSimple;
 import administradorDeTareas.TareaAgenda;
 import java.util.ArrayList;
 
