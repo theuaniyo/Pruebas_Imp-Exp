@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<gestor_gtd usuario="">
+  <bandeja_entrada>
+    <tarea_entrada>
+      <nombre>Una TareaEntrada</nombre>
+    </tarea_entrada>
+    <tarea_entrada>
+      <nombre>Otra TareaEntrada</nombre>
+    </tarea_entrada>
+  </bandeja_entrada>
+  <lista_tareas_simples>
+    <tarea_simple>
+      <nombre>Una TareaSimple</nombre>
+      <contexto>un contexto</contexto>
+      <anotacion>una anotacion</anotacion>
+      <complejidad>Media</complejidad>
+      <requisitos>un requisito</requisitos>
+    </tarea_simple>
+    <tarea_simple>
+      <nombre>Otra TareaSimple</nombre>
+      <contexto>Otro contexto</contexto>
+      <anotacion>Otra anotacion</anotacion>
+      <complejidad>Alta</complejidad>
+      <requisitos>Otro requisito</requisitos>
+    </tarea_simple>
+  </lista_tareas_simples>
+  <mis_proyectos>
+    <proyecto>
+      <nombre>Un proyecto</nombre>
+      <lista_tareas>
+        <tarea_proyecto>
+          <nombre>Una TareaProyecto</nombre>
+          <prioridad>Baja</prioridad>
+        </tarea_proyecto>
+        <tarea_proyecto>
+          <nombre>Otra TareaProyecto</nombre>
+          <prioridad>Baja</prioridad>
+          <dependencia>Una TareaProyecto</dependencia>
+        </tarea_proyecto>
+      </lista_tareas>
+      <fecha_fin fecha="2018-04-23"/>
+    </proyecto>
+  </mis_proyectos>
+</gestor_gtd>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<gestor_gtd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" usuario="" xsi:noNamespaceSchemaLocation="esquema.xsd">
+  <bandeja_entrada>
+    <tarea_entrada nombre=""/>
+    <!-- ... -->
+  </bandeja_entrada>
+  <lista_tareas_simples>
+    <tarea_simple nombre="">
+      <contexto>un contexto</contexto>
+      <anotacion>una anotacion</anotacion>
+      <complejidad>una complejidad</complejidad>
+      <requisitos>un requisito</requisitos>
+    </tarea_simple>
+    <!-- ... -->
+  </lista_tareas_simples>
+  <mis_proyectos>
+    <proyecto nombre="">
+      <lista_tareas>
+        <tarea_proyecto>
+          <prioridad>una prioridad</prioridad>
+          <dependencia>unaTareaProyecto</dependencia>
+        </tarea_proyecto>
+        <!-- ... -->
+      </lista_tareas>
+      <fecha_fin fecha=""/>
+    </proyecto>
+    <!-- ... -->
+  </mis_proyectos>
+</gestor_gtd>
