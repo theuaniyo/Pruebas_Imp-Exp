@@ -62,10 +62,11 @@ public class IEDatos {
      */
     public static void cargarDesdeXml(String ruta) {
          //Crear DOM vacío
-        Document xml = pruebasXML.DOMUtil.crearDOMVacio("gtd");
-        //ES POSIBLE QUE A GTD SE AÑANDA UN ATRIBUTO USUARIO
+        Document xml = pruebasXML.DOMUtil.crearDOMVacio(ruta);
+        //PONER A GTD SE AÑANDA UN ATRIBUTO USUARIO
         if(!RepoProvisional.getInstance().getBandejaEntrada().isEmpty()){
          Element eleBandejaEntrada=xml.createElement("bandeja_entrada");
+         xml.getDocumentElement().appendChild(eleBandejaEntrada);
             for(TareaEntrada te : RepoProvisional.getInstance().getBandejaEntrada()){
                 
                 Element eleTareaEntrada=xml.createElement("tarea_entrada");
@@ -79,6 +80,7 @@ public class IEDatos {
         if(!RepoProvisional.getInstance().getListaTareasSimples().isEmpty()){
         
             Element eleListaTareasSimples=xml.createElement("lista_tareas_simples");
+            xml.getDocumentElement().appendChild(eleListaTareasSimples);
             for(TareaSimple ts : RepoProvisional.getInstance().getListaTareasSimples()){
                 
                 Element eleTareaSimple=xml.createElement("tarea_simple");
@@ -100,12 +102,35 @@ public class IEDatos {
                 eleTareaSimple.appendChild(eleRequisitosTareaSimple);
             }
         }
+        if(!RepoProvisional.getInstance().getAgenda().isEmpty()){
+            Element eleListaTareasAgenda=xml.createElement("agenda");
+            xml.getDocumentElement().appendChild(eleListaTareasAgenda);
+            for(TareaAgenda ta : RepoProvisional.getInstance().getAgenda()){
+                Element eleTareaAgenda=xml.createElement("tarea_agenda");
+                eleListaTareasAgenda.appendChild(eleTareaAgenda);
+                Element eleNombreTareaAgenda=xml.createElement("nombre");
+                eleNombreTareaAgenda.setTextContent(ta.getNombre());
+                eleTareaAgenda.appendChild(eleNombreTareaAgenda);
+                Element eleContextoTareaAgenda=xml.createElement("contexto");
+                eleContextoTareaAgenda.setTextContent(ta.getContexto());
+                eleTareaAgenda.appendChild(eleContextoTareaAgenda);
+                Element eleAnotacionTareaAgenda=xml.createElement("anotacion");
+                eleAnotacionTareaAgenda.setTextContent(ta.getAnotacion());
+                eleTareaAgenda.appendChild(eleAnotacionTareaAgenda);
+                 
+                  
+            }
+        }
+        
         //METER TAREAS AGENDA ANTES DE PROYECTOS
         if(!RepoProvisional.getInstance().getMisProyectos().isEmpty()){
             
             Element eleListaProyectos=xml.createElement("mis_proyectos");
+            xml.getDocumentElement().appendChild(eleListaProyectos);
             for(Proyecto p : RepoProvisional.getInstance().getMisProyectos()){
                 
+                Element eleProyecto=xml.createElement("proyecto");
+                eleListaProyectos.appendChild(eleProyecto);
             }
         }
         /*
