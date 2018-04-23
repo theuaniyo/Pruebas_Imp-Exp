@@ -20,6 +20,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import pruebas_integracion.administradorDeTareas.Proyecto;
+import pruebas_integracion.administradorDeTareas.TareaAgenda;
+import pruebas_integracion.administradorDeTareas.TareaEntrada;
+import pruebas_integracion.administradorDeTareas.TareaSimple;
 
 /**
  * Clase que se usa para guardar y cargar datos desde archivos xml.
@@ -56,7 +61,103 @@ public class IEDatos {
      * @param ruta la ruta de origen del archivo a cargar.
      */
     public static void cargarDesdeXml(String ruta) {
+         //Crear DOM vacío
+        Document xml = pruebasXML.DOMUtil.crearDOMVacio("gtd");
+        //ES POSIBLE QUE A GTD SE AÑANDA UN ATRIBUTO USUARIO
+        if(!RepoProvisional.getInstance().getBandejaEntrada().isEmpty()){
+         Element eleBandejaEntrada=xml.createElement("bandeja_entrada");
+            for(TareaEntrada te : RepoProvisional.getInstance().getBandejaEntrada()){
+                
+                Element eleTareaEntrada=xml.createElement("tarea_entrada");
+                eleBandejaEntrada.appendChild(eleTareaEntrada);
+                Element eleNombreTareaEntrada = xml.createElement("nombre");
+                eleNombreTareaEntrada.setTextContent(te.getNombre());
+                eleTareaEntrada.appendChild(eleNombreTareaEntrada);
+                
+            }
+        }
+        if(!RepoProvisional.getInstance().getListaTareasSimples().isEmpty()){
+        
+            Element eleListaTareasSimples=xml.createElement("lista_tareas_simples");
+            for(TareaSimple ts : RepoProvisional.getInstance().getListaTareasSimples()){
+                
+                Element eleTareaSimple=xml.createElement("tarea_simple");
+                eleListaTareasSimples.appendChild(eleTareaSimple);
+                Element eleNombreTareaSimple = xml.createElement("nombre");
+                eleNombreTareaSimple.setTextContent(ts.getNombre());
+                eleTareaSimple.appendChild(eleNombreTareaSimple);
+                Element eleContextoTareaSimple=xml.createElement("contexto");
+                eleContextoTareaSimple.setTextContent(ts.getContexto());
+                eleTareaSimple.appendChild(eleContextoTareaSimple);
+                Element eleAnotacionTareaSimple=xml.createElement("anotacion");
+                eleAnotacionTareaSimple.setTextContent(ts.getAnotacion());
+                eleTareaSimple.appendChild(eleAnotacionTareaSimple);
+                Element eleComplejidadTareaSimple=xml.createElement("complejidad");
+                eleComplejidadTareaSimple.setTextContent(ts.getMiComplejidad().toString());
+                eleTareaSimple.appendChild(eleComplejidadTareaSimple);
+                Element eleRequisitosTareaSimple=xml.createElement("requisitos");
+                eleRequisitosTareaSimple.setTextContent(ts.getRequisitos());
+                eleTareaSimple.appendChild(eleRequisitosTareaSimple);
+            }
+        }
+        //METER TAREAS AGENDA ANTES DE PROYECTOS
+        if(!RepoProvisional.getInstance().getMisProyectos().isEmpty()){
+            
+            Element eleListaProyectos=xml.createElement("mis_proyectos");
+            for(Proyecto p : RepoProvisional.getInstance().getMisProyectos()){
+                
+            }
+        }
+        /*
+        //Añadimos las etiquetas
+        for (Tarea t : listadoTareas) {
 
+            //Primero para las tareas que no pertenecen a un proyecto
+            if (t.getProyecto() == null) {
+                Element dirTarea = xml.createElement("tareaSimple");
+                xml.getDocumentElement().appendChild(dirTarea);
+
+                Element dirTitulo = xml.createElement("titulo");
+                dirTitulo.setTextContent(t.getTitulo());
+                dirTarea.appendChild(dirTitulo);
+
+                Element dirDescripcion = xml.createElement("descripcion");
+                dirDescripcion.setTextContent(t.getDescripcion());
+                dirTarea.appendChild(dirDescripcion);
+            }
+        }
+
+        //Después para las tareas asociadas a un proyecto
+        for (Proyecto p : listadoProyectos) {
+
+            Element dirProyecto = xml.createElement("proyecto");
+            dirProyecto.setAttribute("titulo", p.getTitulo());
+            xml.getDocumentElement().appendChild(dirProyecto);
+
+            Element dirDescripcionProyecto = xml.createElement("descripcionProyecto");
+            dirDescripcionProyecto.setTextContent(p.getDescripcion());
+            dirProyecto.appendChild(dirDescripcionProyecto);
+
+            Element dirTareas = xml.createElement("tareas");
+            dirProyecto.appendChild(dirTareas);
+
+            for (Tarea t : p.getListaTareas()) {
+                Element dirTarea = xml.createElement("tarea");
+                dirTareas.appendChild(dirTarea);
+
+                Element dirTitulo = xml.createElement("titulo");
+                dirTitulo.setTextContent(t.getTitulo());
+                dirTarea.appendChild(dirTitulo);
+
+                Element dirDescripcion = xml.createElement("descripcion");
+                dirDescripcion.setTextContent(t.getDescripcion());
+                dirTarea.appendChild(dirDescripcion);
+            }
+        }
+
+        System.out.println(pruebasXML.DOMUtil.DOM2XML(xml, ruta));
+        
+     */   
     }
 
     /**
