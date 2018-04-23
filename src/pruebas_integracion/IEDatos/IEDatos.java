@@ -24,6 +24,7 @@ import org.w3c.dom.Element;
 import pruebas_integracion.administradorDeTareas.Proyecto;
 import pruebas_integracion.administradorDeTareas.TareaAgenda;
 import pruebas_integracion.administradorDeTareas.TareaEntrada;
+import pruebas_integracion.administradorDeTareas.TareaProyecto;
 import pruebas_integracion.administradorDeTareas.TareaSimple;
 
 /**
@@ -52,17 +53,9 @@ public class IEDatos {
      * @param ruta la ruta donde se guardará el archivo.
      */
     public static void guardarXml(String ruta) {
-
-    }
-
-    /**
-     * Carga los datos del programa desde un archivo XML.
-     *
-     * @param ruta la ruta de origen del archivo a cargar.
-     */
-    public static void cargarDesdeXml(String ruta) {
-         //Crear DOM vacío
-        Document xml = pruebasXML.DOMUtil.crearDOMVacio(ruta);
+ //Crear DOM vacío
+        Document xml = pruebasXML.DOMUtil.crearDOMVacio("gtd");
+        xml.createAttribute("usuario");//.setValue(miUsuario.getNick);
         //PONER A GTD SE AÑANDA UN ATRIBUTO USUARIO
         if(!RepoProvisional.getInstance().getBandejaEntrada().isEmpty()){
          Element eleBandejaEntrada=xml.createElement("bandeja_entrada");
@@ -71,6 +64,7 @@ public class IEDatos {
                 
                 Element eleTareaEntrada=xml.createElement("tarea_entrada");
                 eleBandejaEntrada.appendChild(eleTareaEntrada);
+                
                 Element eleNombreTareaEntrada = xml.createElement("nombre");
                 eleNombreTareaEntrada.setTextContent(te.getNombre());
                 eleTareaEntrada.appendChild(eleNombreTareaEntrada);
@@ -85,18 +79,23 @@ public class IEDatos {
                 
                 Element eleTareaSimple=xml.createElement("tarea_simple");
                 eleListaTareasSimples.appendChild(eleTareaSimple);
+                
                 Element eleNombreTareaSimple = xml.createElement("nombre");
                 eleNombreTareaSimple.setTextContent(ts.getNombre());
                 eleTareaSimple.appendChild(eleNombreTareaSimple);
+                
                 Element eleContextoTareaSimple=xml.createElement("contexto");
                 eleContextoTareaSimple.setTextContent(ts.getContexto());
                 eleTareaSimple.appendChild(eleContextoTareaSimple);
+                
                 Element eleAnotacionTareaSimple=xml.createElement("anotacion");
                 eleAnotacionTareaSimple.setTextContent(ts.getAnotacion());
                 eleTareaSimple.appendChild(eleAnotacionTareaSimple);
+                
                 Element eleComplejidadTareaSimple=xml.createElement("complejidad");
                 eleComplejidadTareaSimple.setTextContent(ts.getMiComplejidad().toString());
                 eleTareaSimple.appendChild(eleComplejidadTareaSimple);
+                
                 Element eleRequisitosTareaSimple=xml.createElement("requisitos");
                 eleRequisitosTareaSimple.setTextContent(ts.getRequisitos());
                 eleTareaSimple.appendChild(eleRequisitosTareaSimple);
@@ -108,17 +107,30 @@ public class IEDatos {
             for(TareaAgenda ta : RepoProvisional.getInstance().getAgenda()){
                 Element eleTareaAgenda=xml.createElement("tarea_agenda");
                 eleListaTareasAgenda.appendChild(eleTareaAgenda);
+                
                 Element eleNombreTareaAgenda=xml.createElement("nombre");
                 eleNombreTareaAgenda.setTextContent(ta.getNombre());
                 eleTareaAgenda.appendChild(eleNombreTareaAgenda);
+                
                 Element eleContextoTareaAgenda=xml.createElement("contexto");
                 eleContextoTareaAgenda.setTextContent(ta.getContexto());
                 eleTareaAgenda.appendChild(eleContextoTareaAgenda);
+               
                 Element eleAnotacionTareaAgenda=xml.createElement("anotacion");
                 eleAnotacionTareaAgenda.setTextContent(ta.getAnotacion());
                 eleTareaAgenda.appendChild(eleAnotacionTareaAgenda);
-                 
-                  
+                
+                Element eleComplejidadTareaAgenda=xml.createElement("complejidad");
+                eleComplejidadTareaAgenda.setTextContent(ta.getMiComplejidad().toString());
+                eleTareaAgenda.appendChild(eleComplejidadTareaAgenda);
+                
+                Element eleRequisitosTareaAgenda=xml.createElement("requisitos");
+                eleRequisitosTareaAgenda.setTextContent(ta.getRequisitos());
+                eleTareaAgenda.appendChild(eleRequisitosTareaAgenda);
+                
+                Element eleFechaFin=xml.createElement("fecha_fin");
+                eleFechaFin.setTextContent(ta.getFechaFin().toString());
+                eleTareaAgenda.appendChild(eleFechaFin);
             }
         }
         
@@ -131,6 +143,35 @@ public class IEDatos {
                 
                 Element eleProyecto=xml.createElement("proyecto");
                 eleListaProyectos.appendChild(eleProyecto);
+                
+                Element eleNombreProyecto=xml.createElement("nombre");
+                eleNombreProyecto.setTextContent(p.getNombreP());
+                eleProyecto.appendChild(eleNombreProyecto);
+                if(!p.getListaTareasProyecto().isEmpty()){
+                    Element eleListaTareasProyectos=xml.createElement("lista_tareas");
+                    eleProyecto.appendChild(eleListaTareasProyectos);
+                    for(TareaProyecto tp : p.getListaTareasProyecto()){
+                        Element eleTareaProyecto=xml.createElement("tarea_proyecto");
+                        eleListaTareasProyectos.appendChild(eleTareaProyecto);
+                        
+                        Element eleNombreTareaProyecto=xml.createElement("nombre");
+                        eleNombreTareaProyecto.setTextContent(tp.getNombre());
+                        eleTareaProyecto.appendChild(eleNombreTareaProyecto);
+                        
+                        Element elePrioridadTareaProyecto=xml.createElement("prioridad");
+                        elePrioridadTareaProyecto.setTextContent(tp.getMiPrioridad().toString());
+                        eleTareaProyecto.appendChild(elePrioridadTareaProyecto);
+                        
+                         if(tp.getDependencia() != null){
+                           Element eleDependenciaTareaProyecto=xml.createElement("dependencia");
+                           eleDependenciaTareaProyecto.setTextContent(tp.getDependencia().toString());
+                           eleTareaProyecto.appendChild(eleDependenciaTareaProyecto);
+                         }
+                        Element eleFechaFinProyecto=xml.createElement("fecha_fin");
+                        eleFechaFinProyecto.setTextContent(p.getFechaFin().toString());
+                        eleProyecto.appendChild(eleFechaFinProyecto);
+                    }
+                }
             }
         }
         /*
@@ -182,7 +223,16 @@ public class IEDatos {
 
         System.out.println(pruebasXML.DOMUtil.DOM2XML(xml, ruta));
         
-     */   
+     */ 
+    }
+
+    /**
+     * Carga los datos del programa desde un archivo XML.
+     *
+     * @param ruta la ruta de origen del archivo a cargar.
+     */
+    public static void cargarDesdeXml(String ruta) {
+          
     }
 
     /**
