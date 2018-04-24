@@ -38,7 +38,8 @@ public class IEDatos {
      * Instancia de la ruta del archivo xml (PROVISIONAL).
      */
     private static String ruta = "gestor_gtd.xml";
-
+    private final String raiz="gestor_gtd";
+    
     public static String getRuta() {
         return ruta;
     }
@@ -54,9 +55,10 @@ public class IEDatos {
      */
     public static void guardarXml(String ruta) {
         //Crear DOM vacío
-        Document xml = pruebasXML.DOMUtil.crearDOMVacio("gtd");
+        Document xml = pruebasXML.DOMUtil.crearDOMVacio("gestor_gtd");
         xml.createAttribute("usuario");//.setValue(miUsuario.getNick);
         //PONER A GTD SE AÑANDA UN ATRIBUTO USUARIO
+        
         if (!RepoProvisional.getInstance().getBandejaEntrada().isEmpty()) {
             Element eleBandejaEntrada = xml.createElement("bandeja_entrada");
             xml.getDocumentElement().appendChild(eleBandejaEntrada);
@@ -134,7 +136,6 @@ public class IEDatos {
             }
         }
 
-        //METER TAREAS AGENDA ANTES DE PROYECTOS
         if (!RepoProvisional.getInstance().getMisProyectos().isEmpty()) {
 
             Element eleListaProyectos = xml.createElement("mis_proyectos");
@@ -169,9 +170,11 @@ public class IEDatos {
                         }
                     }
                 }
+                
                 Element eleFechaFinProyecto = xml.createElement("fecha_fin");
-                eleFechaFinProyecto.setTextContent(p.getFechaFin().toString());
+                eleFechaFinProyecto.setAttribute("fecha",p.getFechaFin().toString()); 
                 eleProyecto.appendChild(eleFechaFinProyecto);
+                DOMUtil.DOM2XML(xml, ruta);
             }
         }
     }
