@@ -18,7 +18,7 @@ public class CargarGuardarDatos {
 
         Repositorio miRepo = Repositorio.getInstance();
         String entrada = "";
-
+        
         do {
             System.out.println("Elige opción:");
             System.out.println("1. Prueba de carga.");
@@ -34,7 +34,9 @@ public class CargarGuardarDatos {
                     break;
 
                 case "2":
-                    IEDatos.guardarXml(IEDatos.getRuta());
+                    
+                    
+                   IEDatos.guardarXml("pruebaGuardado.xml");
                     break;
 
                 case "0":
