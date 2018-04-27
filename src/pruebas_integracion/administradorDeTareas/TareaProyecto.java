@@ -14,43 +14,29 @@ import java.util.Date;
  */
 public class TareaProyecto extends TareaSimple{
     
-    private TareaProyecto dependencia;
+    
     private Proyecto unProyecto;
     private Prioridad miPrioridad;
-
+    
+ 
     /**
      *
-     * @param dependencia
+     * 
      * @param unProyecto
      * @param miPrioridad
      * @param contexto
      * @param anotacion
-     * @param requisitos
      * @param miComplejidad
-     * @param Nombre
-     * @param FechaRegistro
+     * @param nombre
+     * @param id
      */
-    public TareaProyecto(TareaProyecto dependencia, Proyecto unProyecto, Prioridad miPrioridad, String contexto, String anotacion, String requisitos, Complejidad miComplejidad, String Nombre, Date FechaRegistro) {
-        super(contexto, anotacion, requisitos, miComplejidad, Nombre, FechaRegistro);
-        this.dependencia = dependencia;
+    
+
+    public TareaProyecto(Proyecto unProyecto, Prioridad miPrioridad, String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
+        super(contexto, miComplejidad, anotacion, nombre, id);
         this.unProyecto = unProyecto;
         this.miPrioridad = miPrioridad;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public TareaProyecto getDependencia() {
-        return dependencia;
-    }
-
-    /**
-     *
-     * @param dependencia
-     */
-    public void setDependencia(TareaProyecto dependencia) {
-        this.dependencia = dependencia;
+        
     }
 
     /**
@@ -84,10 +70,9 @@ public class TareaProyecto extends TareaSimple{
     public void setMiPrioridad(Prioridad miPrioridad) {
         this.miPrioridad = miPrioridad;
     }
-    
-    
 
   
 
+    
     
 }

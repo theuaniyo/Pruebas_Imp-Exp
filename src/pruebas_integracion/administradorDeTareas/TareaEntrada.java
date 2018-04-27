@@ -14,16 +14,17 @@ import java.util.Date;
 public class TareaEntrada {
     
     private String nombre;
-    private Date fechaRegistro;
+   
+    private int id;
 
     /**
      *
-     * @param Nombre
-     * @param FechaRegistro
+     * @param nombre
+     * @param id
      */
-    public TareaEntrada(String Nombre, Date FechaRegistro) {
-        this.nombre = Nombre;
-        this.fechaRegistro = FechaRegistro;
+    public TareaEntrada(String nombre, int id) {
+        this.nombre = nombre;
+        this.id=id;
     }
 
     /**
@@ -46,16 +47,17 @@ public class TareaEntrada {
      *
      * @return
      */
-    public Date getFechaRegistro() {
-        return fechaRegistro;
+    public int getId() {
+        return id;
     }
 
     /**
      *
-     * @param FechaRegistro
+     * @param id
      */
-    public void setFechaRegistro(Date FechaRegistro) {
-        this.fechaRegistro = FechaRegistro;
+    public void setId(int id) {
+        this.id = id;
     }
-    
+
+   
 }

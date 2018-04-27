@@ -20,6 +20,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import pruebas_integracion.administradorDeTareas.Complejidad;
+import pruebas_integracion.administradorDeTareas.TareaEntrada;
+import pruebas_integracion.administradorDeTareas.TareaSimple;
 
 /**
  * Clase que se usa para guardar y cargar datos desde archivos xml.
@@ -32,11 +38,23 @@ public class IEDatos {
      * Instancia de la ruta del archivo xml (PROVISIONAL).
      */
     private static String ruta = "gestor_gtd.xml";
+    /**
+     * Constante con la raíz del archivo XML.
+     */
+    private static final String RAIZ = "gestor_gtd";
 
+    /**
+     *
+     * @return la ruta del archivo XML.
+     */
     public static String getRuta() {
         return ruta;
     }
 
+    /**
+     *Cambia la ruta donde se guardará/cargará el archivo XML.
+     * @param ruta cadena que contiene la ruta del archivo.
+     */
     public static void setRuta(String ruta) {
         IEDatos.ruta = ruta;
     }
@@ -44,19 +62,136 @@ public class IEDatos {
     /**
      * Guarda los datos del programa en un archivo XML.
      *
-     * @param ruta la ruta donde se guardará el archivo.
      */
-    public static void guardarXml(String ruta) {
+    public static void guardarXml() {
 
     }
 
     /**
-     * Carga los datos del programa desde un archivo XML.
+     * Carga los datos del programa desde un archivo XML. Para cambiar la ruta
+     * desde la que se cargará el archivo, hay que usar el método setRuta de esta
+     * clase.
      *
-     * @param ruta la ruta de origen del archivo a cargar.
      */
-    public static void cargarDesdeXml(String ruta) {
+    public static void cargarDesdeXml() {
 
+        //Paso de XML a árbol DOM
+        Document doc = DOMUtil.XML2DOM(ruta);
+        //Guardamos las etiquetas hijas de la raíz en una lista de nodos
+        NodeList nodosRaiz = doc.getDocumentElement().getChildNodes();
+
+        for (int i = 0; i < nodosRaiz.getLength(); i++) {
+
+            //Si es un elemento, lo guardamos para filtralo
+            if (nodosRaiz.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) nodosRaiz.item(i);
+
+                switch (e.getTagName()) {
+
+                    case "bandeja_entrada":
+                        //Lista de nodos con todas las TareasEntrada
+                        NodeList nodosBandejaEntrada = e.getChildNodes();
+
+                        for (int j = 0; j < nodosBandejaEntrada.getLength(); j++) {
+
+                            //Cogemos cada nombre de las etiquetas TareaEntrada, 
+                            //creamos un objeto y lo guardamos en el repositorio.
+                            if (nodosBandejaEntrada.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                Element nombreTareaEntrada
+                                        = (Element) nodosBandejaEntrada.item(j);
+                                /*TareaEntrada unaTareaEntrada = new TareaEntrada(
+                                        nombreTareaEntrada.getTextContent().trim());
+                                RepoProvisional.guardarTareaEntrada(unaTareaEntrada);*/
+                            }
+                        }
+                        break;
+
+                    case "lista_tareas_simples":
+
+                        String nombreTareaSimple = "";
+                        String contextoTareaSimple = "";
+                        String anotacionTareaSimple = "";
+                        String complejidadTareaSimple = "";
+                        String requisitosTareaSimple = "";
+
+                        //Lista de nodos con todas las TareasSimples.
+                        NodeList nodosListaTareasSimples = e.getChildNodes();
+
+                        for (int j = 0; j < nodosListaTareasSimples.getLength(); j++) {
+
+                            //Lista de nodos con las etiquetas de UNA TareaSimple.
+                            if (nodosListaTareasSimples.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                
+                                Element tareaSimple = (Element) nodosListaTareasSimples.item(j);
+                                NodeList nodosTareaSimple = tareaSimple.getChildNodes();
+
+                                //Creamos un objeto TareaSimple a partir del contenido
+                                //de las etiquetas.
+                                for (int k = 0; k < nodosTareaSimple.getLength(); k++) {
+                                    
+                                    if (nodosTareaSimple.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                                        Element atributoTareaSimple
+                                                = (Element) nodosTareaSimple.item(k);
+                                        
+                                        switch (atributoTareaSimple.getTagName()) {
+                                            case "nombre":
+                                                nombreTareaSimple
+                                                        = atributoTareaSimple.getTextContent().trim();
+                                                break;
+                                            case "contexto":
+                                                contextoTareaSimple
+                                                        = atributoTareaSimple.getTextContent().trim();
+                                                break;
+                                            case "anotacion":
+                                                anotacionTareaSimple
+                                                        = atributoTareaSimple.getTextContent().trim();
+                                                break;
+                                            case "complejidad":
+                                                complejidadTareaSimple
+                                                        = atributoTareaSimple.getTextContent().trim();
+                                                break;
+                                            case "requisitos":
+                                                requisitosTareaSimple
+                                                        = atributoTareaSimple.getTextContent().trim();
+                                                break;
+                                        }
+                                    }
+                                }
+                                /*TareaSimple unaTareaSimple = new TareaSimple(
+                                        contextoTareaSimple,
+                                        anotacionTareaSimple,
+                                        requisitosTareaSimple,
+                                        Complejidad.valueOf(complejidadTareaSimple),
+                                        nombreTareaSimple);
+                                RepoProvisional.guardarTareaSimple(unaTareaSimple);*/
+                            }
+                        }
+                        break;
+
+                    case "agenda":
+                        
+                        //Lista de nodos de elementos TareaAgenda
+                        NodeList nodosAgenda = e.getChildNodes();
+                        
+                        for (int j = 0; j < nodosAgenda.getLength(); j++){
+                            
+                            if (nodosAgenda.item(j).getNodeType() == Node.ELEMENT_NODE){
+                                
+                                //Lista de nodos del elemento TareaAgenda
+                                Element tareaAgenda = (Element) nodosAgenda.item(j);
+                                NodeList nodosTareaAgenda = tareaAgenda.getChildNodes();
+                                
+                                
+                            }
+                        }
+                        break;
+
+                    case "mis_proyectos":
+                        break;
+                }
+            }
+
+        }
     }
 
     /**
@@ -64,13 +199,14 @@ public class IEDatos {
      * última conexión a la base de datos del programa.
      */
     public static boolean compararSincro() {
-        
+
         boolean datosSincro = false;
-        
+
         return datosSincro;
+
     }
 
-    //###############Clase DOMUtil SIEMPRE al final#############################
+    //##################Clase DOMUtil SIEMPRE al final##########################
     /**
      * Utilidades para pasar árboles DOM a documentos XML y viceversa.
      *

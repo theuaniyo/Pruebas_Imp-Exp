@@ -6,7 +6,8 @@
 package pruebas_integracion.IEDatos;
 
 import java.util.Scanner;
-import pruebasXML.Repositorio;
+import pruebas_integracion.administradorDeTareas.TareaEntrada;
+import pruebas_integracion.administradorDeTareas.TareaSimple;
 
 /**
  *
@@ -16,7 +17,7 @@ public class CargarGuardarDatos {
 
     public static void main(String[] args) {
 
-        Repositorio miRepo = Repositorio.getInstance();
+        RepoProvisional miRepo = RepoProvisional.getInstance();
         String entrada = "";
 
         do {
@@ -30,11 +31,21 @@ public class CargarGuardarDatos {
 
             switch (entrada) {
                 case "1":
-                    IEDatos.cargarDesdeXml(IEDatos.getRuta());
+                    //IEDatos.cargarDesdeXml(IEDatos.getRuta());
+                    System.out.println("Total objetos TareaEntrada: " + miRepo.getBandejaEntrada().size());
+                    for (TareaEntrada unaTareaEntrada : miRepo.getBandejaEntrada()) {
+                        System.out.println(unaTareaEntrada.getNombre());
+                    }
+                    System.out.println("Total objetos TareaSimple: " + miRepo.getListaTareasSimples().size());
+                    for (TareaSimple unaTareaSimple : miRepo.getListaTareasSimples()) {
+                        System.out.println(unaTareaSimple.getNombre());
+                        System.out.println(unaTareaSimple.getContexto());
+                        System.out.println(unaTareaSimple.getMiComplejidad().toString());
+                    }
                     break;
 
                 case "2":
-                    IEDatos.guardarXml(IEDatos.getRuta());
+                    IEDatos.guardarXml();
                     break;
 
                 case "0":

@@ -25,14 +25,14 @@ public class RepoProvisional {
      *
      * @see TareaEntrada
      */
-    private ArrayList<TareaEntrada> bandejaEntrada;
+    private static ArrayList<TareaEntrada> bandejaEntrada;
 
     /**
      * Lista de objetos TareaSimple.
      *
      * @see TareaSimple
      */
-    private ArrayList<TareaSimple> listaTareasSimples;
+    private static ArrayList<TareaSimple> listaTareasSimples;
 
     /**
      * Lista de objetos TareaAgenda.
@@ -72,6 +72,14 @@ public class RepoProvisional {
     public void setBandejaEntrada(ArrayList<TareaEntrada> bandejaEntrada) {
         this.bandejaEntrada = bandejaEntrada;
     }
+    
+    /**
+     *
+     * @param unaTareaEntrada un objeto TareaEntrada
+     */
+    public static void guardarTareaEntrada(TareaEntrada unaTareaEntrada){
+        bandejaEntrada.add(unaTareaEntrada);
+    }
 
     /**
      *
@@ -87,6 +95,10 @@ public class RepoProvisional {
      */
     public void setListaTareasSimples(ArrayList<TareaSimple> listaTareasSimples) {
         this.listaTareasSimples = listaTareasSimples;
+    }
+    
+    public static void guardarTareaSimple(TareaSimple unaTareaSimple){
+        listaTareasSimples.add(unaTareaSimple);
     }
 
     /**

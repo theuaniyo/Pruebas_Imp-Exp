@@ -5,7 +5,8 @@
  */
 package pruebas_integracion.administradorDeTareas;
 
-import java.util.ArrayList;
+
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -14,31 +15,31 @@ import java.util.Date;
  */
 public class TareaAgenda extends TareaSimple{
     
-    private Date fechaFin;
+    private Timestamp fechaFin;
     
-    private Date recordatorio;
+    private Timestamp fechaInicio;
 
     /**
      *
      * @param fechaFin
+     * @param fechaInicio
      * @param contexto
-     * @param anotacion
-     * @param requisitos
      * @param miComplejidad
-     * @param Nombre
-     * @param FechaRegistro
+     * @param anotacion
+     * @param nombre
+     * @param id
      */
-    public TareaAgenda(Date fechaFin, Date recordatorio, String contexto, String anotacion, String requisitos, Complejidad miComplejidad, String Nombre, Date FechaRegistro) {    
-        super(contexto, anotacion, requisitos, miComplejidad, Nombre, FechaRegistro);
+    public TareaAgenda(Timestamp fechaFin, Timestamp fechaInicio, String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
+        super(contexto, miComplejidad, anotacion, nombre, id);
         this.fechaFin = fechaFin;
-        this.recordatorio = recordatorio;
+        this.fechaInicio = fechaInicio;
     }
 
     /**
      *
      * @return
      */
-    public Date getFechaFin() {
+    public Timestamp getFechaFin() {
         return fechaFin;
     }
 
@@ -46,18 +47,33 @@ public class TareaAgenda extends TareaSimple{
      *
      * @param fechaFin
      */
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(Timestamp fechaFin) {
         this.fechaFin = fechaFin;
     }
 
-    public Date getRecordatorio() {
-        return recordatorio;
+    /**
+     *
+     * @return
+     */
+    public Timestamp getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setRecordatorio(Date recordatorio) {
-        this.recordatorio = recordatorio;
+    /**
+     *
+     * @param fechaInicio
+     */
+    public void setFechaInicio(Timestamp fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
+    
+    
+    
+ 
 
+    
+
+   
     
    
    

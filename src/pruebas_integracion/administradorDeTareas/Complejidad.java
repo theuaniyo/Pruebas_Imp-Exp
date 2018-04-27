@@ -9,4 +9,29 @@ package pruebas_integracion.administradorDeTareas;
  *
  * @author Rarkdreik
  */
-public enum Complejidad {Baja, Media_Baja, Media, Media_Alta, Alta}
+public enum Complejidad {
+
+    /**
+     *
+     */
+    Baja,
+
+    /**
+     *
+     */
+    Media_Baja,
+
+    /**
+     *
+     */
+    Media,
+
+    /**
+     *
+     */
+    Media_Alta,
+
+    /**
+     *
+     */
+    Alta}

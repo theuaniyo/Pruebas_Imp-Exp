@@ -5,29 +5,32 @@
  */
 package pruebas_integracion.administradorDeTareas;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
  * @author xisko
  */
 public class Proyecto {
-    
+
     private String nombreP;
-	private ArrayList<TareaProyecto> listaTareasProyecto;
-	private Date fechaFin;
+    private ArrayList<TareaProyecto> listaTareasProyecto;
+    private Timestamp fechaFin;
+    //Añadido atributo id -Juan J. Luque
+    private int id;
 
     /**
      *
-     * @param NombreP
-     * @param listaTareasProyecto
+     * @param nombreP
      * @param fechaFin
+     * @param id
      */
-    public Proyecto(String NombreP, ArrayList<TareaProyecto> listaTareasProyecto, Date fechaFin) {
-        this.nombreP = NombreP;
-        this.listaTareasProyecto = listaTareasProyecto;
+    public Proyecto(String nombreP, Timestamp fechaFin, int id) {
+        this.nombreP = nombreP;
+        listaTareasProyecto = new ArrayList<>();
         this.fechaFin = fechaFin;
+        this.id = id;
     }
 
     /**
@@ -66,7 +69,7 @@ public class Proyecto {
      *
      * @return
      */
-    public Date getFechaFin() {
+    public Timestamp getFechaFin() {
         return fechaFin;
     }
 
@@ -74,8 +77,34 @@ public class Proyecto {
      *
      * @param fechaFin
      */
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(Timestamp fechaFin) {
         this.fechaFin = fechaFin;
     }
-    
+
+    /**
+     * @author Juan J. Luque
+     * @return un entero con el id del proyecto
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id entero que representa el id del proyecto
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void insertarTareaProyecto(TareaProyecto miTarea) {
+
+        listaTareasProyecto.add(miTarea);
+    }
+
+    public void quitarTareaProyecto(TareaProyecto miTarea) {
+
+        listaTareasProyecto.remove(miTarea);
+    }
+
 }

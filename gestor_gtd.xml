@@ -1,44 +1,179 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<gestor_gtd usuario="">
+<gestor_gtd>
+  <contextos>
+    <contexto>Un Contexto</contexto>
+    <contexto>Otro Contexto</contexto>
+    <contexto>Otro Contexto más</contexto>
+  </contextos>
+  <agenda>
+    <tarea_agenda id="1">
+      <fecha_fin>2018-04-25</fecha_fin>
+      <fecha_inicio>2018-04-24</fecha_inicio>
+      <contexto>Un Contexto</contexto>
+      <complejidad>Baja</complejidad>
+      <anotacion>Una anotación</anotacion>
+      <nombre>Una TareaAgenda</nombre>
+    </tarea_agenda>
+    <tarea_agenda id="2">
+      <fecha_fin>2018-04-27</fecha_fin>
+      <fecha_inicio>2018-04-26</fecha_inicio>
+      <contexto>Otro Contexto</contexto>
+      <complejidad>Media</complejidad>
+      <anotacion>Otra anotación</anotacion>
+      <nombre>Otra TareaAgenda</nombre>
+    </tarea_agenda>
+  </agenda>
   <bandeja_entrada>
-    <tarea_entrada>
+    <tarea_entrada id="3">
       <nombre>Una TareaEntrada</nombre>
     </tarea_entrada>
-    <tarea_entrada>
+    <tarea_entrada id="4">
       <nombre>Otra TareaEntrada</nombre>
     </tarea_entrada>
   </bandeja_entrada>
-  <lista_tareas_simples>
-    <tarea_simple>
-      <nombre>Una TareaSimple</nombre>
-      <contexto>un contexto</contexto>
-      <anotacion>una anotacion</anotacion>
+  <tareas_inmediatas>
+    <tarea_inmediata id="5">
+      <terminada>no</terminada>
+      <contexto>Un Contexto</contexto>
+      <complejidad>Media_Baja</complejidad>
+      <anotacion>Una anotacion</anotacion>
+      <nombre>Una TareaInmediata</nombre>
+      <terminada>no</terminada>
+    </tarea_inmediata>
+    <tarea_inmediata id="6">
+      <terminada>no</terminada>
+      <contexto>Otro Contexto</contexto>
+      <complejidad>Media_Alta</complejidad>
+      <anotacion>Otra anotacion</anotacion>
+      <nombre>Otra TareaInmediata</nombre>
+    </tarea_inmediata>
+  </tareas_inmediatas>
+  <proyectos>
+    <proyecto id="7">
+      <nombre>Un proyecto</nombre>
+      <lista_tareas_proyecto>
+        <tarea_proyecto id="8">
+          <proyecto id="7"/>
+          <prioridad>Media</prioridad>
+          <contexto>Un Contexto</contexto>
+          <complejidad>Media</complejidad>
+          <anotacion>Una anotación</anotacion>
+          <nombre>Una TareaProyecto</nombre>
+        </tarea_proyecto>
+        <tarea_proyecto id="9">
+          <proyecto id="7"/>
+          <prioridad>Media</prioridad>
+          <contexto>Un Contexto</contexto>
+          <complejidad>Media</complejidad>
+          <anotacion>Otra anotación</anotacion>
+          <nombre>Otra TareaProyecto</nombre>
+        </tarea_proyecto>
+      </lista_tareas_proyecto>
+      <fecha_fin>2018-04-23</fecha_fin>
+    </proyecto>
+  </proyectos>
+  <papelera>
+    <tarea_entrada id="10">
+      <nombre>Una TareaEntrada borrada</nombre>
+    </tarea_entrada>
+    <tarea_simple id="11">
+      <contexto>Un Contexto</contexto>
       <complejidad>Media</complejidad>
-      <requisitos>un requisito</requisitos>
+      <anotacion>una anotacion borrada</anotacion>
+      <nombre>Una TareaSimple borrada</nombre>
     </tarea_simple>
-    <tarea_simple>
+    <tarea_inmediata id="12">
+      <terminada>si</terminada>
+      <contexto>Un Contexto</contexto>
+      <complejidad>Media_Baja</complejidad>
+      <anotacion>Una anotacion borrada</anotacion>
+      <nombre>Una TareaInmediata borrada</nombre>
+    </tarea_inmediata>
+    <tarea_agenda id="13">
+      <fecha_fin>2018-04-25</fecha_fin>
+      <fecha_inicio>2018-04-24</fecha_inicio>
+      <contexto>Un Contexto</contexto>
+      <complejidad>Baja</complejidad>
+      <anotacion>Una anotación borrada</anotacion>
+      <nombre>Una TareaAgenda borrada</nombre>
+    </tarea_agenda>
+    <proyecto id="14">
+      <nombre>Un proyecto borrado</nombre>
+      <lista_tareas_proyecto>
+        <tarea_proyecto id="15">
+          <prioridad>Media</prioridad>
+          <contexto>Un Contexto</contexto>
+          <complejidad>Media</complejidad>
+          <anotacion>Una anotación borrada</anotacion>
+          <nombre>Una TareaProyecto borrada</nombre>
+        </tarea_proyecto>
+        <tarea_proyecto id="16">
+          <prioridad>Media</prioridad>
+          <contexto>Un Contexto</contexto>
+          <complejidad>Media</complejidad>
+          <anotacion>Otra anotación borrada</anotacion>
+          <nombre>Otra TareaProyecto borrada</nombre>
+        </tarea_proyecto>
+      </lista_tareas_proyecto>
+      <fecha_fin>2018-04-23</fecha_fin>
+    </proyecto>
+    <tarea_proyecto id="18">
+      <proyecto id="17">Otro Proyecto borrado</proyecto>
+      <prioridad>Media</prioridad>
+      <contexto>Otro Contexto</contexto>
+      <complejidad>Media</complejidad>
+      <anotacion>Otra anotación borrada más</anotacion>
+      <nombre>Otra TareaProyecto borrada más</nombre>
+    </tarea_proyecto>
+  </papelera>
+  <archivo_seguimiento>
+    <tarea_simple id="19">
+      <contexto>Un Contexto</contexto>
+      <complejidad>Media</complejidad>
+      <anotacion>Another anotacion</anotacion>
+      <nombre>Another TareaSimple</nombre>
+    </tarea_simple>
+    <tarea_simple id="20">
+      <contexto>Un Contexto</contexto>
+      <complejidad>Media</complejidad>
+      <anotacion>One more anotacion</anotacion>
+      <nombre>One more TareaSimple</nombre>
+    </tarea_simple>
+  </archivo_seguimiento>
+  <archivo_consulta>
+    <tarea_simple id="21">
+      <contexto>Un Contexto</contexto>
+      <complejidad>Media</complejidad>
+      <anotacion>Another anotacion</anotacion>
+      <nombre>Another TareaSimple</nombre>
+    </tarea_simple>
+    <tarea_simple id="22">
+      <contexto>Un Contexto</contexto>
+      <complejidad>Media</complejidad>
+      <anotacion>One more anotacion</anotacion>
+      <nombre>One more TareaSimple</nombre>
+    </tarea_simple>
+  </archivo_consulta>
+  <acciones_siguientes>
+    <tarea_simple id="23">
+      <contexto>Un Contexto</contexto>
+      <complejidad>Media</complejidad>
+      <anotacion>una anotacion</anotacion>
+      <nombre>Una TareaSimple</nombre>
+    </tarea_simple>
+    <tarea_inmediata id="24">
+      <terminada>no</terminada>
+      <contexto>Otro Contexto más</contexto>
+      <complejidad>Media_Alta</complejidad>
+      <anotacion>Otra anotacion más</anotacion>
+      <nombre>Una TareaInmediata</nombre>
+    </tarea_inmediata>
+    <tarea_simple id="25">
       <nombre>Otra TareaSimple</nombre>
-      <contexto>Otro contexto</contexto>
+      <contexto>Otro Contexto</contexto>
       <anotacion>Otra anotacion</anotacion>
       <complejidad>Alta</complejidad>
       <requisitos>Otro requisito</requisitos>
     </tarea_simple>
-  </lista_tareas_simples>
-  <mis_proyectos>
-    <proyecto>
-      <nombre>Un proyecto</nombre>
-      <lista_tareas>
-        <tarea_proyecto>
-          <nombre>Una TareaProyecto</nombre>
-          <prioridad>Baja</prioridad>
-        </tarea_proyecto>
-        <tarea_proyecto>
-          <nombre>Otra TareaProyecto</nombre>
-          <prioridad>Baja</prioridad>
-          <dependencia>Una TareaProyecto</dependencia>
-        </tarea_proyecto>
-      </lista_tareas>
-      <fecha_fin fecha="2018-04-23"/>
-    </proyecto>
-  </mis_proyectos>
+  </acciones_siguientes>
 </gestor_gtd>

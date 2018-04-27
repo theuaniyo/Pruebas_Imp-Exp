@@ -5,23 +5,31 @@
  */
 package pruebas_integracion.administradorDeTareas;
 
-import java.util.Date;
 
 /**
  *
  * @author xisko
  */
-public class TareaSimple extends TareaEntrada{
-    
-    private String contexto;
-    private String anotacion;
+public class TareaSimple extends TareaEntrada {
 
-    /**
-     *
-     */
-   
-    private String requisitos;
+    private String contexto;
     private Complejidad miComplejidad;
+    private String anotacion;
+    
+/**
+     *
+     * @param contexto
+     * @param anotacion
+     * @param miComplejidad
+     * @param nombre
+     * @param id 
+     */
+    public TareaSimple(String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
+        super(nombre, id);
+        this.contexto = contexto;
+        this.miComplejidad = miComplejidad;
+        this.anotacion = anotacion;
+    }
 
     /**
      *
@@ -39,22 +47,7 @@ public class TareaSimple extends TareaEntrada{
         this.miComplejidad = miComplejidad;
     }
 
-    /**
-     *
-     * @param contexto
-     * @param anotacion
-     * @param requisitos
-     * @param miComplejidad
-     * @param Nombre
-     * @param FechaRegistro
-     */
-    public TareaSimple(String contexto, String anotacion, String requisitos, Complejidad miComplejidad, String Nombre, Date FechaRegistro) {
-        super(Nombre, FechaRegistro);
-        this.contexto = contexto;
-        this.anotacion = anotacion;
-        this.requisitos = requisitos;
-        this.miComplejidad = miComplejidad;
-    }
+    
 
     /**
      *
@@ -76,39 +69,16 @@ public class TareaSimple extends TareaEntrada{
      *
      * @return
      */
-    public String getAnotacion() {
+    public String getDescripcion() {
         return anotacion;
     }
 
     /**
      *
-     * @param anotacion
+     * @param descripcion
      */
-    public void setAnotacion(String anotacion) {
-        this.anotacion = anotacion;
+    public void setDescripcion(String descripcion) {
+        this.anotacion = descripcion;
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getRequisitos() {
-        return requisitos;
-    }
-
-    /**
-     *
-     * @param requisitos
-     */
-    public void setRequisitos(String requisitos) {
-        this.requisitos = requisitos;
-    }
-
-   
-
-    
-
-   
-    
-    
 }

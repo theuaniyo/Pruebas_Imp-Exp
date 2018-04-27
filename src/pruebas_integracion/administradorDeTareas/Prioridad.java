@@ -3,11 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pruebas_integracion.administradorDeTareas;
+package administradorDeTareas;
 
 /**
  *
  * @author xisko
  */
-public enum Prioridad {Alta,Media,Baja  
+public enum Prioridad {  
+
+    /**
+     *
+     */
+    Alta,  
+
+    /**
+     *
+     */
+    Media,  
+
+    /**
+     *
+     */
+    Baja  
 }
