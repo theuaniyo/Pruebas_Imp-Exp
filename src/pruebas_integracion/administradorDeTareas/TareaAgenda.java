@@ -7,7 +7,6 @@ package pruebas_integracion.administradorDeTareas;
 
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  *

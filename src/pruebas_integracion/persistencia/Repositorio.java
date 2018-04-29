@@ -1,6 +1,5 @@
 package pruebas_integracion.persistencia;
 
-
 import pruebas_integracion.administradorDeTareas.Complejidad;
 import pruebas_integracion.administradorDeTareas.Proyecto;
 import pruebas_integracion.administradorDeTareas.TareaAgenda;
@@ -74,6 +73,46 @@ public class Repositorio {
         archivoConsulta = new ArrayList<>();
         accionesSiguientes = new ArrayList<>();
        
+    }
+
+    public ArrayList<String> getContextos() {
+        return contextos;
+    }
+
+    public ArrayList<TareaAgenda> getAgenda() {
+        return agenda;
+    }
+
+    public ArrayList<TareaEntrada> getBandejaEntrada() {
+        return bandejaEntrada;
+    }
+
+    public ArrayList<TareaInmediata> getTareasInmediatas() {
+        return tareasInmediatas;
+    }
+
+    public ArrayList<Proyecto> getProyectos() {
+        return proyectos;
+    }
+
+    public ArrayList<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public ArrayList<TareaEntrada> getPapelera() {
+        return papelera;
+    }
+
+    public ArrayList<TareaEntrada> getArchivoSeguimiento() {
+        return archivoSeguimiento;
+    }
+
+    public ArrayList<TareaEntrada> getArchivoConsulta() {
+        return archivoConsulta;
+    }
+
+    public ArrayList<TareaSimple> getAccionesSiguientes() {
+        return accionesSiguientes;
     }
     
     

@@ -7,16 +7,16 @@
   </contextos>
   <agenda>
     <tarea_agenda id="1">
-      <fecha_fin>2018-04-25</fecha_fin>
-      <fecha_inicio>2018-04-24</fecha_inicio>
+      <fecha_fin>2018-04-25 00:00:00</fecha_fin>
+      <fecha_inicio>2018-04-24 00:00:00</fecha_inicio>
       <contexto>Un Contexto</contexto>
       <complejidad>Baja</complejidad>
       <anotacion>Una anotación</anotacion>
       <nombre>Una TareaAgenda</nombre>
     </tarea_agenda>
     <tarea_agenda id="2">
-      <fecha_fin>2018-04-27</fecha_fin>
-      <fecha_inicio>2018-04-26</fecha_inicio>
+      <fecha_fin>2018-04-27 00:00:00</fecha_fin>
+      <fecha_inicio>2018-04-26 00:00:00</fecha_inicio>
       <contexto>Otro Contexto</contexto>
       <complejidad>Media</complejidad>
       <anotacion>Otra anotación</anotacion>
@@ -69,7 +69,7 @@
           <nombre>Otra TareaProyecto</nombre>
         </tarea_proyecto>
       </lista_tareas_proyecto>
-      <fecha_fin>2018-04-23</fecha_fin>
+      <fecha_fin>2018-04-23 00:00:00</fecha_fin>
     </proyecto>
   </proyectos>
   <papelera>
@@ -90,8 +90,8 @@
       <nombre>Una TareaInmediata borrada</nombre>
     </tarea_inmediata>
     <tarea_agenda id="13">
-      <fecha_fin>2018-04-25</fecha_fin>
-      <fecha_inicio>2018-04-24</fecha_inicio>
+      <fecha_fin>2018-04-25 00:00:00</fecha_fin>
+      <fecha_inicio>2018-04-24 00:00:00</fecha_inicio>
       <contexto>Un Contexto</contexto>
       <complejidad>Baja</complejidad>
       <anotacion>Una anotación borrada</anotacion>
@@ -101,6 +101,7 @@
       <nombre>Un proyecto borrado</nombre>
       <lista_tareas_proyecto>
         <tarea_proyecto id="15">
+          <proyecto id="14"/>
           <prioridad>Media</prioridad>
           <contexto>Un Contexto</contexto>
           <complejidad>Media</complejidad>
@@ -108,6 +109,7 @@
           <nombre>Una TareaProyecto borrada</nombre>
         </tarea_proyecto>
         <tarea_proyecto id="16">
+          <proyecto id="14"/>
           <prioridad>Media</prioridad>
           <contexto>Un Contexto</contexto>
           <complejidad>Media</complejidad>
@@ -115,7 +117,7 @@
           <nombre>Otra TareaProyecto borrada</nombre>
         </tarea_proyecto>
       </lista_tareas_proyecto>
-      <fecha_fin>2018-04-23</fecha_fin>
+      <fecha_fin>2018-04-23 00:00:00</fecha_fin>
     </proyecto>
     <tarea_proyecto id="18">
       <proyecto id="17">Otro Proyecto borrado</proyecto>
@@ -127,32 +129,20 @@
     </tarea_proyecto>
   </papelera>
   <archivo_seguimiento>
-    <tarea_simple id="19">
-      <contexto>Un Contexto</contexto>
-      <complejidad>Media</complejidad>
-      <anotacion>Another anotacion</anotacion>
-      <nombre>Another TareaSimple</nombre>
-    </tarea_simple>
-    <tarea_simple id="20">
-      <contexto>Un Contexto</contexto>
-      <complejidad>Media</complejidad>
-      <anotacion>One more anotacion</anotacion>
-      <nombre>One more TareaSimple</nombre>
-    </tarea_simple>
+    <tarea_entrada id="19">
+      <nombre>Another TareaEntrada</nombre>
+    </tarea_entrada>
+    <tarea_entrada id="20">
+      <nombre>One more TareaEntrada</nombre>
+    </tarea_entrada>
   </archivo_seguimiento>
   <archivo_consulta>
-    <tarea_simple id="21">
-      <contexto>Un Contexto</contexto>
-      <complejidad>Media</complejidad>
-      <anotacion>Another anotacion</anotacion>
-      <nombre>Another TareaSimple</nombre>
-    </tarea_simple>
-    <tarea_simple id="22">
-      <contexto>Un Contexto</contexto>
-      <complejidad>Media</complejidad>
-      <anotacion>One more anotacion</anotacion>
-      <nombre>One more TareaSimple</nombre>
-    </tarea_simple>
+    <tarea_entrada id="21">
+      <nombre>aaaaaa TareaSimple</nombre>
+    </tarea_entrada>
+    <tarea_entrada id="22">
+      <nombre>bbbbbb TareaSimple</nombre>
+    </tarea_entrada>
   </archivo_consulta>
   <acciones_siguientes>
     <tarea_simple id="23">
