@@ -33,15 +33,15 @@
   </bandeja_entrada>
   <tareas_inmediatas>
     <tarea_inmediata id="5">
-      <terminada>no</terminada>
+      <terminada>false</terminada>
       <contexto>Un Contexto</contexto>
       <complejidad>Media_Baja</complejidad>
       <anotacion>Una anotacion</anotacion>
       <nombre>Una TareaInmediata</nombre>
-      <terminada>no</terminada>
+      <terminada>false</terminada>
     </tarea_inmediata>
     <tarea_inmediata id="6">
-      <terminada>no</terminada>
+      <terminada>false</terminada>
       <contexto>Otro Contexto</contexto>
       <complejidad>Media_Alta</complejidad>
       <anotacion>Otra anotacion</anotacion>
@@ -52,16 +52,14 @@
     <proyecto id="7">
       <nombre>Un proyecto</nombre>
       <lista_tareas_proyecto>
-        <tarea_proyecto id="8">
-          <proyecto id="7"/>
+        <tarea_proyecto id="8" proyecto="7">
           <prioridad>Media</prioridad>
           <contexto>Un Contexto</contexto>
           <complejidad>Media</complejidad>
           <anotacion>Una anotación</anotacion>
           <nombre>Una TareaProyecto</nombre>
         </tarea_proyecto>
-        <tarea_proyecto id="9">
-          <proyecto id="7"/>
+        <tarea_proyecto id="9" proyecto="7">
           <prioridad>Media</prioridad>
           <contexto>Un Contexto</contexto>
           <complejidad>Media</complejidad>
@@ -83,7 +81,7 @@
       <nombre>Una TareaSimple borrada</nombre>
     </tarea_simple>
     <tarea_inmediata id="12">
-      <terminada>si</terminada>
+      <terminada>true</terminada>
       <contexto>Un Contexto</contexto>
       <complejidad>Media_Baja</complejidad>
       <anotacion>Una anotacion borrada</anotacion>
@@ -100,16 +98,14 @@
     <proyecto id="14">
       <nombre>Un proyecto borrado</nombre>
       <lista_tareas_proyecto>
-        <tarea_proyecto id="15">
-          <proyecto id="14"/>
+        <tarea_proyecto id="15" proyecto="14">
           <prioridad>Media</prioridad>
           <contexto>Un Contexto</contexto>
           <complejidad>Media</complejidad>
           <anotacion>Una anotación borrada</anotacion>
           <nombre>Una TareaProyecto borrada</nombre>
         </tarea_proyecto>
-        <tarea_proyecto id="16">
-          <proyecto id="14"/>
+        <tarea_proyecto id="16" proyecto="14">
           <prioridad>Media</prioridad>
           <contexto>Un Contexto</contexto>
           <complejidad>Media</complejidad>
@@ -119,8 +115,7 @@
       </lista_tareas_proyecto>
       <fecha_fin>2018-04-23 00:00:00</fecha_fin>
     </proyecto>
-    <tarea_proyecto id="18">
-      <proyecto id="17">Otro Proyecto borrado</proyecto>
+    <tarea_proyecto id="18" proyecto="7">
       <prioridad>Media</prioridad>
       <contexto>Otro Contexto</contexto>
       <complejidad>Media</complejidad>
@@ -138,10 +133,10 @@
   </archivo_seguimiento>
   <archivo_consulta>
     <tarea_entrada id="21">
-      <nombre>aaaaaa TareaSimple</nombre>
+      <nombre>aaaaaa TareaEntrada</nombre>
     </tarea_entrada>
     <tarea_entrada id="22">
-      <nombre>bbbbbb TareaSimple</nombre>
+      <nombre>bbbbbb TareaEntrada</nombre>
     </tarea_entrada>
   </archivo_consulta>
   <acciones_siguientes>
@@ -152,7 +147,7 @@
       <nombre>Una TareaSimple</nombre>
     </tarea_simple>
     <tarea_inmediata id="24">
-      <terminada>no</terminada>
+      <terminada>false</terminada>
       <contexto>Otro Contexto más</contexto>
       <complejidad>Media_Alta</complejidad>
       <anotacion>Otra anotacion más</anotacion>

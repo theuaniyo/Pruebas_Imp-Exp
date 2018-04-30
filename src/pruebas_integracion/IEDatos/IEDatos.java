@@ -9,7 +9,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringWriter;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -27,16 +26,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pruebas_integracion.administradorDeTareas.Complejidad;
+import pruebas_integracion.administradorDeTareas.Prioridad;
 import pruebas_integracion.administradorDeTareas.Proyecto;
 import pruebas_integracion.administradorDeTareas.TareaAgenda;
 import pruebas_integracion.administradorDeTareas.TareaEntrada;
+import pruebas_integracion.administradorDeTareas.TareaInmediata;
+import pruebas_integracion.administradorDeTareas.TareaProyecto;
 import pruebas_integracion.administradorDeTareas.TareaSimple;
 import pruebas_integracion.persistencia.Repositorio;
 
 /**
  * Clase que se usa para guardar y cargar datos desde archivos xml.
  *
- * @author Juan José Luque Morales
+ * @author Juan J. Luque Morales
  */
 public class IEDatos {
 
@@ -75,6 +77,7 @@ public class IEDatos {
     }
 
     /**
+     * @author Juan J. Luque Morales
      * Carga los datos del programa desde un archivo XML. Para cambiar la ruta
      * desde la que se cargará el archivo, hay que usar el método setRuta de
      * esta clase.
@@ -96,110 +99,429 @@ public class IEDatos {
                 switch (e.getTagName()) {
 
                     case "contextos":
-
                         //Lista de nodos de elementos Contexto
                         NodeList contextos = e.getChildNodes();
-
                         procesarContextos(contextos);
                         break;
                     case "agenda":
-
                         //Lista de nodos de elementos TareaAgenda
-                        NodeList nodosAgenda = e.getChildNodes();
+                        NodeList agenda = e.getChildNodes();
 
-                        procesarTareaAgenda(nodosAgenda);
+                        for (int j = 0; j < agenda.getLength(); j++) {
+
+                            if (agenda.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                //Una etiqueta TareaAgenda
+                                Element tareaAgenda = (Element) agenda.item(j);
+                                TareaAgenda unaTareaAgenda = procesarTareaAgenda(tareaAgenda);
+                                Repositorio.getInstancia().agregarEnAgenda(unaTareaAgenda);
+                            }
+                        }
                         break;
 
                     case "bandeja_entrada":
 
                         //Lista de nodos con todas las TareasEntrada
-                        NodeList nodosBandejaEntrada = e.getChildNodes();
+                        NodeList bandejaEntrada = e.getChildNodes();
 
-                        procesarTareaEntrada(nodosBandejaEntrada);
+                        for (int j = 0; j < bandejaEntrada.getLength(); j++) {
+
+                            if (bandejaEntrada.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                //Una etiqueta TareaEntrada
+                                Element tareaEntrada
+                                        = (Element) bandejaEntrada.item(j);
+                                TareaEntrada unaTareaEntrada
+                                        = procesarTareaEntrada(tareaEntrada);
+                                Repositorio.getInstancia().agregarEnBandeja(
+                                        unaTareaEntrada);
+                            }
+                        }
                         break;
 
-                    /*case "tareas_inmediatas":
-                        break;*/
+                    case "tareas_inmediatas":
+
+                        //Lista de nodos con todas las TareasInmediatas
+                        NodeList tareasInmediatas = e.getChildNodes();
+
+                        for (int j = 0; j < tareasInmediatas.getLength(); j++) {
+
+                            if (tareasInmediatas.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                //Una etiqueta TareaInmediata
+                                Element tareaInmediata
+                                        = (Element) tareasInmediatas.item(j);
+                                TareaInmediata unaTareaInmediata
+                                        = procesarTareaInmediata(tareaInmediata);
+                                Repositorio.getInstancia().agregarEnInmediatas(
+                                        unaTareaInmediata);
+                            }
+                        }
+                        break;
+
                     case "proyectos":
 
                         //Lista de nodos de elementos Proyecto
                         NodeList proyectos = e.getChildNodes();
-                        
-                        procesarProyectos(proyectos);
+
+                        for (int j = 0; j < proyectos.getLength(); j++) {
+
+                            if (proyectos.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                Proyecto unProyecto;
+                                //Una etiqueta proyecto.
+                                Element proyecto = (Element) proyectos.item(j);
+                                unProyecto = procesarProyecto(proyecto);
+                                Repositorio.getInstancia().agregarEnProyectos(unProyecto);
+                            }
+                        }
                         break;
 
-                    /*case "papelera":
-                        break;*/
+                    case "papelera":
+
+                        //Lista de nodos dentro de la etiqueta papelera
+                        NodeList papelera = e.getChildNodes();
+
+                        for (int j = 0; j < papelera.getLength(); j++) {
+
+                            if (papelera.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                Element tareaEnPapelera = (Element) papelera.item(j);
+
+                                switch (tareaEnPapelera.getNodeName()) {
+
+                                    case "tarea_entrada":
+
+                                        TareaEntrada unaTareaEntrada
+                                                = procesarTareaEntrada(tareaEnPapelera);
+                                        Repositorio.getInstancia().
+                                                agregarEnPapelera(unaTareaEntrada);
+                                        break;
+
+                                    case "tarea_simple":
+
+                                        TareaSimple unaTareaSimple
+                                                = procesarTareaSimple(tareaEnPapelera);
+                                        Repositorio.getInstancia().
+                                                agregarEnPapelera(unaTareaSimple);
+                                        break;
+
+                                    case "tarea_inmediata":
+
+                                        TareaInmediata unaTareaInmediata
+                                                = procesarTareaInmediata(tareaEnPapelera);
+                                        Repositorio.getInstancia().
+                                                agregarEnPapelera(unaTareaInmediata);
+                                        break;
+
+                                    case "tarea_agenda":
+
+                                        TareaAgenda unaTareaAgenda
+                                                = procesarTareaAgenda(tareaEnPapelera);
+                                        Repositorio.getInstancia().
+                                                agregarEnPapelera(unaTareaAgenda);
+                                        break;
+
+                                    //Preguntar si los proyectos tendrán otra papelera específica
+                                    /*case "proyecto":
+                                        
+                                        Proyecto unProyecto 
+                                                = procesarProyecto(tareaEnPapelera);
+                                        Repositorio.getInstancia().agregarEnPapelera(unProyecto);
+                                        break;*/
+                                    case "tarea_proyecto":
+
+                                        TareaProyecto unaTareaProyecto
+                                                = procesarTareaProyecto(tareaEnPapelera);
+
+                                        tareaEnPapelera.getAttributes();
+                                        int id = Integer.parseInt(
+                                                tareaEnPapelera.getAttribute("proyecto"));
+                                        Proyecto unpProyecto = Repositorio.
+                                                getInstancia().buscarProyecto(id);
+
+                                        unaTareaProyecto.setUnProyecto(unpProyecto);
+
+                                        Repositorio.getInstancia().
+                                                agregarEnPapelera(unaTareaProyecto);
+                                        break;
+                                }
+                            }
+                        }
+                        break;
                     case "archivo_seguimiento":
 
-                        //Lista de nodos con todas las TareasSimples.
-                        NodeList nodosArchivoSeguimiento = e.getChildNodes();
+                        //Todos los nodos de archivoSeguimiento
+                        NodeList archivoSeguimiento = e.getChildNodes();
 
-                        procesarTareaSimple(nodosArchivoSeguimiento);
+                        for (int j = 0; j < archivoSeguimiento.getLength(); j++) {
+
+                            if (archivoSeguimiento.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                TareaEntrada unaTareaEntrada;
+
+                                //Una etiqueta TareaEntrada
+                                Element tareaEntrada
+                                        = (Element) archivoSeguimiento.item(j);
+                                unaTareaEntrada
+                                        = procesarTareaEntrada(tareaEntrada);
+                                Repositorio.getInstancia().agregarEnSeguimiento(
+                                        unaTareaEntrada);
+                            }
+                        }
                         break;
 
-                    /*case "archivo_consulta":
+                    case "archivo_consulta":
+
+                        //Nodos dentro de archivoConsulta
+                        NodeList archivoConsulta = e.getChildNodes();
+
+                        for (int j = 0; j < archivoConsulta.getLength(); j++) {
+
+                            if (archivoConsulta.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                //Una etiqueta TareaEntrada
+                                Element tareaEntrada
+                                        = (Element) archivoConsulta.item(j);
+                                TareaEntrada unaTareaEntrada
+                                        = procesarTareaEntrada(tareaEntrada);
+                                Repositorio.getInstancia().agregarEnConsulta(
+                                        unaTareaEntrada);
+                            }
+                        }
                         break;
 
                     //¡Ojo! Aquí se guardan objetos TareaSimple y TareaInmediata.
                     case "acciones_siguientes":
-                        break;*/
-                }
-            }
 
-        }
-    }
+                        //Nodos dentro de accionesSiguientes.
+                        NodeList accionesSiguientes = e.getChildNodes();
 
-    private static void procesarProyectos(NodeList nl) throws DOMException, NumberFormatException {
+                        for (int j = 0; j < accionesSiguientes.getLength(); j++) {
 
-        for (int i = 0; i < nl.getLength(); i++) {
+                            if (accionesSiguientes.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-            String idProyecto = "";
-            String nombreProyecto = "";
-            String fechaFin = "";
-            ArrayList listaTareasProyecto = new ArrayList();
+                                Element tareaSiguiente = (Element) accionesSiguientes.item(j);
 
-            if (nl.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                
-                //Elemento Proyecto
-                Element proyecto = (Element) nl.item(i);
-                //Atributo id
-                idProyecto = proyecto.getAttribute("id");
-                //Lista de nodos del elemento Proyecto
-                NodeList nodosProyecto = proyecto.getChildNodes();
-                
-                for (int j = 0; j < nodosProyecto.getLength(); j++){
-                    
-                    if (nodosProyecto.item(j).getNodeType() == Node.ELEMENT_NODE){
-                        
-                        Element etiquetaProyecto = (Element) nodosProyecto.item(j);
-                        
-                        switch (etiquetaProyecto.getTagName()){
-                            
-                            case "nombre":
-                                nombreProyecto = etiquetaProyecto.getTextContent().trim();
-                                break;
-                                
-                            case "fecha_fin":
-                                fechaFin = etiquetaProyecto.getTextContent().trim();
-                                break;
+                                switch (tareaSiguiente.getTagName()) {
+
+                                    case "tarea_simple":
+
+                                        TareaSimple unaTareaSimple
+                                                = procesarTareaSimple(tareaSiguiente);
+                                        Repositorio.getInstancia().
+                                                agregarEnSiguientes(unaTareaSimple);
+                                        break;
+
+                                    case "tarea_inmediata":
+
+                                        TareaInmediata unaTareaInmediata
+                                                = procesarTareaInmediata(tareaSiguiente);
+                                        Repositorio.getInstancia().
+                                                agregarEnSiguientes(unaTareaInmediata);
+                                        break;
+                                }
+                            }
                         }
-                    }
+                        break;
                 }
-                
-                Proyecto unProyecto = new Proyecto(
-                        nombreProyecto, 
-                        Timestamp.valueOf(fechaFin), 
-                        Integer.parseInt(idProyecto));
             }
+
         }
     }
 
-    private static void procesarTareaProyecto(NodeList nl) throws DOMException, NumberFormatException {
-        
-        
+    /**
+     * @author Juan J. Luque Morales
+     * Convierte una etiqueta del archivo XML a un objeto TareaInmediata.
+     *
+     * @param e un elemento del XML que representa a la TareaInmediata.
+     * @return un objeto TareaInmediata.
+     * @throws DOMException si hay un error relacionado con el XML.
+     * @throws NumberFormatException si el id de la tarea no es un valor
+     * numérico.
+     */
+    private static TareaInmediata procesarTareaInmediata(Element e)
+            throws DOMException, NumberFormatException {
+
+        TareaInmediata unaTareaInmediata = new TareaInmediata(
+                false, "", Complejidad.Media, "", "", 0);
+
+        //Atributo id
+        unaTareaInmediata.setId(Integer.parseInt(e.getAttribute("id")));
+
+        //Nodos dentro de TareaInmediata
+        NodeList nodosTareaInmediata = e.getChildNodes();
+
+        for (int i = 0; i < nodosTareaInmediata.getLength(); i++) {
+
+            if (nodosTareaInmediata.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+                //Una etiqueta de TareaInmediata
+                Element etiquetaTareaInmediata = (Element) nodosTareaInmediata.item(i);
+
+                switch (etiquetaTareaInmediata.getTagName()) {
+
+                    case "terminada":
+
+                        unaTareaInmediata.setTerminada(Boolean.valueOf(
+                                etiquetaTareaInmediata.getTextContent().trim()));
+                        break;
+
+                    case "contexto":
+
+                        unaTareaInmediata.setContexto(
+                                etiquetaTareaInmediata.getTextContent().trim());
+                        break;
+
+                    case "complejidad":
+
+                        unaTareaInmediata.setMiComplejidad(Complejidad.valueOf(
+                                etiquetaTareaInmediata.getTextContent().trim()));
+                        break;
+
+                    case "anotacion":
+
+                        unaTareaInmediata.setDescripcion(
+                                etiquetaTareaInmediata.getTextContent().trim());
+                        break;
+
+                    case "nombre":
+
+                        unaTareaInmediata.setNombre(
+                                etiquetaTareaInmediata.getTextContent().trim());
+                        break;
+                }
+            }
+        }
+
+        return unaTareaInmediata;
     }
 
+    /**
+     * @author Juan J. Luque Morales
+     * Convierte una etiqueta del archivo XML a un objeto Proyecto.
+     *
+     * @param e un elemento del XML que representa un Proyecto.
+     * @return un objeto Proyecto.
+     * @throws DOMException si hay un error relacionado con el XML.
+     * @throws NumberFormatException si el id del proyecto no es un valor
+     * numérico.
+     */
+    private static Proyecto procesarProyecto(Element e)
+            throws DOMException, NumberFormatException {
+
+        Proyecto unProyecto = new Proyecto("", null, 0);
+
+        //Atributo id
+        unProyecto.setId(Integer.parseInt(e.getAttribute("id")));
+        //Lista de nodos del elemento Proyecto
+        NodeList nodosProyecto = e.getChildNodes();
+
+        for (int i = 0; i < nodosProyecto.getLength(); i++) {
+
+            if (nodosProyecto.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+                Element etiquetaProyecto = (Element) nodosProyecto.item(i);
+
+                switch (etiquetaProyecto.getTagName()) {
+
+                    case "nombre":
+                        unProyecto.setNombreP(
+                                etiquetaProyecto.getTextContent().trim());
+                        break;
+
+                    case "fecha_fin":
+                        unProyecto.setFechaFin(Timestamp.valueOf(
+                                etiquetaProyecto.getTextContent().trim()));
+                        break;
+
+                    case "lista_tareas_proyecto":
+                        TareaProyecto unaTareaProyecto;
+                        //Nodos de la lista de tareas del proyecto.
+                        NodeList tareas = etiquetaProyecto.getChildNodes();
+
+                        for (int j = 0; j < tareas.getLength(); j++) {
+
+                            if (tareas.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                Element tareaProyecto = (Element) tareas.item(j);
+                                unaTareaProyecto = procesarTareaProyecto(tareaProyecto);
+                                unaTareaProyecto.setUnProyecto(unProyecto);
+                                unProyecto.insertarTareaProyecto(unaTareaProyecto);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        return unProyecto;
+    }
+
+    /**
+     * @author Juan J. Luque Morales
+     * Convierte una etiqueta del archivo XML a un objeto TareaProyecto.
+     *
+     * @param e un elemento del XML que representa una TareaProyecto.
+     * @return un objeto TareaProyecto.
+     * @throws DOMException si hay un error relacionado con el XML.
+     * @throws NumberFormatException si el id no es un valor numérico.
+     */
+    private static TareaProyecto procesarTareaProyecto(Element e)
+            throws DOMException, NumberFormatException {
+
+        TareaProyecto unaTareaProyecto = new TareaProyecto(
+                null, Prioridad.Media, "", Complejidad.Media, "", "", 0);
+
+        //Atributo id
+        unaTareaProyecto.setId(Integer.parseInt(e.getAttribute("id")));
+
+        //Lista de nodos de la TareaProyecto
+        NodeList nodosTareaProyecto = e.getChildNodes();
+
+        for (int i = 0; i < nodosTareaProyecto.getLength(); i++) {
+
+            if (nodosTareaProyecto.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+                Element etiquetaTareaProyecto = (Element) nodosTareaProyecto.item(i);
+
+                switch (etiquetaTareaProyecto.getTagName()) {
+
+                    case "prioridad":
+                        unaTareaProyecto.setMiPrioridad(Prioridad.valueOf(
+                                etiquetaTareaProyecto.getTextContent().trim()));
+                        break;
+
+                    case "contexto":
+                        unaTareaProyecto.setContexto(
+                                etiquetaTareaProyecto.getTextContent().trim());
+                        break;
+
+                    case "complejidad":
+                        unaTareaProyecto.setMiComplejidad(Complejidad.valueOf(
+                                etiquetaTareaProyecto.getTextContent().trim()));
+                        break;
+                    case "anotacion":
+                        unaTareaProyecto.setDescripcion(
+                                etiquetaTareaProyecto.getTextContent().trim());
+                        break;
+                    case "nombre":
+                        unaTareaProyecto.setNombre(
+                                etiquetaTareaProyecto.getTextContent().trim());
+                        break;
+                }
+            }
+        }
+        return unaTareaProyecto;
+    }
+
+    /**
+     * @author Juan J. Luque Morales
+     * Guarda los contextos que lea del archivo XML en el la lista "contextos"
+     * del repositorio.
+     *
+     * @param nl una lista de nodos que contiene los contextos.
+     * @throws DOMException si hay algún fallo relacionado con el XML.
+     */
     private static void procesarContextos(NodeList nl) throws DOMException {
 
         for (int i = 0; i < nl.getLength(); i++) {
@@ -214,182 +536,166 @@ public class IEDatos {
         }
     }
 
-    private static void procesarTareaSimple(NodeList nl) throws NumberFormatException, DOMException {
+    /**
+     * @author Juan J. Luque Morales
+     * Convierte una etiqueta del XML a un objeto TareaSimple.
+     *
+     * @param e un elemento que representa una TareaSimple.
+     * @return un objeto TareaSimple.
+     * @throws NumberFormatException si el id no tiene un valor numérico.
+     * @throws DOMException si hay algún fallo relacionado con el XML.
+     */
+    private static TareaSimple procesarTareaSimple(Element e)
+            throws NumberFormatException, DOMException {
 
-        for (int i = 0; i < nl.getLength(); i++) {
+        TareaSimple unaTareaSimple = new TareaSimple(
+                "", Complejidad.Media, "", "", 0);
+        //Atributo id.
+        unaTareaSimple.setId(Integer.parseInt(e.getAttribute("id")));
 
-            String idTareaSimple = "";
-            String nombreTareaSimple = "";
-            String contextoTareaSimple = "";
-            String anotacionTareaSimple = "";
-            String complejidadTareaSimple = "";
+        //Lista de nodos del elemento TareaSimple.
+        NodeList nodosTareaSimple = e.getChildNodes();
 
-            if (nl.item(i).getNodeType() == Node.ELEMENT_NODE) {
+        for (int i = 0; i < nodosTareaSimple.getLength(); i++) {
 
-                //Elemento TareaSimple.
-                Element tareaSimple = (Element) nl.item(i);
+            if (nodosTareaSimple.item(i).getNodeType() == Node.ELEMENT_NODE) {
 
-                //Atributo id.
-                idTareaSimple = tareaSimple.getAttribute("id");
+                Element etiquetaTareaSimple = (Element) nodosTareaSimple.item(i);
 
-                //Lista de nodos del elemento TareaSimple.
-                NodeList nodosTareaSimple = tareaSimple.getChildNodes();
+                switch (etiquetaTareaSimple.getTagName()) {
+                    case "nombre":
+                        unaTareaSimple.setNombre(
+                                etiquetaTareaSimple.getTextContent().trim());
+                        break;
 
-                /*Creamos un objeto TareaSimple a partir del
-                contenido de las etiquetas.*/
-                for (int j = 0; j < nodosTareaSimple.getLength(); j++) {
+                    case "contexto":
+                        unaTareaSimple.setContexto(
+                                etiquetaTareaSimple.getTextContent().trim());
+                        break;
 
-                    if (nodosTareaSimple.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                    case "anotacion":
+                        unaTareaSimple.setDescripcion(
+                                etiquetaTareaSimple.getTextContent().trim());
+                        break;
 
-                        Element etiquetaTareaSimple = (Element) nodosTareaSimple.item(j);
-
-                        switch (etiquetaTareaSimple.getTagName()) {
-                            case "nombre":
-                                nombreTareaSimple
-                                        = etiquetaTareaSimple.getTextContent().trim();
-                                break;
-
-                            case "contexto":
-                                contextoTareaSimple
-                                        = etiquetaTareaSimple.getTextContent().trim();
-                                break;
-
-                            case "anotacion":
-                                anotacionTareaSimple
-                                        = etiquetaTareaSimple.getTextContent().trim();
-                                break;
-
-                            case "complejidad":
-                                complejidadTareaSimple
-                                        = etiquetaTareaSimple.getTextContent().trim();
-                                break;
-                        }
-                    }
+                    case "complejidad":
+                        unaTareaSimple.setMiComplejidad(Complejidad.valueOf(
+                                etiquetaTareaSimple.getTextContent().trim()));
+                        break;
                 }
-                TareaSimple unaTareaSimple = new TareaSimple(
-                        contextoTareaSimple,
-                        Complejidad.valueOf(complejidadTareaSimple),
-                        anotacionTareaSimple,
-                        nombreTareaSimple,
-                        Integer.parseInt(idTareaSimple));
-                Repositorio.getInstancia().agregarEnSeguimiento(
-                        unaTareaSimple);
             }
         }
-    }
-
-    private static void procesarTareaAgenda(NodeList nl) throws DOMException, NumberFormatException {
-
-        for (int i = 0; i < nl.getLength(); i++) {
-
-            String fechaFinTareaAgenda = "";
-            String fechaInicioTareaAgenda = "";
-            String contextoTareaAgenda = "";
-            String complejidadTareaAgenda = "";
-            String anotacionTareaAgenda = "";
-            String nombreTareaAgenda = "";
-            String idTareaAgenda = "";
-
-            if (nl.item(i).getNodeType() == Node.ELEMENT_NODE) {
-
-                //Lista de nodos del elemento TareaAgenda
-                Element tareaAgenda = (Element) nl.item(i);
-                //Atributo id
-                idTareaAgenda = tareaAgenda.getAttribute("id");
-                //Lista de nodos del elemento TareaAgenda
-                NodeList nodosTareaAgenda = tareaAgenda.getChildNodes();
-
-                for (int j = 0; j < nodosTareaAgenda.getLength(); j++) {
-
-                    if (nodosTareaAgenda.item(j).getNodeType() == Node.ELEMENT_NODE) {
-
-                        Element etiquetaTareaAgenda = (Element) nodosTareaAgenda.item(j);
-
-                        switch (etiquetaTareaAgenda.getTagName()) {
-
-                            case "fecha_fin":
-                                fechaFinTareaAgenda
-                                        = etiquetaTareaAgenda.getTextContent();
-                                break;
-
-                            case "fecha_inicio":
-                                fechaInicioTareaAgenda
-                                        = etiquetaTareaAgenda.getTextContent();
-                                break;
-
-                            case "contexto":
-                                contextoTareaAgenda
-                                        = etiquetaTareaAgenda.getTextContent().trim();
-                                break;
-
-                            case "complejidad":
-                                complejidadTareaAgenda
-                                        = etiquetaTareaAgenda.getTextContent().trim();
-                                break;
-
-                            case "anotacion":
-                                anotacionTareaAgenda
-                                        = etiquetaTareaAgenda.getTextContent().trim();
-                                break;
-
-                            case "nombre":
-                                nombreTareaAgenda
-                                        = etiquetaTareaAgenda.getTextContent().trim();
-                                break;
-                        }
-                    }
-                }
-                //Tenemos que preguntar el formato de fecha
-                TareaAgenda unaTareaAgenda = new TareaAgenda(
-                        Timestamp.valueOf(fechaFinTareaAgenda),
-                        Timestamp.valueOf(fechaInicioTareaAgenda),
-                        contextoTareaAgenda,
-                        Complejidad.valueOf(complejidadTareaAgenda),
-                        anotacionTareaAgenda,
-                        nombreTareaAgenda,
-                        Integer.parseInt(idTareaAgenda)
-                );
-
-                Repositorio.getInstancia().getAgenda().add(unaTareaAgenda);
-            }
-        }
-    }
-
-    private static void procesarTareaEntrada(NodeList nl) throws DOMException, NumberFormatException {
-
-        for (int i = 0; i < nl.getLength(); i++) {
-
-            String idTareaEntrada = "";
-            String nombreTareaEntrada = "";
-
-            if (nl.item(i).getNodeType() == Node.ELEMENT_NODE) {
-
-                //Elemento TareaEntrada
-                Element tareaEntrada = (Element) nl.item(i);
-                //Etiqueta nombre.
-                nombreTareaEntrada = tareaEntrada.getTextContent().trim();
-                //Atributo id
-                idTareaEntrada = tareaEntrada.getAttribute("id").trim();
-
-                //Creamos un objeto y lo guardamos en el repositorio.
-                TareaEntrada unaTareaEntrada = new TareaEntrada(
-                        nombreTareaEntrada,
-                        Integer.parseInt(idTareaEntrada));
-
-                Repositorio.getInstancia().agregarEnBandeja(unaTareaEntrada);
-            }
-        }
+        return unaTareaSimple;
     }
 
     /**
+     * @author Juan J. Luque Morales
+     * Convierte una etiqueta del archivo XML a un objeto TareaAgenda.
+     *
+     * @param e un elemento que representa una TareaAgenda.
+     * @return un objeto TareaAgenda.
+     * @throws DOMException si hay algún fallo relacionado con el XML.
+     * @throws NumberFormatException si el id no tiene valor numérico.
+     */
+    private static TareaAgenda procesarTareaAgenda(Element e)
+            throws DOMException, NumberFormatException {
+
+        TareaAgenda unaTareaAgenda = new TareaAgenda(null, null, "",
+                Complejidad.Media, "", "", 0);
+
+        //Atributo id
+        unaTareaAgenda.setId(Integer.parseInt(e.getAttribute("id")));
+        //Lista de nodos del elemento TareaAgenda
+        NodeList nodosTareaAgenda = e.getChildNodes();
+
+        for (int i = 0; i < nodosTareaAgenda.getLength(); i++) {
+
+            if (nodosTareaAgenda.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+                Element etiquetaTareaAgenda = (Element) nodosTareaAgenda.item(i);
+
+                switch (etiquetaTareaAgenda.getTagName()) {
+
+                    case "fecha_fin":
+                        unaTareaAgenda.setFechaFin(Timestamp.valueOf(
+                                etiquetaTareaAgenda.getTextContent().trim()));
+                        break;
+
+                    case "fecha_inicio":
+                        unaTareaAgenda.setFechaInicio(Timestamp.valueOf(
+                                etiquetaTareaAgenda.getTextContent().trim()));
+                        break;
+
+                    case "contexto":
+                        unaTareaAgenda.setContexto(
+                                etiquetaTareaAgenda.getTextContent().trim());
+                        break;
+
+                    case "complejidad":
+                        unaTareaAgenda.setMiComplejidad(Complejidad.valueOf(
+                                etiquetaTareaAgenda.getTextContent().trim()));
+                        break;
+
+                    case "anotacion":
+                        unaTareaAgenda.setDescripcion(
+                                etiquetaTareaAgenda.getTextContent().trim());
+                        break;
+
+                    case "nombre":
+                        unaTareaAgenda.setNombre(
+                                etiquetaTareaAgenda.getTextContent().trim());
+                        break;
+                }
+            }
+        }
+        return unaTareaAgenda;
+    }
+
+    /**
+     * @author Juan J. Luque Morales
+     * Convierte una etiqueta del archivo XML en un objeto TareaEntrada.
+     *
+     * @param e el elemento del archivo XML que representa una TareaEntrada.
+     * @return un objeto TareaEntrada.
+     * @throws DOMException si hay algún fallo relacionado con el XML.
+     * @throws NumberFormatException si el id no tiene valor numérico.
+     */
+    private static TareaEntrada procesarTareaEntrada(Element e)
+            throws DOMException, NumberFormatException {
+
+        TareaEntrada unaTareaEntrada;
+        String idTareaEntrada = "";
+        String nombreTareaEntrada = "";
+
+        nombreTareaEntrada = e.getTextContent().trim();
+
+        idTareaEntrada = e.getAttribute("id").trim();
+
+        unaTareaEntrada = new TareaEntrada(nombreTareaEntrada,
+                Integer.parseInt(idTareaEntrada));
+
+        return unaTareaEntrada;
+    }
+
+    /**
+     * @author Juan J. Luque Morales
      * Compara la fecha de modificación del archivo xml con la fecha de la
      * última conexión a la base de datos del programa.
      *
+     * @param l un long que representa la fecha de la última sincronización de
+     * la base de datos.
      * @return true si están sincronizados y false si no lo están.
      */
-    public static boolean compararSincro() {
+    public static boolean comprobarSincro(long l) {
 
         boolean datosSincro = false;
+
+        File f = new File(ruta);
+        long fm = f.lastModified();
+
+        if (fm == l) {
+            datosSincro = true;
+        }
 
         return datosSincro;
 

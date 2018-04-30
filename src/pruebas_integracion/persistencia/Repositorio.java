@@ -72,7 +72,7 @@ public class Repositorio {
         archivoSeguimiento = new ArrayList<>();
         archivoConsulta = new ArrayList<>();
         accionesSiguientes = new ArrayList<>();
-       
+        papelera = new ArrayList<>();
     }
 
     public ArrayList<String> getContextos() {
@@ -115,6 +115,24 @@ public class Repositorio {
         return accionesSiguientes;
     }
     
+    /**
+     * @author Juan J. Luque Morales
+     * Busca un proyecto en la lista "proyectos" del Repositorio.
+     * @param id el id del proyecto buscado.
+     * @return un objeto Proyecto o null si no existe ningún proyecto con el id 
+     *         pasado por parámetro.
+     */
+    public Proyecto buscarProyecto(int id) {
+        Proyecto proyectoBuscado = null;
+        
+        for (Proyecto p : proyectos){
+            
+            if (p.getId() == id){
+                proyectoBuscado = p;
+            }
+        }
+        return proyectoBuscado;
+    }
     
     public void agregarEnContextos(String contexto) {
         contextos.add(contexto);
