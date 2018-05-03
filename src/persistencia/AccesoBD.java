@@ -1,4 +1,4 @@
-package pruebas_integracion.persistencia;
+package persistencia;
 
 
 import java.sql.Connection;
@@ -17,15 +17,15 @@ import java.sql.SQLException;
  */
 public class AccesoBD {
     private static final String CONNECTION_URL = "jdbc:mysql://35.198.95.47/proyecto?" +
-    "user=aplicacion&password=Apl.caci0n";
+    "user=aplicacion&password=Apl.caci0n&useSSL=false";
     // Obtener la conexión
     
-    public static Connection abrirConexion () throws SQLException {
+    public Connection abrirConexion () throws SQLException {
         Connection con = DriverManager.getConnection(CONNECTION_URL); 
         return con;
     }
     
-    public static void cerrarConexion (Connection con) throws SQLException {
+    public void cerrarConexion (Connection con) throws SQLException {
         con.close();
     }
   

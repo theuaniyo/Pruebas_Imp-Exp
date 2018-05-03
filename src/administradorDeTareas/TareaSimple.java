@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pruebas_integracion.administradorDeTareas;
+package administradorDeTareas;
 
+import java.util.Date;
 
 /**
  *
@@ -15,17 +16,17 @@ public class TareaSimple extends TareaEntrada {
     private String contexto;
     private Complejidad miComplejidad;
     private String anotacion;
-    
-/**
+
+    /**
      *
      * @param contexto
-     * @param anotacion
+     * @param descripcion
      * @param miComplejidad
      * @param nombre
-     * @param id 
+     * @param id
      */
     public TareaSimple(String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
-        super(nombre, id);
+        super(nombre);
         this.contexto = contexto;
         this.miComplejidad = miComplejidad;
         this.anotacion = anotacion;
@@ -47,8 +48,6 @@ public class TareaSimple extends TareaEntrada {
         this.miComplejidad = miComplejidad;
     }
 
-    
-
     /**
      *
      * @return
@@ -69,7 +68,7 @@ public class TareaSimple extends TareaEntrada {
      *
      * @return
      */
-    public String getDescripcion() {
+    public String getAnotacion() {
         return anotacion;
     }
 
@@ -77,7 +76,7 @@ public class TareaSimple extends TareaEntrada {
      *
      * @param descripcion
      */
-    public void setDescripcion(String descripcion) {
+    public void setAnotacion(String descripcion) {
         this.anotacion = descripcion;
     }
 

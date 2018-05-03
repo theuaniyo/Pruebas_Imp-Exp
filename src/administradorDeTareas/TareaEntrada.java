@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pruebas_integracion.administradorDeTareas;
+package administradorDeTareas;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ import java.util.Date;
 public class TareaEntrada {
     
     private String nombre;
-   
+    private static int cantidad = 0;
     private int id;
 
     /**
@@ -22,9 +22,11 @@ public class TareaEntrada {
      * @param nombre
      * @param id
      */
-    public TareaEntrada(String nombre, int id) {
+    public TareaEntrada(String nombre) {
         this.nombre = nombre;
-        this.id=id;
+        cantidad++;
+        
+        this.id=cantidad;
     }
 
     /**
@@ -51,13 +53,6 @@ public class TareaEntrada {
         return id;
     }
 
-    /**
-     *
-     * @param id
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
 
    
 }

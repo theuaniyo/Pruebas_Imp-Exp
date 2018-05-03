@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pruebas_integracion.IEDatos;
+package IEDatos;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -25,15 +25,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import pruebas_integracion.administradorDeTareas.Complejidad;
-import pruebas_integracion.administradorDeTareas.Prioridad;
-import pruebas_integracion.administradorDeTareas.Proyecto;
-import pruebas_integracion.administradorDeTareas.TareaAgenda;
-import pruebas_integracion.administradorDeTareas.TareaEntrada;
-import pruebas_integracion.administradorDeTareas.TareaInmediata;
-import pruebas_integracion.administradorDeTareas.TareaProyecto;
-import pruebas_integracion.administradorDeTareas.TareaSimple;
-import pruebas_integracion.persistencia.Repositorio;
+import administradorDeTareas.Complejidad;
+import administradorDeTareas.Prioridad;
+import administradorDeTareas.Proyecto;
+import administradorDeTareas.TareaAgenda;
+import administradorDeTareas.TareaEntrada;
+import administradorDeTareas.TareaInmediata;
+import administradorDeTareas.TareaProyecto;
+import administradorDeTareas.TareaSimple;
+import java.lang.reflect.Field;
+import persistencia.Repositorio;
 
 /**
  * Clase que se usa para guardar y cargar datos desde archivos xml.
@@ -75,7 +76,7 @@ public class IEDatos {
     public static void guardarXml() {
 
         //Crear DOM vacío
-        Document xml = pruebasXML.DOMUtil.crearDOMVacio(RAIZ);
+        Document xml = DOMUtil.crearDOMVacio(RAIZ);
         //xml.createAttribute("usuario");//.setValue(miUsuario.getNick);
         //PONER A GTD SE AÑANDA UN ATRIBUTO USUARIO
         if (!Repositorio.getInstancia().getContextos().isEmpty()) {
@@ -94,7 +95,15 @@ public class IEDatos {
                 Element eleTareaAgenda = xml.createElement("tarea_agenda");
                 eleListaTareasAgenda.appendChild(eleTareaAgenda);
 
-                eleTareaAgenda.setAttribute("id", (Integer.toString(ta.getId())));
+                Field[] campos = TareaAgenda.class.getDeclaredFields();
+
+                eleTareaAgenda = xml.createElement("tarea_agenda");
+                for (Field campo : campos) {
+                    Element eleCampo = xml.createElement(campo.getName());
+                    eleCampo.setTextContent(campo.toString());
+                    eleTareaAgenda.appendChild(eleCampo);
+                }
+                /*eleTareaAgenda.setAttribute("id", (Integer.toString(ta.getId())));
 
                 Element eleFechaFin = xml.createElement("fecha_fin");
                 eleFechaFin.setTextContent(ta.getFechaFin().toString());
@@ -113,12 +122,12 @@ public class IEDatos {
                 eleTareaAgenda.appendChild(eleComplejidadTareaAgenda);
 
                 Element eleAnotacionTareaAgenda = xml.createElement("anotacion");
-                eleAnotacionTareaAgenda.setTextContent(ta.getDescripcion());
+                eleAnotacionTareaAgenda.setTextContent(ta.getAnotacion());
                 eleTareaAgenda.appendChild(eleAnotacionTareaAgenda);
 
                 Element eleNombreTareaAgenda = xml.createElement("nombre");
                 eleNombreTareaAgenda.setTextContent(ta.getNombre());
-                eleTareaAgenda.appendChild(eleNombreTareaAgenda);
+                eleTareaAgenda.appendChild(eleNombreTareaAgenda);*/
 
             }
         }
@@ -209,7 +218,7 @@ public class IEDatos {
                         eleTareaProyectoAnotacion.setTextContent(tp.getDescripcion());
 
                         Element eleTareaProyectoNombre = xml.createElement("nombre");
-                        eleTareaProyecto.appendChild(eleTareaProyectoNombre);
+                        eleTareaProyecto.appendChild(eleTareaProyecto);
                         eleTareaProyectoNombre.setTextContent(tp.getNombre());
 
                     }
@@ -226,13 +235,13 @@ public class IEDatos {
             xml.getDocumentElement().appendChild(elePapelera);
 
             for (TareaEntrada tep : Repositorio.getInstancia().getPapelera()) {
-                //if (tep.getClass().equals(TareaEntrada.class)) {
+                if (tep.getClass().equals(TareaEntrada.class)) {
                     Element eleTareaEntradaPape = xml.createElement("tarea_entrada");
                     elePapelera.appendChild(eleTareaEntradaPape);
                     eleTareaEntradaPape.setAttribute("id", (Integer.toString(tep.getId())));
 
                     Element elePapeTareaEntradaNombre = xml.createElement("nombre");
-                    elePapeTareaEntradaNombre.setTextContent(tep.getNombre());
+                    eleTareaEntradaPape.setTextContent(tep.getNombre());
                     eleTareaEntradaPape.appendChild(elePapeTareaEntradaNombre);
                     /*
                 } else if (tep.getClass().equals(TareaSimple.class)) {
@@ -365,9 +374,9 @@ public class IEDatos {
                     Element eleFechaFinProyectoPape = xml.createElement("fecha_fin");
                     eleFechaFinProyectoPape.setAttribute("fecha", p.getFechaFin().toString());
                     eleProyectoPape.appendChild(eleFechaFinProyectoPape);
-                    */
-                //}
-                    
+                     */
+                }
+
             }
         }
         if (!Repositorio.getInstancia().getArchivoSeguimiento().isEmpty()) {
@@ -468,14 +477,13 @@ public class IEDatos {
             }
 
         }
-        DOMUtil.DOM2XML(xml, "prueba.xml");
+        DOMUtil.DOM2XML(xml, ruta);
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Carga los datos del programa desde un archivo XML. Para cambiar la ruta
-     * desde la que se cargará el archivo, hay que usar el método setRuta de
-     * esta clase.
+     * @author Juan J. Luque Morales Carga los datos del programa desde un
+     * archivo XML. Para cambiar la ruta desde la que se cargará el archivo, hay
+     * que usar el método setRuta de esta clase.
      *
      */
     public static void cargarDesdeXml() {
@@ -583,11 +591,11 @@ public class IEDatos {
                             if (papelera.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
                                 Element tareaEnPapelera = (Element) papelera.item(j);
-                                
+
                                 TareaEntrada unaTareaEntrada
-                                                = procesarTareaEntrada(tareaEnPapelera);
-                                        Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaEntrada);
+                                        = procesarTareaEntrada(tareaEnPapelera);
+                                Repositorio.getInstancia().
+                                        agregarEnPapelera(unaTareaEntrada);
 
                                 /*
                                 switch (tareaEnPapelera.getNodeName()) {
@@ -732,8 +740,8 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Convierte una etiqueta del archivo XML a un objeto TareaInmediata.
+     * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML a un
+     * objeto TareaInmediata.
      *
      * @param e un elemento del XML que representa a la TareaInmediata.
      * @return un objeto TareaInmediata.
@@ -799,8 +807,8 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Convierte una etiqueta del archivo XML a un objeto Proyecto.
+     * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML a un
+     * objeto Proyecto.
      *
      * @param e un elemento del XML que representa un Proyecto.
      * @return un objeto Proyecto.
@@ -811,7 +819,7 @@ public class IEDatos {
     private static Proyecto procesarProyecto(Element e)
             throws DOMException, NumberFormatException {
 
-        Proyecto unProyecto = new Proyecto("", null, 0);
+        Proyecto unProyecto = new Proyecto("", null);
 
         //Atributo id
         unProyecto.setId(Integer.parseInt(e.getAttribute("id")));
@@ -859,8 +867,8 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Convierte una etiqueta del archivo XML a un objeto TareaProyecto.
+     * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML a un
+     * objeto TareaProyecto.
      *
      * @param e un elemento del XML que representa una TareaProyecto.
      * @return un objeto TareaProyecto.
@@ -916,9 +924,8 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Guarda los contextos que lea del archivo XML en el la lista "contextos"
-     * del repositorio.
+     * @author Juan J. Luque Morales Guarda los contextos que lea del archivo
+     * XML en el la lista "contextos" del repositorio.
      *
      * @param nl una lista de nodos que contiene los contextos.
      * @throws DOMException si hay algún fallo relacionado con el XML.
@@ -938,8 +945,8 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Convierte una etiqueta del XML a un objeto TareaSimple.
+     * @author Juan J. Luque Morales Convierte una etiqueta del XML a un objeto
+     * TareaSimple.
      *
      * @param e un elemento que representa una TareaSimple.
      * @return un objeto TareaSimple.
@@ -990,8 +997,8 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Convierte una etiqueta del archivo XML a un objeto TareaAgenda.
+     * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML a un
+     * objeto TareaAgenda.
      *
      * @param e un elemento que representa una TareaAgenda.
      * @return un objeto TareaAgenda.
@@ -1053,8 +1060,8 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Convierte una etiqueta del archivo XML en un objeto TareaEntrada.
+     * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML en
+     * un objeto TareaEntrada.
      *
      * @param e el elemento del archivo XML que representa una TareaEntrada.
      * @return un objeto TareaEntrada.
@@ -1079,9 +1086,9 @@ public class IEDatos {
     }
 
     /**
-     * @author Juan J. Luque Morales
-     * Compara la fecha de modificación del archivo xml con la fecha de la
-     * última conexión a la base de datos del programa.
+     * @author Juan J. Luque Morales Compara la fecha de modificación del
+     * archivo xml con la fecha de la última conexión a la base de datos del
+     * programa.
      *
      * @param l un long que representa la fecha de la última sincronización de
      * la base de datos.

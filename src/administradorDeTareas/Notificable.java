@@ -3,26 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pruebas_integracion.administradorDeTareas;
+package administradorDeTareas;
 
 /**
  *
  * @author xisko
  */
-public enum Prioridad {  
-
+public interface Notificable {
+ 
     /**
-     *
+     * Interface que implementa el metodo notificable
      */
-    Alta,  
-
-    /**
-     *
-     */
-    Media,  
-
-    /**
-     *
-     */
-    Baja  
+    void Notificar();
+    
 }
