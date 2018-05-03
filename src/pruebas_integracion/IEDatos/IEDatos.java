@@ -209,7 +209,7 @@ public class IEDatos {
                         eleTareaProyectoAnotacion.setTextContent(tp.getDescripcion());
 
                         Element eleTareaProyectoNombre = xml.createElement("nombre");
-                        eleTareaProyecto.appendChild(eleTareaProyecto);
+                        eleTareaProyecto.appendChild(eleTareaProyectoNombre);
                         eleTareaProyectoNombre.setTextContent(tp.getNombre());
 
                     }
@@ -226,13 +226,13 @@ public class IEDatos {
             xml.getDocumentElement().appendChild(elePapelera);
 
             for (TareaEntrada tep : Repositorio.getInstancia().getPapelera()) {
-                if (tep.getClass().equals(TareaEntrada.class)) {
+                //if (tep.getClass().equals(TareaEntrada.class)) {
                     Element eleTareaEntradaPape = xml.createElement("tarea_entrada");
                     elePapelera.appendChild(eleTareaEntradaPape);
                     eleTareaEntradaPape.setAttribute("id", (Integer.toString(tep.getId())));
 
                     Element elePapeTareaEntradaNombre = xml.createElement("nombre");
-                    eleTareaEntradaPape.setTextContent(tep.getNombre());
+                    elePapeTareaEntradaNombre.setTextContent(tep.getNombre());
                     eleTareaEntradaPape.appendChild(elePapeTareaEntradaNombre);
                     /*
                 } else if (tep.getClass().equals(TareaSimple.class)) {
@@ -366,7 +366,7 @@ public class IEDatos {
                     eleFechaFinProyectoPape.setAttribute("fecha", p.getFechaFin().toString());
                     eleProyectoPape.appendChild(eleFechaFinProyectoPape);
                     */
-                }
+                //}
                     
             }
         }
@@ -468,7 +468,7 @@ public class IEDatos {
             }
 
         }
-        DOMUtil.DOM2XML(xml, ruta);
+        DOMUtil.DOM2XML(xml, "prueba.xml");
     }
 
     /**

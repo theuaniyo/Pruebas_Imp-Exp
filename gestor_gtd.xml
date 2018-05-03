@@ -38,7 +38,6 @@
       <complejidad>Media_Baja</complejidad>
       <anotacion>Una anotacion</anotacion>
       <nombre>Una TareaInmediata</nombre>
-      <terminada>false</terminada>
     </tarea_inmediata>
     <tarea_inmediata id="6">
       <terminada>false</terminada>
@@ -74,6 +73,7 @@
     <tarea_entrada id="10">
       <nombre>Una TareaEntrada borrada</nombre>
     </tarea_entrada>
+    <!--
     <tarea_simple id="11">
       <contexto>Un Contexto</contexto>
       <complejidad>Media</complejidad>
@@ -122,6 +122,7 @@
       <anotacion>Otra anotación borrada más</anotacion>
       <nombre>Otra TareaProyecto borrada más</nombre>
     </tarea_proyecto>
+    -->
   </papelera>
   <archivo_seguimiento>
     <tarea_entrada id="19">
