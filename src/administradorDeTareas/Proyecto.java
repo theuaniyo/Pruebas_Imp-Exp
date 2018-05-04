@@ -17,6 +17,7 @@ public class Proyecto {
     private String nombreP;
 	private ArrayList<TareaProyecto> listaTareasProyecto;
 	private Timestamp fechaFin;
+        private int id;
 
     /**
      *
@@ -87,5 +88,15 @@ public class Proyecto {
         
         listaTareasProyecto.remove(miTarea);
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+        
     
 }
