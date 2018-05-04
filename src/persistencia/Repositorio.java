@@ -36,7 +36,7 @@ public class Repositorio {
     private ArrayList<String> contextos;
     private ArrayList<TareaAgenda> agenda;
     private ArrayList<TareaEntrada> bandejaEntrada;
-    private ArrayList<TareaSimple> tareasInmediatas;
+    private ArrayList<TareaInmediata> tareasInmediatas;
     private ArrayList<Proyecto> proyectos;
     //Que de error al agregar un usuario si el nick ya está pillado.
     private ArrayList<Usuario> usuarios;
@@ -48,7 +48,7 @@ public class Repositorio {
     //Algún día  tal vez
     private ArrayList<TareaEntrada> archivoSeguimiento;
     private ArrayList<TareaEntrada> archivoConsulta;
-
+    //Acciones simples y tareasProyecto
     private ArrayList<TareaSimple> accionesSiguientes;
 
     private static Repositorio instancia = null;
@@ -95,7 +95,7 @@ public class Repositorio {
         return contextos;
     }
 
-    public ArrayList<TareaSimple> getTareasInmediatas() {
+    public ArrayList<TareaInmediata> getTareasInmediatas() {
         return tareasInmediatas;
     }
 
@@ -139,7 +139,7 @@ public class Repositorio {
         bandejaEntrada.add(nuevaTarea);
     }
 
-    public void agregarEnInmediatas(TareaSimple nuevaTarea) {
+    public void agregarEnInmediatas(TareaInmediata nuevaTarea) {
         tareasInmediatas.add(nuevaTarea);
     }
 
