@@ -378,7 +378,7 @@ public class IEDatos {
                                 //Una etiqueta TareaInmediata
                                 Element tareaInmediata
                                         = (Element) tareasInmediatas.item(j);
-                                TareaSimple unaTareaInmediata
+                                TareaInmediata unaTareaInmediata
                                         = procesarTareaInmediata(tareaInmediata);
                                 Repositorio.getInstancia().agregarEnInmediatas(
                                         unaTareaInmediata);
@@ -573,14 +573,14 @@ public class IEDatos {
      * @throws NumberFormatException si el id de la tarea no es un valor
      * numérico.
      */
-    private static TareaSimple procesarTareaInmediata(Element e)
+    private static TareaInmediata procesarTareaInmediata(Element e)
             throws DOMException, NumberFormatException {
 
-        TareaSimple unaTareaInmediata = new TareaSimple(
-                 "", Complejidad.Media, "", "", 0);
+        TareaInmediata unaTareaInmediata = new TareaInmediata(
+                false, "", Complejidad.Media, "", "", 0);
 
         //Atributo id
-        unaTareaInmediata.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaInmediata.setId(Integer.parseInt(e.getAttribute("id")));
 
         //Nodos dentro de TareaInmediata
         NodeList nodosTareaInmediata = e.getChildNodes();
@@ -646,7 +646,7 @@ public class IEDatos {
         Proyecto unProyecto = new Proyecto("", null);
 
         //Atributo id
-        unProyecto.setId(Integer.parseInt(e.getAttribute("id")));
+        //unProyecto.setId(Integer.parseInt(e.getAttribute("id")));
         //Lista de nodos del elemento Proyecto
         NodeList nodosProyecto = e.getChildNodes();
 
@@ -706,7 +706,7 @@ public class IEDatos {
                 null, Prioridad.Media, "", Complejidad.Media, "", "", 0);
 
         //Atributo id
-        unaTareaProyecto.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaProyecto.setId(Integer.parseInt(e.getAttribute("id")));
 
         //Lista de nodos de la TareaProyecto
         NodeList nodosTareaProyecto = e.getChildNodes();
@@ -783,7 +783,7 @@ public class IEDatos {
         TareaSimple unaTareaSimple = new TareaSimple(
                 "", Complejidad.Media, "", "", 0);
         //Atributo id.
-        unaTareaSimple.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaSimple.setId(Integer.parseInt(e.getAttribute("id")));
 
         //Lista de nodos del elemento TareaSimple.
         NodeList nodosTareaSimple = e.getChildNodes();
@@ -836,7 +836,7 @@ public class IEDatos {
                 Complejidad.Media, "", "", 0);
 
         //Atributo id
-        unaTareaAgenda.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaAgenda.setId(Integer.parseInt(e.getAttribute("id")));
         //Lista de nodos del elemento TareaAgenda
         NodeList nodosTareaAgenda = e.getChildNodes();
 

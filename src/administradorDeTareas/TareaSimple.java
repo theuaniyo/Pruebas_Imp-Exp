@@ -82,15 +82,7 @@ public class TareaSimple extends TareaEntrada {
     public void setAnotacion(String descripcion) {
         this.anotacion = descripcion;
     }
-
-    public void setId(int id){
-        this.id = id;
-    }
     
-    public int getId(){
-        return id;
-    }
-
     public String getDescripcion() {
         return descripcion;
     }
