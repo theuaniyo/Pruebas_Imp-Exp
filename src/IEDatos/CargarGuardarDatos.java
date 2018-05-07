@@ -5,8 +5,6 @@
  */
 package IEDatos;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Scanner;
 import administradorDeTareas.Proyecto;
 import administradorDeTareas.TareaAgenda;
@@ -49,7 +47,7 @@ public class CargarGuardarDatos {
                         System.out.println(t.getId());
                         System.out.println(t.getNombre());
                         System.out.println(t.getContexto());
-                        System.out.println(t.getDescripcion());
+                        System.out.println(t.getAnotacion());
                         System.out.println(t.getMiComplejidad().toString());
                         System.out.println(t.getFechaInicio());
                         System.out.println(t.getFechaFin());
@@ -65,7 +63,7 @@ public class CargarGuardarDatos {
                     for (TareaInmediata t : Repositorio.getInstancia().getTareasInmediatas()) {
                         System.out.println(t.getId());
                         System.out.println(t.getNombre());
-                        System.out.println(t.getDescripcion());
+                        System.out.println(t.getAnotacion());
                         System.out.println(t.getContexto());
                         System.out.println(t.getMiComplejidad().toString());
                     }
@@ -78,7 +76,7 @@ public class CargarGuardarDatos {
                         for (TareaProyecto tp : p.getListaTareasProyecto()) {
                             System.out.println(tp.getId());
                             System.out.println(tp.getNombre());
-                            System.out.println(tp.getDescripcion());
+                            System.out.println(tp.getAnotacion());
                             System.out.println(tp.getContexto());
                             System.out.println(tp.getMiComplejidad());
                             System.out.println(tp.getMiPrioridad());
@@ -97,7 +95,7 @@ public class CargarGuardarDatos {
                             System.out.println(ta.getId());
                             System.out.println(ta.getNombre());
                             System.out.println(ta.getContexto());
-                            System.out.println(ta.getDescripcion());
+                            System.out.println(ta.getAnotacion());
                             System.out.println(ta.getMiComplejidad().toString());
                             System.out.println(ta.getFechaInicio());
                             System.out.println(ta.getFechaFin());
@@ -105,14 +103,14 @@ public class CargarGuardarDatos {
                             TareaSimple ts = (TareaSimple) t;
                             System.out.println(ts.getId());
                             System.out.println(ts.getNombre());
-                            System.out.println(ts.getDescripcion());
+                            System.out.println(ts.getAnotacion());
                             System.out.println(ts.getContexto());
                             System.out.println(ts.getMiComplejidad());
                         } else if (t.getClass().equals(TareaInmediata.class)) {
                             TareaInmediata ti = (TareaInmediata) t;
                             System.out.println(ti.getId());
                             System.out.println(ti.getNombre());
-                            System.out.println(ti.getDescripcion());
+                            System.out.println(ti.getAnotacion());
                             System.out.println(ti.getContexto());
                             System.out.println(ti.getMiComplejidad());
                             System.out.println(ti.isTerminada());
@@ -120,7 +118,7 @@ public class CargarGuardarDatos {
                             TareaProyecto tp = (TareaProyecto) t;
                             System.out.println(tp.getId());
                             System.out.println(tp.getNombre());
-                            System.out.println(tp.getDescripcion());
+                            System.out.println(tp.getAnotacion());
                             System.out.println(tp.getContexto());
                             System.out.println(tp.getMiComplejidad());
                             System.out.println(tp.getMiPrioridad());
@@ -150,7 +148,7 @@ public class CargarGuardarDatos {
                             TareaInmediata ti = (TareaInmediata) t;
                             System.out.println(ti.getId());
                             System.out.println(ti.getNombre());
-                            System.out.println(ti.getDescripcion());
+                            System.out.println(ti.getAnotacion());
                             System.out.println(ti.getContexto());
                             System.out.println(ti.getMiComplejidad());
                             System.out.println(ti.isTerminada());
@@ -158,7 +156,7 @@ public class CargarGuardarDatos {
                         } else {
                             System.out.println(t.getId());
                             System.out.println(t.getNombre());
-                            System.out.println(t.getDescripcion());
+                            System.out.println(t.getAnotacion());
                             System.out.println(t.getContexto());
                             System.out.println(t.getMiComplejidad());
                         }

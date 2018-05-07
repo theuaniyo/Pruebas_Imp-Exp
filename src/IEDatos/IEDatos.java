@@ -160,7 +160,8 @@ public class IEDatos {
                 }
             }
         }
-        DOMUtil.DOM2XML(xml, ruta);
+//######¡OJO! El segundo parámetro habría que cambiarlo al atributo ruta.#######
+        DOMUtil.DOM2XML(xml, "prueba.xml");
     }
 
     private static void escribirTareaInmediataXml(Document xml, Element eleAccionesSiguientes, TareaInmediata ti) throws DOMException {
@@ -237,7 +238,7 @@ public class IEDatos {
     private static void escribirTareaProyectoXml(Document xml, Element eleListaTareasProyectos, TareaProyecto tp) throws DOMException {
         Element eleTareaProyecto = xml.createElement("tarea_proyecto");
         eleListaTareasProyectos.appendChild(eleTareaProyecto);
-        eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
+        //eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
         //eleTareaProyecto.setAttribute("proyecto", Integer.toString(tp.getUnProyecto().getId()));
         
         Element eleTareaProyectoPrioridad = xml.createElement("prioridad");
@@ -257,7 +258,7 @@ public class IEDatos {
         eleTareaProyectoAnotacion.setTextContent(tp.getAnotacion());
         
         Element eleTareaProyectoNombre = xml.createElement("nombre");
-        eleTareaProyecto.appendChild(eleTareaProyecto);
+        eleTareaProyecto.appendChild(eleTareaProyectoNombre);
         eleTareaProyectoNombre.setTextContent(tp.getNombre());
     }
 
@@ -614,7 +615,7 @@ public class IEDatos {
 
                     case "anotacion":
 
-                        unaTareaInmediata.setDescripcion(
+                        unaTareaInmediata.setAnotacion(
                                 etiquetaTareaInmediata.getTextContent().trim());
                         break;
 
@@ -734,7 +735,7 @@ public class IEDatos {
                                 etiquetaTareaProyecto.getTextContent().trim()));
                         break;
                     case "anotacion":
-                        unaTareaProyecto.setDescripcion(
+                        unaTareaProyecto.setAnotacion(
                                 etiquetaTareaProyecto.getTextContent().trim());
                         break;
                     case "nombre":
@@ -806,7 +807,7 @@ public class IEDatos {
                         break;
 
                     case "anotacion":
-                        unaTareaSimple.setDescripcion(
+                        unaTareaSimple.setAnotacion(
                                 etiquetaTareaSimple.getTextContent().trim());
                         break;
 
@@ -869,7 +870,7 @@ public class IEDatos {
                         break;
 
                     case "anotacion":
-                        unaTareaAgenda.setDescripcion(
+                        unaTareaAgenda.setAnotacion(
                                 etiquetaTareaAgenda.getTextContent().trim());
                         break;
 
@@ -896,15 +897,14 @@ public class IEDatos {
             throws DOMException, NumberFormatException {
 
         TareaEntrada unaTareaEntrada;
-        String idTareaEntrada = "";
+        //String idTareaEntrada = "";
         String nombreTareaEntrada = "";
 
         nombreTareaEntrada = e.getTextContent().trim();
 
-        idTareaEntrada = e.getAttribute("id").trim();
+        //idTareaEntrada = e.getAttribute("id").trim();
 
-        unaTareaEntrada = new TareaEntrada(nombreTareaEntrada,
-                Integer.parseInt(idTareaEntrada));
+        unaTareaEntrada = new TareaEntrada(nombreTareaEntrada);
 
         return unaTareaEntrada;
     }

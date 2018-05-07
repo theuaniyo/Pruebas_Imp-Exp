@@ -22,9 +22,8 @@ public class TareaEntrada {
      * @param nombre
      * @param id
      */
-    public TareaEntrada(String nombre,int id) {
+    public TareaEntrada(String nombre) {
         this.nombre = nombre;
-        this.id = id;
         cantidad++;
         
         this.id=cantidad;
