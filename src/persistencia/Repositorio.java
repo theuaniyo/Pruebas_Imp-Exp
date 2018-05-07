@@ -33,13 +33,16 @@ import java.util.ArrayList;
  */
 public class Repositorio {
 
+    /**
+     * Contexto
+     */
     private ArrayList<String> contextos;
     private ArrayList<TareaAgenda> agenda;
     private ArrayList<TareaEntrada> bandejaEntrada;
     private ArrayList<TareaSimple> tareasInmediatas;
     private ArrayList<Proyecto> proyectos;
     //Que de error al agregar un usuario si el nick ya está pillado.
-    private ArrayList<Usuario> usuarios;
+    //private ArrayList<Usuario> usuarios;
 
     private ArrayList<TareaEntrada> papelera;
 
@@ -49,6 +52,7 @@ public class Repositorio {
     private ArrayList<TareaEntrada> archivoSeguimiento;
     private ArrayList<TareaEntrada> archivoConsulta;
 
+    //TareaProyecto y TareaSimple
     private ArrayList<TareaSimple> accionesSiguientes;
 
     private static Repositorio instancia = null;
@@ -73,7 +77,7 @@ public class Repositorio {
         bandejaEntrada = new ArrayList<>();
         tareasInmediatas = new ArrayList<>();
         proyectos = new ArrayList<>();
-        usuarios = new ArrayList<>();
+        //usuarios = new ArrayList<>();
         archivoSeguimiento = new ArrayList<>();
         archivoConsulta = new ArrayList<>();
         accionesSiguientes = new ArrayList<>();
@@ -103,9 +107,9 @@ public class Repositorio {
         return proyectos;
     }
 
-    public ArrayList<Usuario> getUsuarios() {
+    /*public ArrayList<Usuario> getUsuarios() {
         return usuarios;
-    }
+    }*/
 
     public ArrayList<TareaEntrada> getPapelera() {
         return papelera;
@@ -147,9 +151,9 @@ public class Repositorio {
         proyectos.add(nuevoProyecto);
     }
 
-    public void agregarEnUsuarios(Usuario nuevoUsuario) {
+    /*public void agregarEnUsuarios(Usuario nuevoUsuario) {
         usuarios.add(nuevoUsuario);
-    }
+    }*/
 
     public void agregarEnSeguimiento(TareaEntrada nuevaTarea) {
         archivoSeguimiento.add(nuevaTarea);
@@ -188,9 +192,9 @@ public class Repositorio {
         proyectos.remove(nuevoProyecto);
     }
 
-    public void quitarEnUsuarios(Usuario nuevoUsuario) {
+    /*public void quitarEnUsuarios(Usuario nuevoUsuario) {
         usuarios.remove(nuevoUsuario);
-    }
+    }*/
 
     public void quitarEnSeguimiento(TareaEntrada nuevaTarea) {
         archivoSeguimiento.remove(nuevaTarea);
