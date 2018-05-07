@@ -92,43 +92,7 @@ public class IEDatos {
             Element eleListaTareasAgenda = xml.createElement("agenda");
             xml.getDocumentElement().appendChild(eleListaTareasAgenda);
             for (TareaAgenda ta : Repositorio.getInstancia().getAgenda()) {
-                Element eleTareaAgenda = xml.createElement("tarea_agenda");
-                eleListaTareasAgenda.appendChild(eleTareaAgenda);
-
-                Field[] campos = TareaAgenda.class.getDeclaredFields();
-
-                eleTareaAgenda = xml.createElement("tarea_agenda");
-                for (Field campo : campos) {
-                    Element eleCampo = xml.createElement(campo.getName());
-                    eleCampo.setTextContent(campo.toString());
-                    eleTareaAgenda.appendChild(eleCampo);
-                }
-                /*eleTareaAgenda.setAttribute("id", (Integer.toString(ta.getId())));
-
-                Element eleFechaFin = xml.createElement("fecha_fin");
-                eleFechaFin.setTextContent(ta.getFechaFin().toString());
-                eleTareaAgenda.appendChild(eleFechaFin);
-
-                Element eleFechaInicio = xml.createElement("fecha_inicio");
-                eleFechaInicio.setTextContent(ta.getFechaInicio().toString());
-                eleTareaAgenda.appendChild(eleFechaInicio);
-
-                Element eleContextoTareaAgenda = xml.createElement("contexto");
-                eleContextoTareaAgenda.setTextContent(ta.getContexto());
-                eleTareaAgenda.appendChild(eleContextoTareaAgenda);
-
-                Element eleComplejidadTareaAgenda = xml.createElement("complejidad");
-                eleComplejidadTareaAgenda.setTextContent(ta.getMiComplejidad().toString());
-                eleTareaAgenda.appendChild(eleComplejidadTareaAgenda);
-
-                Element eleAnotacionTareaAgenda = xml.createElement("anotacion");
-                eleAnotacionTareaAgenda.setTextContent(ta.getAnotacion());
-                eleTareaAgenda.appendChild(eleAnotacionTareaAgenda);
-
-                Element eleNombreTareaAgenda = xml.createElement("nombre");
-                eleNombreTareaAgenda.setTextContent(ta.getNombre());
-                eleTareaAgenda.appendChild(eleNombreTareaAgenda);*/
-
+                escribirTareaAgendaXml(xml, eleListaTareasAgenda, ta);
             }
         }
         if (!Repositorio.getInstancia().getBandejaEntrada().isEmpty()) {
@@ -136,14 +100,7 @@ public class IEDatos {
             xml.getDocumentElement().appendChild(eleBandejaEntrada);
             for (TareaEntrada te : Repositorio.getInstancia().getBandejaEntrada()) {
 
-                Element eleTareaEntrada = xml.createElement("tarea_entrada");
-                eleBandejaEntrada.appendChild(eleTareaEntrada);
-
-                eleTareaEntrada.setAttribute("id", (Integer.toString(te.getId())));
-
-                Element eleNombreTareaEntrada = xml.createElement("nombre");
-                eleNombreTareaEntrada.setTextContent(te.getNombre());
-                eleTareaEntrada.appendChild(eleNombreTareaEntrada);
+                escribirTareaEntradaXml(xml, eleBandejaEntrada, te);
             }
         }
         if (!Repositorio.getInstancia().getTareasInmediatas().isEmpty()) {
@@ -152,82 +109,14 @@ public class IEDatos {
             xml.getDocumentElement().appendChild(eleTareasInmediatas);
 
             for (TareaInmediata ti : Repositorio.getInstancia().getTareasInmediatas()) {
-                Element eleTareaInmediata = xml.createElement("tarea_inmediata");
-                eleTareasInmediatas.appendChild(eleTareaInmediata);
-                eleTareaInmediata.setAttribute("id", (Integer.toString(ti.getId())));
-
-                Element eleTareaInmediataTerminada = xml.createElement("terminada");
-                eleTareaInmediataTerminada.setTextContent(Boolean.toString(ti.isTerminada()));
-                eleTareaInmediata.appendChild(eleTareaInmediataTerminada);
-
-                Element eleTareaInmediataContexto = xml.createElement("contexto");
-                eleTareaInmediataContexto.setTextContent(ti.getContexto());
-                eleTareaInmediata.appendChild(eleTareaInmediataContexto);
-
-                Element eleTareaInmediataComplejidad = xml.createElement("complejidad");
-                eleTareaInmediataComplejidad.setTextContent(ti.getMiComplejidad().toString());
-                eleTareaInmediata.appendChild(eleTareaInmediataComplejidad);
-
-                Element eleTareaInmediataAnotacion = xml.createElement("anotacion");
-                eleTareaInmediataAnotacion.setTextContent(ti.getDescripcion());
-                eleTareaInmediata.appendChild(eleTareaInmediataAnotacion);
-
-                Element eleTareaInmediataNombre = xml.createElement("nombre");
-                eleTareaInmediataNombre.setTextContent(ti.getNombre());
-                eleTareaInmediata.appendChild(eleTareaInmediataNombre);
+                escribirTareaInmediataXml(xml, eleTareasInmediatas, ti);
             }
         }
-
         if (!Repositorio.getInstancia().getProyectos().isEmpty()) {
-
             Element eleProyectos = xml.createElement("proyectos");
             xml.getDocumentElement().appendChild(eleProyectos);
             for (Proyecto p : Repositorio.getInstancia().getProyectos()) {
-
-                Element eleProyecto = xml.createElement("proyecto");
-                eleProyectos.appendChild(eleProyecto);
-                eleProyecto.setAttribute("id", (Integer.toString(p.getId())));
-
-                Element eleNombreProyecto = xml.createElement("nombre");
-                eleNombreProyecto.setTextContent(p.getNombreP());
-                eleProyecto.appendChild(eleNombreProyecto);
-
-                if (!p.getListaTareasProyecto().isEmpty()) {
-                    Element eleListaTareasProyectos = xml.createElement("lista_tareas_proyecto");
-                    eleProyecto.appendChild(eleListaTareasProyectos);
-                    for (TareaProyecto tp : p.getListaTareasProyecto()) {
-                        Element eleTareaProyecto = xml.createElement("tarea_proyecto");
-                        eleListaTareasProyectos.appendChild(eleTareaProyecto);
-                        eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
-                        eleTareaProyecto.setAttribute("proyecto", Integer.toString(tp.getUnProyecto().getId()));
-
-                        Element eleTareaProyectoPrioridad = xml.createElement("prioridad");
-                        eleTareaProyecto.appendChild(eleTareaProyectoPrioridad);
-                        eleTareaProyectoPrioridad.setTextContent(tp.getMiPrioridad().toString());
-
-                        Element eleTareaProyectoContexto = xml.createElement("contexto");
-                        eleTareaProyecto.appendChild(eleTareaProyectoContexto);
-                        eleTareaProyectoContexto.setTextContent(tp.getContexto());
-
-                        Element eleTareaProyectoComplejidad = xml.createElement("complejidad");
-                        eleTareaProyecto.appendChild(eleTareaProyectoComplejidad);
-                        eleTareaProyectoComplejidad.setTextContent(tp.getMiComplejidad().toString());
-
-                        Element eleTareaProyectoAnotacion = xml.createElement("anotacion");
-                        eleTareaProyecto.appendChild(eleTareaProyectoAnotacion);
-                        eleTareaProyectoAnotacion.setTextContent(tp.getDescripcion());
-
-                        Element eleTareaProyectoNombre = xml.createElement("nombre");
-                        eleTareaProyecto.appendChild(eleTareaProyecto);
-                        eleTareaProyectoNombre.setTextContent(tp.getNombre());
-
-                    }
-                }
-
-                Element eleFechaFinProyecto = xml.createElement("fecha_fin");
-                eleFechaFinProyecto.setAttribute("fecha", p.getFechaFin().toString());
-                eleProyecto.appendChild(eleFechaFinProyecto);
-
+                escribirProyectoySusTareasProyectoXml(xml, eleProyectos, p);
             }
         }
         if (!Repositorio.getInstancia().getPapelera().isEmpty()) {
@@ -236,147 +125,8 @@ public class IEDatos {
 
             for (TareaEntrada tep : Repositorio.getInstancia().getPapelera()) {
                 if (tep.getClass().equals(TareaEntrada.class)) {
-                    Element eleTareaEntradaPape = xml.createElement("tarea_entrada");
-                    elePapelera.appendChild(eleTareaEntradaPape);
-                    eleTareaEntradaPape.setAttribute("id", (Integer.toString(tep.getId())));
-
-                    Element elePapeTareaEntradaNombre = xml.createElement("nombre");
-                    eleTareaEntradaPape.setTextContent(tep.getNombre());
-                    eleTareaEntradaPape.appendChild(elePapeTareaEntradaNombre);
-                    /*
-                } else if (tep.getClass().equals(TareaSimple.class)) {
-
-                    TareaSimple tsp = (TareaSimple) tep;
-
-                    Element eleTareaSimplePape = xml.createElement("tarea_simple");
-                    elePapelera.appendChild(eleTareaSimplePape);
-                    eleTareaSimplePape.setAttribute("id", (Integer.toString(tsp.getId())));
-
-                    Element eleTareaSimpleContextoPape = xml.createElement("contexto");
-                    eleTareaSimplePape.appendChild(eleTareaSimpleContextoPape);
-                    eleTareaSimpleContextoPape.setTextContent(tsp.getContexto());
-
-                    Element eleTareaSimpleComplejidadPape = xml.createElement("complejidad");
-                    eleTareaSimplePape.appendChild(eleTareaSimpleComplejidadPape);
-                    eleTareaSimpleComplejidadPape.setTextContent(tsp.getMiComplejidad().toString());
-
-                    Element eleTareaSimpleAnotacionPape = xml.createElement("anotacion");
-                    eleTareaSimplePape.appendChild(eleTareaSimpleAnotacionPape);
-                    eleTareaSimpleAnotacionPape.setTextContent(tsp.getDescripcion());
-
-                    Element eleTareaSimpleNombrePape = xml.createElement("nombre");
-                    eleTareaSimplePape.appendChild(eleTareaSimpleNombrePape);
-                    eleTareaSimpleNombrePape.setTextContent(tsp.getNombre());
-
-                } else if (tep.getClass().equals(TareaInmediata.class)) {
-
-                    TareaInmediata tip = (TareaInmediata) tep;
-
-                    Element eleTareaInmediataPape = xml.createElement("tarea_inmediata");
-                    elePapelera.appendChild(eleTareaInmediataPape);
-                    eleTareaInmediataPape.setAttribute("id", (Integer.toString(tip.getId())));
-
-                    Element eleTareaInmediataTerminadaPape = xml.createElement("terminada");
-                    eleTareaInmediataPape.appendChild(eleTareaInmediataTerminadaPape);
-                    eleTareaInmediataTerminadaPape.setTextContent(Boolean.toString(tip.isTerminada()));
-
-                    Element eleTareaInmediataContextoPape = xml.createElement("contexto");
-                    eleTareaInmediataPape.appendChild(eleTareaInmediataContextoPape);
-                    eleTareaInmediataContextoPape.setTextContent(tip.getContexto());
-
-                    Element eleTareaInmediataComplejidadPape = xml.createElement("complejidad");
-                    eleTareaInmediataPape.appendChild(eleTareaInmediataComplejidadPape);
-                    eleTareaInmediataComplejidadPape.setTextContent(tip.getMiComplejidad().toString());
-
-                    Element eleTareaInmediataAnotacionPape = xml.createElement("anotacion");
-                    eleTareaInmediataPape.appendChild(eleTareaInmediataAnotacionPape);
-                    eleTareaInmediataAnotacionPape.setTextContent(tip.getDescripcion());
-
-                    Element eleTareaInmediataNombrePape = xml.createElement("nombre");
-                    eleTareaInmediataPape.appendChild(eleTareaInmediataNombrePape);
-                    eleTareaInmediataNombrePape.setTextContent(tip.getNombre());
-
-                } else if (tep.getClass().equals(TareaAgenda.class)) {
-
-                    TareaAgenda tAp = (TareaAgenda) tep;
-
-                    Element eleTareaAgendaPape = xml.createElement("tarea_agenda");
-                    elePapelera.appendChild(eleTareaAgendaPape);
-
-                    eleTareaAgendaPape.setAttribute("id", (Integer.toString(tAp.getId())));
-
-                    Element eleFechaFinPape = xml.createElement("fecha_fin");
-                    eleFechaFinPape.setTextContent(tAp.getFechaFin().toString());
-                    eleTareaAgendaPape.appendChild(eleFechaFinPape);
-
-                    Element eleFechaInicioPape = xml.createElement("fecha_inicio");
-                    eleFechaInicioPape.setTextContent(tAp.getFechaInicio().toString());
-                    eleTareaAgendaPape.appendChild(eleFechaInicioPape);
-
-                    Element eleContextoTareaAgendaPape = xml.createElement("contexto");
-                    eleContextoTareaAgendaPape.setTextContent(tAp.getContexto());
-                    eleTareaAgendaPape.appendChild(eleContextoTareaAgendaPape);
-
-                    Element eleComplejidadTareaAgendaPape = xml.createElement("complejidad");
-                    eleComplejidadTareaAgendaPape.setTextContent(tAp.getMiComplejidad().toString());
-                    eleTareaAgendaPape.appendChild(eleComplejidadTareaAgendaPape);
-
-                    Element eleAnotacionTareaAgendaPape = xml.createElement("anotacion");
-                    eleAnotacionTareaAgendaPape.setTextContent(tAp.getDescripcion());
-                    eleTareaAgendaPape.appendChild(eleAnotacionTareaAgendaPape);
-
-                    Element eleNombreTareaAgendaPape = xml.createElement("nombre");
-                    eleNombreTareaAgendaPape.setTextContent(tAp.getNombre());
-                    eleTareaAgendaPape.appendChild(eleNombreTareaAgendaPape);
-
-                    //Queda por poner el proyecto y TareaProyecto
-                } else if (tep.getClass().equals(TareaProyecto.class)) {
-
-                    TareaProyecto tsp = (TareaProyecto) tep;
-                    Proyecto p = tsp.getUnProyecto();
-                    Element eleProyectoPape = xml.createElement("proyecto");
-                    elePapelera.appendChild(eleProyectoPape);
-                    eleProyectoPape.setAttribute("id", (Integer.toString(p.getId())));
-
-                    Element eleNombreProyectoPape = xml.createElement("nombre");
-                    eleNombreProyectoPape.setTextContent(p.getNombreP());
-                    eleProyectoPape.appendChild(eleNombreProyectoPape);
-
-                    if (!p.getListaTareasProyecto().isEmpty()) {
-                        Element eleListaTareasProyectosPape = xml.createElement("lista_tareas_proyecto");
-
-                        Element eleTareaProyectoPape = xml.createElement("tarea_proyecto");
-                        eleListaTareasProyectosPape.appendChild(eleTareaProyectoPape);
-                        eleTareaProyectoPape.setAttribute("id", (Integer.toString(tsp.getId())));
-                        eleTareaProyectoPape.setAttribute("proyecto", Integer.toString(tsp.getUnProyecto().getId()));
-
-                        Element eleTareaProyectoPrioridadPape = xml.createElement("prioridad");
-                        eleTareaProyectoPape.appendChild(eleTareaProyectoPrioridadPape);
-                        eleTareaProyectoPrioridadPape.setTextContent(tsp.getMiPrioridad().toString());
-
-                        Element eleTareaProyectoContextoPape = xml.createElement("contexto");
-                        eleTareaProyectoPape.appendChild(eleTareaProyectoContextoPape);
-                        eleTareaProyectoContextoPape.setTextContent(tsp.getContexto());
-
-                        Element eleTareaProyectoComplejidadPape = xml.createElement("complejidad");
-                        eleTareaProyectoPape.appendChild(eleTareaProyectoComplejidadPape);
-                        eleTareaProyectoComplejidadPape.setTextContent(tsp.getMiComplejidad().toString());
-
-                        Element eleTareaProyectoAnotacionPape = xml.createElement("anotacion");
-                        eleTareaProyectoPape.appendChild(eleTareaProyectoAnotacionPape);
-                        eleTareaProyectoAnotacionPape.setTextContent(tsp.getDescripcion());
-
-                        Element eleTareaProyectoNombrePape = xml.createElement("nombre");
-                        eleTareaProyectoPape.appendChild(eleTareaProyectoPape);
-                        eleTareaProyectoNombrePape.setTextContent(tsp.getNombre());
-                    }
-
-                    Element eleFechaFinProyectoPape = xml.createElement("fecha_fin");
-                    eleFechaFinProyectoPape.setAttribute("fecha", p.getFechaFin().toString());
-                    eleProyectoPape.appendChild(eleFechaFinProyectoPape);
-                     */
+                    escribirTareaEntradaXml(xml, elePapelera, tep);                  
                 }
-
             }
         }
         if (!Repositorio.getInstancia().getArchivoSeguimiento().isEmpty()) {
@@ -385,99 +135,174 @@ public class IEDatos {
             xml.getDocumentElement().appendChild(eleArchivoSeguimiento);
 
             for (TareaEntrada tas : Repositorio.getInstancia().getArchivoSeguimiento()) {
-
                 if (tas.getClass().equals(TareaEntrada.class)) {
-                    Element eleTareaEntradaArSeg = xml.createElement("tareas_entrada");
-                    eleArchivoSeguimiento.appendChild(eleTareaEntradaArSeg);
-
-                    eleTareaEntradaArSeg.setAttribute("id", (Integer.toString(tas.getId())));
-
-                    Element eleNombreTareaEntradaArSeg = xml.createElement("nombre");
-                    eleNombreTareaEntradaArSeg.setTextContent(tas.getNombre());
-                    eleTareaEntradaArSeg.appendChild(eleNombreTareaEntradaArSeg);
-
+                    escribirTareaEntradaXml(xml, eleArchivoSeguimiento, tas);
                 }
             }
         }
         if (!Repositorio.getInstancia().getArchivoConsulta().isEmpty()) {
-
             Element eleArchivoConsulta = xml.createElement("archivo_consulta");
             xml.getDocumentElement().appendChild(eleArchivoConsulta);
             for (TareaEntrada tas : Repositorio.getInstancia().getArchivoSeguimiento()) {
-
-                Element eleTareaEntradaArCon = xml.createElement("tarea_entrada");
-                eleArchivoConsulta.appendChild(eleTareaEntradaArCon);
-
-                eleTareaEntradaArCon.setAttribute("id", (Integer.toString(tas.getId())));
-
-                Element eleNombreTareaEntradaArCon = xml.createElement("nombre");
-                eleNombreTareaEntradaArCon.setTextContent(tas.getNombre());
-                eleTareaEntradaArCon.appendChild(eleNombreTareaEntradaArCon);
-
+                escribirTareaEntradaXml(xml, eleArchivoConsulta, tas);
             }
         }
         if (!Repositorio.getInstancia().getAccionesSiguientes().isEmpty()) {
 
             Element eleAccionesSiguientes = xml.createElement("acciones_siguientes");
             xml.getDocumentElement().appendChild(eleAccionesSiguientes);
-
             for (TareaSimple ts : Repositorio.getInstancia().getAccionesSiguientes()) {
-
                 if (ts.getClass().equals(TareaSimple.class)) {
-
-                    Element eleTareaSimpleAcSim = xml.createElement("tarea_simple");
-                    eleAccionesSiguientes.appendChild(eleTareaSimpleAcSim);
-
-                    eleTareaSimpleAcSim.setAttribute("id", (Integer.toString(ts.getId())));
-
-                    Element eleTareaSimpleContextoAcSim = xml.createElement("contexto");
-                    eleTareaSimpleAcSim.appendChild(eleTareaSimpleContextoAcSim);
-                    eleTareaSimpleContextoAcSim.setTextContent(ts.getContexto());
-
-                    Element eleTareaSimpleComplejidadAcSim = xml.createElement("complejidad");
-                    eleTareaSimpleAcSim.appendChild(eleTareaSimpleComplejidadAcSim);
-                    eleTareaSimpleComplejidadAcSim.setTextContent(ts.getMiComplejidad().toString());
-
-                    Element eleTareaSimpleAnotacionAcSim = xml.createElement("anotacion");
-                    eleTareaSimpleAcSim.appendChild(eleTareaSimpleAnotacionAcSim);
-                    eleTareaSimpleAnotacionAcSim.setTextContent(ts.getDescripcion());
-
-                    Element eleTareaSimpleNombreAcSim = xml.createElement("nombre");
-                    eleTareaSimpleAcSim.appendChild(eleTareaSimpleNombreAcSim);
-                    eleTareaSimpleNombreAcSim.setTextContent(ts.getNombre());
-
+                    escribirTareaSimpleXml(xml, eleAccionesSiguientes, ts);
                 } else if (ts.getClass().equals(TareaInmediata.class)) {
-
                     TareaInmediata ti = (TareaInmediata) ts;
-
-                    Element eleTareaInmediataAcSi = xml.createElement("tarea_inmediata");
-                    eleAccionesSiguientes.appendChild(eleTareaInmediataAcSi);
-                    eleTareaInmediataAcSi.setAttribute("id", (Integer.toString(ti.getId())));
-
-                    Element eleTareaInmediataTerminadaAcSi = xml.createElement("terminada");
-                    eleTareaInmediataAcSi.appendChild(eleTareaInmediataTerminadaAcSi);
-                    eleTareaInmediataTerminadaAcSi.setTextContent(Boolean.toString(ti.isTerminada()));
-
-                    Element eleTareaInmediataContextoAcSim = xml.createElement("contexto");
-                    eleTareaInmediataAcSi.appendChild(eleTareaInmediataContextoAcSim);
-                    eleTareaInmediataContextoAcSim.setTextContent(ti.getContexto());
-
-                    Element eleTareaInmediataComplejidadAcSim = xml.createElement("complejidad");
-                    eleTareaInmediataAcSi.appendChild(eleTareaInmediataComplejidadAcSim);
-                    eleTareaInmediataComplejidadAcSim.setTextContent(ti.getMiComplejidad().toString());
-
-                    Element eleTareaInmediataAnotacionPape = xml.createElement("anotacion");
-                    eleTareaInmediataAcSi.appendChild(eleTareaInmediataAnotacionPape);
-                    eleTareaInmediataAnotacionPape.setTextContent(ti.getDescripcion());
-
-                    Element eleTareaInmediataNombrePape = xml.createElement("nombre");
-                    eleTareaInmediataAcSi.appendChild(eleTareaInmediataNombrePape);
-                    eleTareaInmediataNombrePape.setTextContent(ti.getNombre());
+                    escribirTareaInmediataXml(xml, eleAccionesSiguientes, ti);
                 }
             }
-
         }
-        DOMUtil.DOM2XML(xml, ruta);
+//######¡OJO! El segundo parámetro habría que cambiarlo al atributo ruta.#######
+        DOMUtil.DOM2XML(xml, "prueba.xml");
+    }
+
+    private static void escribirTareaInmediataXml(Document xml, Element eleAccionesSiguientes, TareaInmediata ti) throws DOMException {
+        Element eleTareaInmediataAcSi = xml.createElement("tarea_inmediata");
+        eleAccionesSiguientes.appendChild(eleTareaInmediataAcSi);
+        //eleTareaInmediataAcSi.setAttribute("id", (Integer.toString(ti.getId())));
+        
+        Element eleTareaInmediataTerminadaAcSi = xml.createElement("terminada");
+        eleTareaInmediataAcSi.appendChild(eleTareaInmediataTerminadaAcSi);
+        eleTareaInmediataTerminadaAcSi.setTextContent(Boolean.toString(ti.isTerminada()));
+        
+        Element eleTareaInmediataContextoAcSim = xml.createElement("contexto");
+        eleTareaInmediataAcSi.appendChild(eleTareaInmediataContextoAcSim);
+        eleTareaInmediataContextoAcSim.setTextContent(ti.getContexto());
+        
+        Element eleTareaInmediataComplejidadAcSim = xml.createElement("complejidad");
+        eleTareaInmediataAcSi.appendChild(eleTareaInmediataComplejidadAcSim);
+        eleTareaInmediataComplejidadAcSim.setTextContent(ti.getMiComplejidad().toString());
+        
+        Element eleTareaInmediataAnotacionPape = xml.createElement("anotacion");
+        eleTareaInmediataAcSi.appendChild(eleTareaInmediataAnotacionPape);
+        eleTareaInmediataAnotacionPape.setTextContent(ti.getAnotacion());
+        
+        Element eleTareaInmediataNombrePape = xml.createElement("nombre");
+        eleTareaInmediataAcSi.appendChild(eleTareaInmediataNombrePape);
+        eleTareaInmediataNombrePape.setTextContent(ti.getNombre());
+    }
+
+    private static void escribirTareaSimpleXml(Document xml, Element eleAccionesSiguientes, TareaSimple ts) throws DOMException {
+        Element eleTareaSimpleAcSim = xml.createElement("tarea_simple");
+        eleAccionesSiguientes.appendChild(eleTareaSimpleAcSim);
+        
+        //eleTareaSimpleAcSim.setAttribute("id", (Integer.toString(ts.getId())));
+        
+        Element eleTareaSimpleContextoAcSim = xml.createElement("contexto");
+        eleTareaSimpleAcSim.appendChild(eleTareaSimpleContextoAcSim);
+        eleTareaSimpleContextoAcSim.setTextContent(ts.getContexto());
+        
+        Element eleTareaSimpleComplejidadAcSim = xml.createElement("complejidad");
+        eleTareaSimpleAcSim.appendChild(eleTareaSimpleComplejidadAcSim);
+        eleTareaSimpleComplejidadAcSim.setTextContent(ts.getMiComplejidad().toString());
+        
+        Element eleTareaSimpleAnotacionAcSim = xml.createElement("anotacion");
+        eleTareaSimpleAcSim.appendChild(eleTareaSimpleAnotacionAcSim);
+        eleTareaSimpleAnotacionAcSim.setTextContent(ts.getAnotacion());
+        
+        Element eleTareaSimpleNombreAcSim = xml.createElement("nombre");
+        eleTareaSimpleAcSim.appendChild(eleTareaSimpleNombreAcSim);
+        eleTareaSimpleNombreAcSim.setTextContent(ts.getNombre());
+    }
+
+    private static void escribirProyectoySusTareasProyectoXml(Document xml, Element eleProyectos, Proyecto p) throws DOMException {
+        Element eleProyecto = xml.createElement("proyecto");
+        eleProyectos.appendChild(eleProyecto);
+        //eleProyecto.setAttribute("id", (Integer.toString(p.getId())));
+        
+        Element eleNombreProyecto = xml.createElement("nombre");
+        eleNombreProyecto.setTextContent(p.getNombreP());
+        eleProyecto.appendChild(eleNombreProyecto);
+        
+        if (!p.getListaTareasProyecto().isEmpty()) {
+            Element eleListaTareasProyectos = xml.createElement("lista_tareas_proyecto");
+            eleProyecto.appendChild(eleListaTareasProyectos);
+            for (TareaProyecto tp : p.getListaTareasProyecto()) {
+                escribirTareaProyectoXml(xml, eleListaTareasProyectos, tp);               
+            }
+        }
+        
+        Element eleFechaFinProyecto = xml.createElement("fecha_fin");
+        eleFechaFinProyecto.setAttribute("fecha", p.getFechaFin().toString());
+        eleProyecto.appendChild(eleFechaFinProyecto);
+    }
+
+    private static void escribirTareaProyectoXml(Document xml, Element eleListaTareasProyectos, TareaProyecto tp) throws DOMException {
+        Element eleTareaProyecto = xml.createElement("tarea_proyecto");
+        eleListaTareasProyectos.appendChild(eleTareaProyecto);
+        //eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
+        //eleTareaProyecto.setAttribute("proyecto", Integer.toString(tp.getUnProyecto().getId()));
+        
+        Element eleTareaProyectoPrioridad = xml.createElement("prioridad");
+        eleTareaProyecto.appendChild(eleTareaProyectoPrioridad);
+        eleTareaProyectoPrioridad.setTextContent(tp.getMiPrioridad().toString());
+        
+        Element eleTareaProyectoContexto = xml.createElement("contexto");
+        eleTareaProyecto.appendChild(eleTareaProyectoContexto);
+        eleTareaProyectoContexto.setTextContent(tp.getContexto());
+        
+        Element eleTareaProyectoComplejidad = xml.createElement("complejidad");
+        eleTareaProyecto.appendChild(eleTareaProyectoComplejidad);
+        eleTareaProyectoComplejidad.setTextContent(tp.getMiComplejidad().toString());
+        
+        Element eleTareaProyectoAnotacion = xml.createElement("anotacion");
+        eleTareaProyecto.appendChild(eleTareaProyectoAnotacion);
+        eleTareaProyectoAnotacion.setTextContent(tp.getAnotacion());
+        
+        Element eleTareaProyectoNombre = xml.createElement("nombre");
+        eleTareaProyecto.appendChild(eleTareaProyectoNombre);
+        eleTareaProyectoNombre.setTextContent(tp.getNombre());
+    }
+
+    private static void escribirTareaEntradaXml(Document xml, Element eleBandejaEntrada, TareaEntrada te) throws DOMException {
+        Element eleTareaEntrada = xml.createElement("tarea_entrada");
+        eleBandejaEntrada.appendChild(eleTareaEntrada);
+        
+        //eleTareaEntrada.setAttribute("id", (Integer.toString(te.getId())));
+        
+        Element eleNombreTareaEntrada = xml.createElement("nombre");
+        eleNombreTareaEntrada.setTextContent(te.getNombre());
+        eleTareaEntrada.appendChild(eleNombreTareaEntrada);
+    }
+
+    private static void escribirTareaAgendaXml(Document xml, Element eleListaTareasAgenda, TareaAgenda ta) throws DOMException {
+        Element eleTareaAgenda = xml.createElement("tarea_agenda");
+        eleListaTareasAgenda.appendChild(eleTareaAgenda);
+        
+        
+        //eleTareaAgenda.setAttribute("id", (Integer.toString(ta.getId())));
+        
+        Element eleFechaFin = xml.createElement("fecha_fin");
+        eleFechaFin.setTextContent(ta.getFechaFin().toString());
+        eleTareaAgenda.appendChild(eleFechaFin);
+        
+        Element eleFechaInicio = xml.createElement("fecha_inicio");
+        eleFechaInicio.setTextContent(ta.getFechaInicio().toString());
+        eleTareaAgenda.appendChild(eleFechaInicio);
+        
+        Element eleContextoTareaAgenda = xml.createElement("contexto");
+        eleContextoTareaAgenda.setTextContent(ta.getContexto());
+        eleTareaAgenda.appendChild(eleContextoTareaAgenda);
+        
+        Element eleComplejidadTareaAgenda = xml.createElement("complejidad");
+        eleComplejidadTareaAgenda.setTextContent(ta.getMiComplejidad().toString());
+        eleTareaAgenda.appendChild(eleComplejidadTareaAgenda);
+        
+        Element eleAnotacionTareaAgenda = xml.createElement("anotacion");
+        eleAnotacionTareaAgenda.setTextContent(ta.getAnotacion());
+        eleTareaAgenda.appendChild(eleAnotacionTareaAgenda);
+        
+        Element eleNombreTareaAgenda = xml.createElement("nombre");
+        eleNombreTareaAgenda.setTextContent(ta.getNombre());
+        eleTareaAgenda.appendChild(eleNombreTareaAgenda);
     }
 
     /**
@@ -724,7 +549,7 @@ public class IEDatos {
 
                                     case "tarea_inmediata":
 
-                                        TareaInmediata unaTareaInmediata
+                                        TareaSimple unaTareaInmediata
                                                 = procesarTareaInmediata(tareaSiguiente);
                                         Repositorio.getInstancia().
                                                 agregarEnSiguientes(unaTareaInmediata);
@@ -756,7 +581,7 @@ public class IEDatos {
                 false, "", Complejidad.Media, "", "", 0);
 
         //Atributo id
-        unaTareaInmediata.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaInmediata.setId(Integer.parseInt(e.getAttribute("id")));
 
         //Nodos dentro de TareaInmediata
         NodeList nodosTareaInmediata = e.getChildNodes();
@@ -790,7 +615,7 @@ public class IEDatos {
 
                     case "anotacion":
 
-                        unaTareaInmediata.setDescripcion(
+                        unaTareaInmediata.setAnotacion(
                                 etiquetaTareaInmediata.getTextContent().trim());
                         break;
 
@@ -822,7 +647,7 @@ public class IEDatos {
         Proyecto unProyecto = new Proyecto("", null);
 
         //Atributo id
-        unProyecto.setId(Integer.parseInt(e.getAttribute("id")));
+        //unProyecto.setId(Integer.parseInt(e.getAttribute("id")));
         //Lista de nodos del elemento Proyecto
         NodeList nodosProyecto = e.getChildNodes();
 
@@ -882,7 +707,7 @@ public class IEDatos {
                 null, Prioridad.Media, "", Complejidad.Media, "", "", 0);
 
         //Atributo id
-        unaTareaProyecto.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaProyecto.setId(Integer.parseInt(e.getAttribute("id")));
 
         //Lista de nodos de la TareaProyecto
         NodeList nodosTareaProyecto = e.getChildNodes();
@@ -910,7 +735,7 @@ public class IEDatos {
                                 etiquetaTareaProyecto.getTextContent().trim()));
                         break;
                     case "anotacion":
-                        unaTareaProyecto.setDescripcion(
+                        unaTareaProyecto.setAnotacion(
                                 etiquetaTareaProyecto.getTextContent().trim());
                         break;
                     case "nombre":
@@ -959,7 +784,7 @@ public class IEDatos {
         TareaSimple unaTareaSimple = new TareaSimple(
                 "", Complejidad.Media, "", "", 0);
         //Atributo id.
-        unaTareaSimple.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaSimple.setId(Integer.parseInt(e.getAttribute("id")));
 
         //Lista de nodos del elemento TareaSimple.
         NodeList nodosTareaSimple = e.getChildNodes();
@@ -982,7 +807,7 @@ public class IEDatos {
                         break;
 
                     case "anotacion":
-                        unaTareaSimple.setDescripcion(
+                        unaTareaSimple.setAnotacion(
                                 etiquetaTareaSimple.getTextContent().trim());
                         break;
 
@@ -1012,7 +837,7 @@ public class IEDatos {
                 Complejidad.Media, "", "", 0);
 
         //Atributo id
-        unaTareaAgenda.setId(Integer.parseInt(e.getAttribute("id")));
+        //unaTareaAgenda.setId(Integer.parseInt(e.getAttribute("id")));
         //Lista de nodos del elemento TareaAgenda
         NodeList nodosTareaAgenda = e.getChildNodes();
 
@@ -1045,7 +870,7 @@ public class IEDatos {
                         break;
 
                     case "anotacion":
-                        unaTareaAgenda.setDescripcion(
+                        unaTareaAgenda.setAnotacion(
                                 etiquetaTareaAgenda.getTextContent().trim());
                         break;
 
@@ -1072,15 +897,14 @@ public class IEDatos {
             throws DOMException, NumberFormatException {
 
         TareaEntrada unaTareaEntrada;
-        String idTareaEntrada = "";
+        //String idTareaEntrada = "";
         String nombreTareaEntrada = "";
 
         nombreTareaEntrada = e.getTextContent().trim();
 
-        idTareaEntrada = e.getAttribute("id").trim();
+        //idTareaEntrada = e.getAttribute("id").trim();
 
-        unaTareaEntrada = new TareaEntrada(nombreTareaEntrada,
-                Integer.parseInt(idTareaEntrada));
+        unaTareaEntrada = new TareaEntrada(nombreTareaEntrada);
 
         return unaTareaEntrada;
     }
