@@ -378,7 +378,7 @@ public class IEDatos {
                                 //Una etiqueta TareaInmediata
                                 Element tareaInmediata
                                         = (Element) tareasInmediatas.item(j);
-                                TareaInmediata unaTareaInmediata
+                                TareaSimple unaTareaInmediata
                                         = procesarTareaInmediata(tareaInmediata);
                                 Repositorio.getInstancia().agregarEnInmediatas(
                                         unaTareaInmediata);
@@ -548,7 +548,7 @@ public class IEDatos {
 
                                     case "tarea_inmediata":
 
-                                        TareaInmediata unaTareaInmediata
+                                        TareaSimple unaTareaInmediata
                                                 = procesarTareaInmediata(tareaSiguiente);
                                         Repositorio.getInstancia().
                                                 agregarEnSiguientes(unaTareaInmediata);
@@ -573,11 +573,11 @@ public class IEDatos {
      * @throws NumberFormatException si el id de la tarea no es un valor
      * numérico.
      */
-    private static TareaInmediata procesarTareaInmediata(Element e)
+    private static TareaSimple procesarTareaInmediata(Element e)
             throws DOMException, NumberFormatException {
 
-        TareaInmediata unaTareaInmediata = new TareaInmediata(
-                false, "", Complejidad.Media, "", "", 0);
+        TareaSimple unaTareaInmediata = new TareaSimple(
+                 "", Complejidad.Media, "", "", 0);
 
         //Atributo id
         unaTareaInmediata.setId(Integer.parseInt(e.getAttribute("id")));
