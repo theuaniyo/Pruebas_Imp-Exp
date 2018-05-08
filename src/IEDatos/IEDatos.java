@@ -949,7 +949,7 @@ public class IEDatos {
          * @return el documento DOM o null si no se ha podido cargar el
          * documento.
          */
-        private static Document XML2DOM(String CaminoAArchivoXml) {
+        public static Document XML2DOM(String CaminoAArchivoXml) {
             Document doc = null;
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
