@@ -17,7 +17,7 @@ public class TareaProyecto extends TareaSimple{
     
     private Proyecto unProyecto;
     private Prioridad miPrioridad;
-    
+    private String descripcion;
  
     /**
      *
@@ -70,6 +70,16 @@ public class TareaProyecto extends TareaSimple{
     public void setMiPrioridad(Prioridad miPrioridad) {
         this.miPrioridad = miPrioridad;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
+    
 
   
 

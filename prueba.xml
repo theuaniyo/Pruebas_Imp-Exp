@@ -1,114 +1,114 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <gestor_gtd>
-  <contextos>
-    <contexto>Un Contexto</contexto>
-    <contexto>Otro Contexto</contexto>
-    <contexto>Otro Contexto más</contexto>
-  </contextos>
-  <agenda>
-    <tarea_agenda>
-      <fecha_fin>2018-04-25 00:00:00.0</fecha_fin>
-      <fecha_inicio>2018-04-24 00:00:00.0</fecha_inicio>
-      <contexto>Un Contexto</contexto>
-      <complejidad>Baja</complejidad>
-      <anotacion>Una anotación</anotacion>
-      <nombre>Una TareaAgenda</nombre>
-    </tarea_agenda>
-    <tarea_agenda>
-      <fecha_fin>2018-04-27 00:00:00.0</fecha_fin>
-      <fecha_inicio>2018-04-26 00:00:00.0</fecha_inicio>
-      <contexto>Otro Contexto</contexto>
-      <complejidad>Media</complejidad>
-      <anotacion>Otra anotación</anotacion>
-      <nombre>Otra TareaAgenda</nombre>
-    </tarea_agenda>
-  </agenda>
-  <bandeja_entrada>
-    <tarea_entrada>
-      <nombre>Una TareaEntrada</nombre>
-    </tarea_entrada>
-    <tarea_entrada>
-      <nombre>Otra TareaEntrada</nombre>
-    </tarea_entrada>
-  </bandeja_entrada>
-  <tareas_inmediatas>
-    <tarea_inmediata>
-      <terminada>false</terminada>
-      <contexto>Un Contexto</contexto>
-      <complejidad>Media_Baja</complejidad>
-      <anotacion>Una anotacion</anotacion>
-      <nombre>Una TareaInmediata</nombre>
-    </tarea_inmediata>
-    <tarea_inmediata>
-      <terminada>false</terminada>
-      <contexto>Otro Contexto</contexto>
-      <complejidad>Media_Alta</complejidad>
-      <anotacion>Otra anotacion</anotacion>
-      <nombre>Otra TareaInmediata</nombre>
-    </tarea_inmediata>
-  </tareas_inmediatas>
-  <proyectos>
-    <proyecto>
-      <nombre>Un proyecto</nombre>
-      <lista_tareas_proyecto>
-        <tarea_proyecto>
-          <prioridad>Media</prioridad>
-          <contexto>Un Contexto</contexto>
-          <complejidad>Media</complejidad>
-          <anotacion>Una anotación</anotacion>
-          <nombre>Una TareaProyecto</nombre>
-        </tarea_proyecto>
-        <tarea_proyecto>
-          <prioridad>Media</prioridad>
-          <contexto>Un Contexto</contexto>
-          <complejidad>Media</complejidad>
-          <anotacion>Otra anotación</anotacion>
-          <nombre>Otra TareaProyecto</nombre>
-        </tarea_proyecto>
-      </lista_tareas_proyecto>
-      <fecha_fin fecha="2018-04-23 00:00:00.0"/>
-    </proyecto>
-  </proyectos>
-  <papelera>
-    <tarea_entrada>
-      <nombre>Una TareaEntrada borrada</nombre>
-    </tarea_entrada>
-  </papelera>
-  <archivo_seguimiento>
-    <tarea_entrada>
-      <nombre>Another TareaEntrada</nombre>
-    </tarea_entrada>
-    <tarea_entrada>
-      <nombre>One more TareaEntrada</nombre>
-    </tarea_entrada>
-  </archivo_seguimiento>
-  <archivo_consulta>
-    <tarea_entrada>
-      <nombre>Another TareaEntrada</nombre>
-    </tarea_entrada>
-    <tarea_entrada>
-      <nombre>One more TareaEntrada</nombre>
-    </tarea_entrada>
-  </archivo_consulta>
-  <acciones_siguientes>
-    <tarea_simple>
-      <contexto>Un Contexto</contexto>
-      <complejidad>Media</complejidad>
-      <anotacion>una anotacion</anotacion>
-      <nombre>Una TareaSimple</nombre>
-    </tarea_simple>
-    <tarea_inmediata>
-      <terminada>false</terminada>
-      <contexto>Otro Contexto más</contexto>
-      <complejidad>Media_Alta</complejidad>
-      <anotacion>Otra anotacion más</anotacion>
-      <nombre>Una TareaInmediata</nombre>
-    </tarea_inmediata>
-    <tarea_simple>
-      <contexto>Otro Contexto</contexto>
-      <complejidad>Alta</complejidad>
-      <anotacion>Otra anotacion</anotacion>
-      <nombre>Otra TareaSimple</nombre>
-    </tarea_simple>
-  </acciones_siguientes>
+<contextos>
+<contexto>Un Contexto</contexto>
+<contexto>Otro Contexto</contexto>
+<contexto>Otro Contexto más</contexto>
+</contextos>
+<agenda>
+<tarea_agenda id="1">
+<fecha_fin>2018-04-25 00:00:00.0</fecha_fin>
+<fecha_inicio>2018-04-24 00:00:00.0</fecha_inicio>
+<contexto>Un Contexto</contexto>
+<complejidad>Baja</complejidad>
+<anotacion>Una anotación</anotacion>
+<nombre>Una TareaAgenda</nombre>
+</tarea_agenda>
+<tarea_agenda id="2">
+<fecha_fin>2018-04-27 00:00:00.0</fecha_fin>
+<fecha_inicio>2018-04-26 00:00:00.0</fecha_inicio>
+<contexto>Otro Contexto</contexto>
+<complejidad>Media</complejidad>
+<anotacion>Otra anotación</anotacion>
+<nombre>Otra TareaAgenda</nombre>
+</tarea_agenda>
+</agenda>
+<bandeja_entrada>
+<tarea_entrada id="3">
+<nombre>Una TareaEntrada</nombre>
+</tarea_entrada>
+<tarea_entrada id="4">
+<nombre>Otra TareaEntrada</nombre>
+</tarea_entrada>
+</bandeja_entrada>
+<tareas_inmediatas>
+<tarea_inmediata id="5">
+<terminada>false</terminada>
+<contexto>Un Contexto</contexto>
+<complejidad>Media_Baja</complejidad>
+<anotacion>Una anotacion</anotacion>
+<nombre>Una TareaInmediata</nombre>
+</tarea_inmediata>
+<tarea_inmediata id="6">
+<terminada>false</terminada>
+<contexto>Otro Contexto</contexto>
+<complejidad>Media_Alta</complejidad>
+<anotacion>Otra anotacion</anotacion>
+<nombre>Otra TareaInmediata</nombre>
+</tarea_inmediata>
+</tareas_inmediatas>
+<proyectos>
+<proyecto id="7">
+<nombre>Un proyecto</nombre>
+<lista_tareas_proyecto>
+<tarea_proyecto id="8" proyecto="7">
+<prioridad>Media</prioridad>
+<contexto>Un Contexto</contexto>
+<complejidad>Media</complejidad>
+<anotacion>Una anotación</anotacion>
+<nombre>Una TareaProyecto</nombre>
+</tarea_proyecto>
+<tarea_proyecto id="9" proyecto="7">
+<prioridad>Media</prioridad>
+<contexto>Un Contexto</contexto>
+<complejidad>Media</complejidad>
+<anotacion>Otra anotación</anotacion>
+<nombre>Otra TareaProyecto</nombre>
+</tarea_proyecto>
+</lista_tareas_proyecto>
+<fecha_fin fecha="2018-04-23 00:00:00.0"/>
+</proyecto>
+</proyectos>
+<papelera>
+<tarea_entrada id="10">
+<nombre>Una TareaEntrada borrada</nombre>
+</tarea_entrada>
+</papelera>
+<archivo_seguimiento>
+<tareas_entrada id="19">
+<nombre>Another TareaEntrada</nombre>
+</tareas_entrada>
+<tareas_entrada id="20">
+<nombre>One more TareaEntrada</nombre>
+</tareas_entrada>
+</archivo_seguimiento>
+<archivo_consulta>
+<tarea_entrada id="19">
+<nombre>Another TareaEntrada</nombre>
+</tarea_entrada>
+<tarea_entrada id="20">
+<nombre>One more TareaEntrada</nombre>
+</tarea_entrada>
+</archivo_consulta>
+<acciones_siguientes>
+<tarea_simple id="23">
+<contexto>Un Contexto</contexto>
+<complejidad>Media</complejidad>
+<anotacion>una anotacion</anotacion>
+<nombre>Una TareaSimple</nombre>
+</tarea_simple>
+<tarea_inmediata id="24">
+<terminada>false</terminada>
+<contexto>Otro Contexto más</contexto>
+<complejidad>Media_Alta</complejidad>
+<anotacion>Otra anotacion más</anotacion>
+<nombre>Una TareaInmediata</nombre>
+</tarea_inmediata>
+<tarea_simple id="25">
+<contexto>Otro Contexto</contexto>
+<complejidad>Alta</complejidad>
+<anotacion>Otra anotacion</anotacion>
+<nombre>Otra TareaSimple</nombre>
+</tarea_simple>
+</acciones_siguientes>
 </gestor_gtd>
