@@ -75,10 +75,10 @@ public class IEDatos {
      */
     public static void guardarXml() {
 
-        //Crear DOM vacío
+        //Crea DOM vacío
         Document xml = DOMUtil.crearDOMVacio(RAIZ);
         //xml.createAttribute("usuario");//.setValue(miUsuario.getNick);
-        //PONER A GTD SE AÑANDA UN ATRIBUTO USUARIO
+       
         if (!Repositorio.getInstancia().getContextos().isEmpty()) {
             Element eleContextos = xml.createElement("contextos");
             xml.getDocumentElement().appendChild(eleContextos);
@@ -163,7 +163,14 @@ public class IEDatos {
 //######¡OJO! El segundo parámetro habría que cambiarlo al atributo ruta.#######
         DOMUtil.DOM2XML(xml, "prueba.xml");
     }
-
+/**
+ * Crea elementos de la TareaInmediata y elementos hijos de sus variables, es 
+ * hija del parametro Element que recibe.  
+ * @param xml
+ * @param eleAccionesSiguientes
+ * @param ti
+ * @throws DOMException 
+ */
     private static void escribirTareaInmediataXml(Document xml, Element eleAccionesSiguientes, TareaInmediata ti) throws DOMException {
         Element eleTareaInmediataAcSi = xml.createElement("tarea_inmediata");
         eleAccionesSiguientes.appendChild(eleTareaInmediataAcSi);
@@ -189,7 +196,14 @@ public class IEDatos {
         eleTareaInmediataAcSi.appendChild(eleTareaInmediataNombrePape);
         eleTareaInmediataNombrePape.setTextContent(ti.getNombre());
     }
-
+/**
+ * Crea Element de la TareaSimple y elementos hijos de sus variables, es 
+ * hija del parametro Element que recibe.
+ * @param xml
+ * @param eleAccionesSiguientes
+ * @param ts
+ * @throws DOMException 
+ */
     private static void escribirTareaSimpleXml(Document xml, Element eleAccionesSiguientes, TareaSimple ts) throws DOMException {
         Element eleTareaSimpleAcSim = xml.createElement("tarea_simple");
         eleAccionesSiguientes.appendChild(eleTareaSimpleAcSim);
@@ -212,7 +226,14 @@ public class IEDatos {
         eleTareaSimpleAcSim.appendChild(eleTareaSimpleNombreAcSim);
         eleTareaSimpleNombreAcSim.setTextContent(ts.getNombre());
     }
-
+/**
+ * Crea elementos de la Proyecto y elementos hijos de sus variables y sus TareasProyecto, es 
+ * hijo del parametro Element que recibe.
+ * @param xml
+ * @param eleProyectos
+ * @param p
+ * @throws DOMException 
+ */
     private static void escribirProyectoySusTareasProyectoXml(Document xml, Element eleProyectos, Proyecto p) throws DOMException {
         Element eleProyecto = xml.createElement("proyecto");
         eleProyectos.appendChild(eleProyecto);
@@ -234,7 +255,14 @@ public class IEDatos {
         eleFechaFinProyecto.setAttribute("fecha", p.getFechaFin().toString());
         eleProyecto.appendChild(eleFechaFinProyecto);
     }
-
+/**
+ * Crea elemento TareasProyecto con sus atributos como elementos hijos.
+ * Es hijo del parametro Element que recibe.
+ * @param xml
+ * @param eleListaTareasProyectos
+ * @param tp
+ * @throws DOMException 
+ */
     private static void escribirTareaProyectoXml(Document xml, Element eleListaTareasProyectos, TareaProyecto tp) throws DOMException {
         Element eleTareaProyecto = xml.createElement("tarea_proyecto");
         eleListaTareasProyectos.appendChild(eleTareaProyecto);
@@ -261,7 +289,14 @@ public class IEDatos {
         eleTareaProyecto.appendChild(eleTareaProyectoNombre);
         eleTareaProyectoNombre.setTextContent(tp.getNombre());
     }
-
+/**
+ * Crea Element de la TareaEntrada y elementos hijos de sus variables, es 
+ * hija del parametro Element que recibe.
+ * @param xml
+ * @param eleBandejaEntrada
+ * @param te
+ * @throws DOMException 
+ */
     private static void escribirTareaEntradaXml(Document xml, Element eleBandejaEntrada, TareaEntrada te) throws DOMException {
         Element eleTareaEntrada = xml.createElement("tarea_entrada");
         eleBandejaEntrada.appendChild(eleTareaEntrada);
@@ -272,7 +307,14 @@ public class IEDatos {
         eleNombreTareaEntrada.setTextContent(te.getNombre());
         eleTareaEntrada.appendChild(eleNombreTareaEntrada);
     }
-
+/**
+ * Crea Element de la TareaAgenda y elementos hijos de sus variables, es 
+ * hija del parametro Element que recibe.
+ * @param xml
+ * @param eleListaTareasAgenda
+ * @param ta
+ * @throws DOMException 
+ */
     private static void escribirTareaAgendaXml(Document xml, Element eleListaTareasAgenda, TareaAgenda ta) throws DOMException {
         Element eleTareaAgenda = xml.createElement("tarea_agenda");
         eleListaTareasAgenda.appendChild(eleTareaAgenda);
