@@ -120,6 +120,7 @@ public class IEDatos {
             }
         }
         if (!Repositorio.getInstancia().getPapelera().isEmpty()) {
+            //Cambiar PAPELERA por TAREASFINALIZADAS
             Element elePapelera = xml.createElement("papelera");
             xml.getDocumentElement().appendChild(elePapelera);
 
@@ -404,7 +405,7 @@ public class IEDatos {
                         }
                         break;
 
-                    //EN PRINCIPIO EN LA PAPELERA SÓLO HAY OBJETOS TAREAENTRADA
+                    //Cambiar PAPELERA por TAREASFINALIZADAS
                     case "papelera":
 
                         //Lista de nodos dentro de la etiqueta papelera

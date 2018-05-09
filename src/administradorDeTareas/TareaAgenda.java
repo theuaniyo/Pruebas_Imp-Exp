@@ -5,7 +5,6 @@
  */
 package administradorDeTareas;
 
-
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -13,10 +12,10 @@ import java.util.Date;
  *
  * @author xisko
  */
-public class TareaAgenda extends TareaSimple{
-    
+public class TareaAgenda extends TareaSimple {
+
     private Timestamp fechaFin;
-    
+
     private Timestamp fechaInicio;
 
     /**
@@ -29,8 +28,8 @@ public class TareaAgenda extends TareaSimple{
      * @param nombre
      * @param id
      */
-    public TareaAgenda(Timestamp fechaFin, Timestamp fechaInicio, String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
-        super(contexto, miComplejidad, anotacion, nombre, id);
+    public TareaAgenda(Timestamp fechaFin, Timestamp fechaInicio, String contexto, Complejidad miComplejidad, String anotacion, String nombre) {
+        super(contexto, miComplejidad, anotacion, nombre);
         this.fechaFin = fechaFin;
         this.fechaInicio = fechaInicio;
     }
@@ -66,16 +65,5 @@ public class TareaAgenda extends TareaSimple{
     public void setFechaInicio(Timestamp fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
-    
-    
-    
- 
 
-    
-
-   
-    
-   
-   
-    
 }

@@ -12,16 +12,14 @@ import java.util.Date;
  *
  * @author xisko
  */
-public class TareaProyecto extends TareaSimple{
-    
-    
+public class TareaProyecto extends TareaSimple {
+
     private Proyecto unProyecto;
     private Prioridad miPrioridad;
-    private String descripcion;
- 
+
     /**
      *
-     * 
+     *
      * @param unProyecto
      * @param miPrioridad
      * @param contexto
@@ -30,13 +28,11 @@ public class TareaProyecto extends TareaSimple{
      * @param nombre
      * @param id
      */
-    
-
-    public TareaProyecto(Proyecto unProyecto, Prioridad miPrioridad, String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
-        super(contexto, miComplejidad, anotacion, nombre, id);
+    public TareaProyecto(Proyecto unProyecto, Prioridad miPrioridad, String contexto, Complejidad miComplejidad, String anotacion, String nombre) {
+        super(contexto, miComplejidad, anotacion, nombre);
         this.unProyecto = unProyecto;
         this.miPrioridad = miPrioridad;
-        
+
     }
 
     /**
@@ -71,18 +67,4 @@ public class TareaProyecto extends TareaSimple{
         this.miPrioridad = miPrioridad;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-    
-    
-
-  
-
-    
-    
 }

@@ -5,14 +5,12 @@
  */
 package administradorDeTareas;
 
-
-
 /**
  *
  * @author cobos
  */
-public class TareaInmediata extends TareaSimple{
-    
+public class TareaInmediata extends TareaEntrada {
+
     private boolean terminada;
 
     /**
@@ -24,8 +22,8 @@ public class TareaInmediata extends TareaSimple{
      * @param nombre
      * @param id
      */
-    public TareaInmediata(boolean terminada, String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
-        super(contexto, miComplejidad, anotacion, nombre, id);
+    public TareaInmediata(boolean terminada, String nombre) {
+        super(nombre);
         this.terminada = terminada;
     }
 
@@ -44,10 +42,5 @@ public class TareaInmediata extends TareaSimple{
     public void setTerminada(boolean terminada) {
         this.terminada = terminada;
     }
-    
-    
-    
-    
-    
-    
+
 }

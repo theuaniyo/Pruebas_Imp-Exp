@@ -49,10 +49,7 @@ public class Usuario {
      * @param email
      * @throws IllegalArgumentException
      */
-    public Usuario(String contrasena, String nick, String email) throws IllegalArgumentException, SQLException, UnsupportedEncodingException, NoSuchAlgorithmException {
-        // Insertar usuario en la base de datos
-        String hashContrasena = passHash(contrasena);
-        Repositorio.getInstancia().insertarUsuario(hashContrasena, nick, email);
+    public Usuario(String contrasena, String nick, String email) throws IllegalArgumentException{
         
         //Crear usuario
         setContrasena(contrasena);

@@ -19,7 +19,7 @@ public class MainPruebas {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+        /*
         ArrayList<String> tareaEntrada = AnalizadorClase.leerClase(TareaEntrada.class);
         
         for (String str : tareaEntrada) {
@@ -37,5 +37,6 @@ public class MainPruebas {
         System.out.println(AnalizadorClase.clasePadre(TareaAgenda.class).getName());
 
     }
-
+         */
+    }
 }

@@ -9,6 +9,7 @@ import administradorDeTareas.TareaProyecto;
 import administradorDeTareas.TareaSimple;
 import administradorDeTareas.Usuario;
 //import GoogleCalendar.CalendarioIO;
+import administradorDeTareas.Prioridad;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -19,7 +20,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /*
@@ -37,18 +42,19 @@ public class Repositorio {
     private ArrayList<TareaAgenda> agenda;
     private ArrayList<TareaEntrada> bandejaEntrada;
     private ArrayList<TareaInmediata> tareasInmediatas;
+    private ArrayList<TareaEntrada> tareasFinalizada;
     private ArrayList<Proyecto> proyectos;
     //Que de error al agregar un usuario si el nick ya está pillado.
     private ArrayList<Usuario> usuarios;
 
-    private ArrayList<TareaEntrada> papelera;
+    //private ArrayList<TareaEntrada> papelera;
 
     //Archivar las tareas descartas en una papelera o borrar definitivamente?
     /*private ArrayList<TareaEntrada> papelera; */
     //Algún día  tal vez
     private ArrayList<TareaEntrada> archivoSeguimiento;
     private ArrayList<TareaEntrada> archivoConsulta;
-    //Acciones simples y tareasProyecto
+
     private ArrayList<TareaSimple> accionesSiguientes;
 
     private static Repositorio instancia = null;
@@ -56,7 +62,7 @@ public class Repositorio {
     private AccesoBD accesoBD;
 
     //Devuelve la instancia, necesario por usar el patrón de diseño Singleton.
-    public static Repositorio getInstancia() {
+    public static Repositorio getInstancia() throws SQLException {
         if (instancia == null) {
             instancia = new Repositorio();
         }
@@ -65,7 +71,7 @@ public class Repositorio {
     }
 
     //Constructor
-    private Repositorio() {
+    private Repositorio() throws SQLException {
         //Conectar con base de datos e inicializar todos los conjuntos.
         accesoBD = new AccesoBD();
         contextos = new ArrayList<>();
@@ -77,18 +83,12 @@ public class Repositorio {
         archivoSeguimiento = new ArrayList<>();
         archivoConsulta = new ArrayList<>();
         accionesSiguientes = new ArrayList<>();
-        papelera = new ArrayList<>();
+        tareasFinalizada = new ArrayList<>();
+        
+        cargarTareasEntrada();
+        cargarTareasAgenda();
+        cargarTareasInmediatas();
 
-        //TareaEntrada tarea1 = new TareaEntrada("Hola");
-        //TareaEntrada tarea2 = new TareaEntrada("Mundo");
-
-        //TareaAgenda tareaA1 = new TareaAgenda(null, null, "blablab", "afsdfsdf", "unos", null, "TareaA1");
-        //TareaAgenda tareaA2 = new TareaAgenda(null, null, "blablab", "afsdfsdf", "unos", null, "TareaA2");
-        //bandejaEntrada.add(tarea1);
-        //bandejaEntrada.add(tarea2);
-
-        //agenda.add(tareaA1);
-        //agenda.add(tareaA2);
     }
 
     public ArrayList<String> getContextos() {
@@ -106,11 +106,11 @@ public class Repositorio {
     public ArrayList<Usuario> getUsuarios() {
         return usuarios;
     }
-
+/*
     public ArrayList<TareaEntrada> getPapelera() {
         return papelera;
     }
-
+*/
     public ArrayList<TareaEntrada> getArchivoSeguimiento() {
         return archivoSeguimiento;
     }
@@ -121,6 +121,15 @@ public class Repositorio {
 
     public ArrayList<TareaSimple> getAccionesSiguientes() {
         return accionesSiguientes;
+    }
+
+    /**
+     * @author Juan J. Luque Morales
+     * Devuelve un ArrayList con todas las tareas finalizadas.
+     * @return 
+     */
+    public ArrayList<TareaEntrada> getTareasFinalizada() {
+        return tareasFinalizada;
     }
 
     public AccesoBD getAccesoBD() {
@@ -137,6 +146,7 @@ public class Repositorio {
 
     public void agregarEnBandeja(TareaEntrada nuevaTarea) {
         bandejaEntrada.add(nuevaTarea);
+        
     }
 
     public void agregarEnInmediatas(TareaInmediata nuevaTarea) {
@@ -162,7 +172,7 @@ public class Repositorio {
     public void agregarEnSiguientes(TareaSimple nuevaTarea) {
         accionesSiguientes.add(nuevaTarea);
     }
-
+    
     /**
      * Agrega una tarea a un proyecto.
      *
@@ -218,6 +228,15 @@ public class Repositorio {
         //seleccionado.quitarTarea(nuevaTarea);
     }
 
+    /**
+     * Author Álvaro Luque Jiménez
+     * 
+     * @param contrasena
+     * @param nick
+     * @param email
+     * @throws SQLException 
+     */
+    
     public void insertarUsuario(String contrasena, String nick, String email) throws SQLException {
 
         Statement stm = accesoBD.abrirConexion().createStatement();
@@ -230,6 +249,17 @@ public class Repositorio {
 
     }
 
+    /**
+     * Author Álvaro Luque Jiménez
+     * 
+     * @param contrasena
+     * @param nick
+     * @return
+     * @throws SQLException
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException 
+     */
+    
     public boolean existeUsuario(String contrasena, String nick) throws SQLException, UnsupportedEncodingException, NoSuchAlgorithmException {
 
         String hashContrasena = passHash(contrasena);
@@ -273,11 +303,11 @@ public class Repositorio {
     public ArrayList<TareaAgenda> getAgenda() {
         return agenda;
     }
-
+/*
     public void agregarEnPapelera(TareaEntrada nuevaTarea) {
         papelera.add(nuevaTarea);
     }
-
+*/
     public void procesarTarea(TareaEntrada aProcesar, TareaSimple procesada) {
         if (!aProcesar.getNombre().equals(procesada.getNombre())) {
             throw new IllegalArgumentException("Las tareas no tienen el mismo nombre");
@@ -286,9 +316,7 @@ public class Repositorio {
             quitarEnBandeja(aProcesar);
             //Comprobamos el tipo
             if (procesada instanceof TareaAgenda) {
-                agregarEnAgenda((TareaAgenda) procesada);
-            } else if (procesada instanceof TareaInmediata) {
-                agregarEnInmediatas((TareaInmediata) procesada);
+                agregarEnAgenda((TareaAgenda) procesada);       
             } else {
                 agregarEnSiguientes(procesada);
             }
@@ -299,7 +327,7 @@ public class Repositorio {
     public void procesarTarea(TareaEntrada aProcesar, String listaDestino) {
 
         if (listaDestino.equals("Papelera")) {
-            agregarEnPapelera(aProcesar);
+            //agregarEnPapelera(aProcesar);
         } else if (listaDestino.equals("Archivo seguimiento")) {
             agregarEnSeguimiento(aProcesar);
         } else if (listaDestino.equals("Archivo consulta")) {
@@ -309,8 +337,38 @@ public class Repositorio {
         quitarEnBandeja(aProcesar);
 
     }
+    
+    /**
+     * Author Álvaro Luque Jiménez
+     * @throws SQLException 
+     */
+    
+    public void cargarTareasEntrada() throws SQLException {
 
-    public void getTareasSimples() throws SQLException {
+        String id = "";
+        String nombre = "";
+
+        TareaEntrada nuevaTarea = null;
+
+        Connection con = accesoBD.abrirConexion();
+
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("SELECT codigo, nombre FROM TareaEntrada");
+
+        while (rs.next()) {
+            id = rs.getString("codigo");
+            nombre = rs.getString("nombre");
+
+            nuevaTarea = new TareaEntrada(nombre);
+
+            agregarEnBandeja(nuevaTarea);
+        }
+
+        accesoBD.cerrarConexion(con);
+
+    }
+
+    public void cargarTareasSimples() throws SQLException {
 
         String id = "";
         String nombre = "";
@@ -335,10 +393,92 @@ public class Repositorio {
 
             contexto = rs.getString("contexto");
 
-            nuevaTarea = new TareaSimple(contexto, Complejidad.valueOf(complejidad), anotacion, nombre, Integer.parseInt(id));
+            nuevaTarea = new TareaSimple(contexto, Complejidad.valueOf(complejidad), anotacion, nombre);
 
             agregarEnSiguientes(nuevaTarea);
+            /*System.out.println(nuevaTarea.getNombre());
+            System.out.println(nuevaTarea.getAnotacion());
+            System.out.println(nuevaTarea.getContexto());
+            System.out.println(nuevaTarea.getMiComplejidad());
             System.out.println(nuevaTarea.getNombre());
+            System.out.print(nuevaTarea.getId());*/
+        }
+
+        accesoBD.cerrarConexion(con);
+
+    }
+
+    public void cargarTareasInmediatas() throws SQLException {
+
+        String id = "";
+        String nombre = "";
+        String anotacion = "";
+        String complejidad = "";
+        boolean terminada = true;
+
+        String contexto = "";
+
+        TareaInmediata nuevaTarea = null;
+
+        Connection con = accesoBD.abrirConexion();
+
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("SELECT te.codigo, te.nombre, ti.terminada FROM TareaInmediata ti, TareaEntrada te WHERE te.codigo=ti.codigo");
+
+        while (rs.next()) {
+            id = rs.getString("codigo");
+            nombre = rs.getString("nombre");
+            terminada = rs.getBoolean("terminada");
+
+            nuevaTarea = new TareaInmediata(terminada, nombre);
+
+            agregarEnInmediatas(nuevaTarea);
+            /*System.out.println(nuevaTarea.getNombre());
+            System.out.println(nuevaTarea.getAnotacion());
+            System.out.println(nuevaTarea.getContexto());
+            System.out.println(nuevaTarea.getMiComplejidad());
+            System.out.println(nuevaTarea.getNombre());
+            System.out.print(nuevaTarea.getId());*/
+        }
+
+        accesoBD.cerrarConexion(con);
+
+    }
+
+    /*
+    public void getTareasProyecto() throws SQLException {
+
+        Proyecto unproyecto = null;
+        String prioridad = "";
+        String id = "";
+        String nombre = "";
+        String anotacion = "";
+        String complejidad = "";
+
+        String contexto = "";
+
+        TareaProyecto nuevaTarea = null;
+
+        Connection con = accesoBD.abrirConexion();
+
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("SELECT codigo, nombre,"
+                + "anotacion, complejidad, prioridad,proyecto, contexto FROM TareaSimple");
+
+        while (rs.next()) {
+            id = rs.getString("codigo");
+            nombre = rs.getString("nombre");
+            anotacion = rs.getString("anotacion");
+            complejidad = rs.getString("complejidad");
+            prioridad = rs.getString("prioridad");
+            unproyecto = (Proyecto) rs.getObject("proyecto");
+
+            contexto = rs.getString("contexto");
+
+            nuevaTarea = new TareaProyecto(unproyecto, Prioridad.valueOf(prioridad), contexto, Complejidad.valueOf(complejidad), anotacion, nombre);
+
+            agregarEnProyectos(nuevaTarea);
+            /*System.out.println(nuevaTarea.getNombre());
             System.out.println(nuevaTarea.getAnotacion());
             System.out.println(nuevaTarea.getContexto());
             System.out.println(nuevaTarea.getMiComplejidad());
@@ -349,14 +489,131 @@ public class Repositorio {
         accesoBD.cerrarConexion(con);
 
     }
+    */
 
-    /*public void exportarEventos() throws IOException {
+    public void cargarTareasAgenda() throws SQLException {
+
+        String fechafin = "";
+        String fechainicio = "";
+        String id = "";
+        String nombre = "";
+        String anotacion = "";
+        String complejidad = "";
+
+        String contexto = "";
+
+        TareaAgenda nuevaTarea = null;
+
+        Connection con = accesoBD.abrirConexion();
+
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("SELECT ta.codigo, te.nombre, fechainicio, fechafin,"
+                + " anotacion, complejidad, contexto FROM TareaDeAgenda ta, TareaSimple ts, TareaEntrada te "
+                + "WHERE ta.codigo=ts.codigo AND ta.codigo=te.codigo");
+
+        while (rs.next()) {
+            id = rs.getString("codigo");
+            nombre = rs.getString("nombre");
+            anotacion = rs.getString("anotacion");
+            complejidad = rs.getString("complejidad");
+            fechafin = rs.getString("fechafin");
+            fechainicio = rs.getString("fechainicio");
+
+            contexto = rs.getString("contexto");
+
+            nuevaTarea = new TareaAgenda(Timestamp.valueOf(fechafin), Timestamp.valueOf(fechainicio), contexto, Complejidad.valueOf(complejidad), anotacion, nombre);
+
+            agregarEnAgenda(nuevaTarea);
+            /*System.out.println(nuevaTarea.getNombre());
+            System.out.println(nuevaTarea.getAnotacion());
+            System.out.println(nuevaTarea.getContexto());
+            System.out.println(nuevaTarea.getMiComplejidad());
+            System.out.println(nuevaTarea.getNombre());
+            System.out.print(nuevaTarea.getId());*/
+        }
+
+        accesoBD.cerrarConexion(con);
+
+    }
+    
+    public void exportarEventos() throws IOException {
         String descripcion = "";
 
         for (TareaAgenda tarea : agenda) {
             descripcion = tarea.getId() + "|" + tarea.getMiComplejidad() + "|" + tarea.getAnotacion();
-            CalendarioIO.crearEvento(tarea.getNombre(), tarea.getContexto(), descripcion, tarea.getFechaInicio(), tarea.getFechaFin());
+            //CalendarioIO.crearEvento(tarea.getNombre(), tarea.getContexto(), descripcion, tarea.getFechaInicio(), tarea.getFechaFin());
         }
-    }*/
+    }
+    
+    /**
+     * 
+     * @param tareaEntradaEliminar
+     * @throws SQLException 
+     * 
+     * Author Álvaro Luque Jiménez
+     */
+    
+    public void quitarTareasEntradaBD(TareaEntrada tareaEntradaEliminar) throws SQLException{
+        
+        Connection con = accesoBD.abrirConexion();
+
+        Statement stm = con.createStatement();
+
+        stm.executeUpdate("DELETE FROM TareaEntrada WHERE codigo = " +  tareaEntradaEliminar.getId() + ";");
+
+        accesoBD.cerrarConexion(con);
+        
+    }
+    
+    
+    public void quitarTareasAgendaBD(TareaAgenda tareaAgendaEliminar) throws SQLException{
+        
+        Connection con = accesoBD.abrirConexion();
+
+        Statement stm = con.createStatement();
+        
+        System.out.println(tareaAgendaEliminar.getId());
+
+        stm.executeUpdate("DELETE FROM TareaDeAgenda WHERE codigo = " +  tareaAgendaEliminar.getId() + ";");
+
+        accesoBD.cerrarConexion(con);
+        
+    }
+    
+    public int getCodigoBD() throws SQLException{
+        
+        Connection con = accesoBD.abrirConexion();
+        
+        String id = null;
+
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("SELECT codigo from TareaEntrada order by codigo desc limit 1");
+
+        id = rs.getString("codigo");
+
+        return Integer.parseInt(id);
+    }
+    
+    /**
+     * 
+     * @param tareaEntradaAgregar
+     * @param usuarioConectado
+     * @throws SQLException 
+     * 
+     * Author Álvaro Luque Jiménez
+     */
+    
+    public void agregarTareasEntradaBD(TareaEntrada tareaEntradaAgregar, String usuarioConectado) throws SQLException{
+        
+        Connection con = accesoBD.abrirConexion();
+
+        Statement stm = con.createStatement();
+
+        stm.executeUpdate("INSERT INTO TareaEntrada (nombre, nickUsuario) VALUES('" + tareaEntradaAgregar.getNombre() + "', '" + usuarioConectado + "');");
+        
+
+        accesoBD.cerrarConexion(con);
+        
+    }
 
 }

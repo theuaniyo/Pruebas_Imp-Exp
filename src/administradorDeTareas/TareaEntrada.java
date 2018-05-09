@@ -5,7 +5,11 @@
  */
 package administradorDeTareas;
 
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import persistencia.Repositorio;
 
 /**
  *
@@ -22,9 +26,9 @@ public class TareaEntrada {
      * @param nombre
      * @param id
      */
-    public TareaEntrada(String nombre,int id) {
+    public TareaEntrada(String nombre) {
+
         this.nombre = nombre;
-        this.id = id;
         cantidad++;
         
         this.id=cantidad;

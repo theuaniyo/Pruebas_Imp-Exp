@@ -16,9 +16,6 @@ public class TareaSimple extends TareaEntrada {
     private String contexto;
     private Complejidad miComplejidad;
     private String anotacion;
-    private int id;
-    private String descripcion;
-    private boolean terminada;
 
     /**
      *
@@ -28,8 +25,8 @@ public class TareaSimple extends TareaEntrada {
      * @param nombre
      * @param id
      */
-    public TareaSimple(String contexto, Complejidad miComplejidad, String anotacion, String nombre, int id) {
-        super(nombre,id);
+    public TareaSimple(String contexto, Complejidad miComplejidad, String anotacion, String nombre) {
+        super(nombre);
         this.contexto = contexto;
         this.miComplejidad = miComplejidad;
         this.anotacion = anotacion;
@@ -82,24 +79,5 @@ public class TareaSimple extends TareaEntrada {
     public void setAnotacion(String descripcion) {
         this.anotacion = descripcion;
     }
-    
-    public String getDescripcion() {
-        return descripcion;
-    }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public boolean isTerminada() {
-        return terminada;
-    }
-
-    public void setTerminada(boolean terminada) {
-        this.terminada = terminada;
-    }
-    
-    
-    
-    
 }
