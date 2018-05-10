@@ -22,7 +22,7 @@ import persistencia.Repositorio;
 public class CargarGuardarDatos {
 
     public static void main(String[] args) throws SQLException {
-
+        
         String entrada = "";
 
         do {

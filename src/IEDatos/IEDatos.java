@@ -51,7 +51,7 @@ public class IEDatos {
      * Constante con la raíz del archivo XML.
      */
     private static final String RAIZ = "gestor_gtd";
-
+    
     /**
      *
      * @return la ruta del archivo XML.
@@ -919,14 +919,18 @@ public class IEDatos {
      * la base de datos.
      * @return true si están sincronizados y false si no lo están.
      */
-    public static boolean comprobarSincro(long l) {
+    public static boolean comprobarSincro(String fechaBD) {
 
         boolean datosSincro = false;
+        
+        Timestamp fecha = Timestamp.valueOf(fechaBD);
+        
+        long fbd = fecha.getTime();
 
         File f = new File(ruta);
         long fm = f.lastModified();
 
-        if (fm == l) {
+        if (fm == fbd) {
             datosSincro = true;
         }
 
