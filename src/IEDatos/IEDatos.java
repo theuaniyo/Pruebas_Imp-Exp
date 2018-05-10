@@ -34,6 +34,7 @@ import administradorDeTareas.TareaInmediata;
 import administradorDeTareas.TareaProyecto;
 import administradorDeTareas.TareaSimple;
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import persistencia.Repositorio;
 
 /**
@@ -311,7 +312,7 @@ public class IEDatos {
      * que usar el método setRuta de esta clase.
      *
      */
-    public static void cargarDesdeXml() {
+    public static void cargarDesdeXml() throws SQLException {
 
         //Paso de XML a árbol DOM
         Document doc = DOMUtil.XML2DOM(ruta);
@@ -420,7 +421,7 @@ public class IEDatos {
                                 TareaEntrada unaTareaEntrada
                                         = procesarTareaEntrada(tareaEnPapelera);
                                 Repositorio.getInstancia().
-                                        agregarEnPapelera(unaTareaEntrada);
+                                        agregarEnPapelera(unaTareaEntrada); //metodod agregarTareaFinalizada
 
                                 /*
                                 switch (tareaEnPapelera.getNodeName()) {
@@ -547,12 +548,12 @@ public class IEDatos {
                                                 agregarEnSiguientes(unaTareaSimple);
                                         break;
 
-                                    case "tarea_inmediata":
+                                    case "tarea_proyecto":
 
-                                        TareaSimple unaTareaInmediata
-                                                = procesarTareaInmediata(tareaSiguiente);
+                                        TareaProyecto unaTareaProyecto
+                                                = procesarTareaProyecto(tareaSiguiente);
                                         Repositorio.getInstancia().
-                                                agregarEnSiguientes(unaTareaInmediata);
+                                                agregarEnSiguientes(unaTareaProyecto);
                                         break;
                                 }
                             }
@@ -577,8 +578,7 @@ public class IEDatos {
     private static TareaInmediata procesarTareaInmediata(Element e)
             throws DOMException, NumberFormatException {
 
-        TareaInmediata unaTareaInmediata = new TareaInmediata(
-                false, "", Complejidad.Media, "", "", 0);
+        TareaInmediata unaTareaInmediata = new TareaInmediata(false, "");
 
         //Atributo id
         //unaTareaInmediata.setId(Integer.parseInt(e.getAttribute("id")));
@@ -600,7 +600,7 @@ public class IEDatos {
                         unaTareaInmediata.setTerminada(Boolean.valueOf(
                                 etiquetaTareaInmediata.getTextContent().trim()));
                         break;
-
+/*
                     case "contexto":
 
                         unaTareaInmediata.setContexto(
@@ -618,7 +618,7 @@ public class IEDatos {
                         unaTareaInmediata.setDescripcion(
                                 etiquetaTareaInmediata.getTextContent().trim());
                         break;
-
+*/
                     case "nombre":
 
                         unaTareaInmediata.setNombre(
@@ -704,7 +704,7 @@ public class IEDatos {
             throws DOMException, NumberFormatException {
 
         TareaProyecto unaTareaProyecto = new TareaProyecto(
-                null, Prioridad.Media, "", Complejidad.Media, "", "", 0);
+                null, Prioridad.Media, "", Complejidad.Media, "", "");
 
         //Atributo id
         //unaTareaProyecto.setId(Integer.parseInt(e.getAttribute("id")));
@@ -734,10 +734,12 @@ public class IEDatos {
                         unaTareaProyecto.setMiComplejidad(Complejidad.valueOf(
                                 etiquetaTareaProyecto.getTextContent().trim()));
                         break;
+
                     case "anotacion":
-                        unaTareaProyecto.setDescripcion(
+                        unaTareaProyecto.setAnotacion(
                                 etiquetaTareaProyecto.getTextContent().trim());
                         break;
+
                     case "nombre":
                         unaTareaProyecto.setNombre(
                                 etiquetaTareaProyecto.getTextContent().trim());
@@ -755,7 +757,9 @@ public class IEDatos {
      * @param nl una lista de nodos que contiene los contextos.
      * @throws DOMException si hay algún fallo relacionado con el XML.
      */
-    private static void procesarContextos(NodeList nl) throws DOMException {
+    
+
+    private static void procesarContextos(NodeList nl) throws DOMException, SQLException {
 
         for (int i = 0; i < nl.getLength(); i++) {
 
@@ -768,6 +772,8 @@ public class IEDatos {
             }
         }
     }
+    
+
 
     /**
      * @author Juan J. Luque Morales Convierte una etiqueta del XML a un objeto
@@ -782,7 +788,7 @@ public class IEDatos {
             throws NumberFormatException, DOMException {
 
         TareaSimple unaTareaSimple = new TareaSimple(
-                "", Complejidad.Media, "", "", 0);
+                "", Complejidad.Media, "", "");
         //Atributo id.
         //unaTareaSimple.setId(Integer.parseInt(e.getAttribute("id")));
 
@@ -807,7 +813,7 @@ public class IEDatos {
                         break;
 
                     case "anotacion":
-                        unaTareaSimple.setDescripcion(
+                        unaTareaSimple.setAnotacion(
                                 etiquetaTareaSimple.getTextContent().trim());
                         break;
 
@@ -834,7 +840,7 @@ public class IEDatos {
             throws DOMException, NumberFormatException {
 
         TareaAgenda unaTareaAgenda = new TareaAgenda(null, null, "",
-                Complejidad.Media, "", "", 0);
+                Complejidad.Media, "", "");
 
         //Atributo id
         //unaTareaAgenda.setId(Integer.parseInt(e.getAttribute("id")));
@@ -870,7 +876,7 @@ public class IEDatos {
                         break;
 
                     case "anotacion":
-                        unaTareaAgenda.setDescripcion(
+                        unaTareaAgenda.setAnotacion(
                                 etiquetaTareaAgenda.getTextContent().trim());
                         break;
 
@@ -904,8 +910,7 @@ public class IEDatos {
 
         idTareaEntrada = e.getAttribute("id").trim();
 
-        unaTareaEntrada = new TareaEntrada(nombreTareaEntrada,
-                Integer.parseInt(idTareaEntrada));
+        unaTareaEntrada = new TareaEntrada(nombreTareaEntrada);
 
         return unaTareaEntrada;
     }
