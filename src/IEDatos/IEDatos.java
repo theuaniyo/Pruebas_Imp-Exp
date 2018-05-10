@@ -816,7 +816,7 @@ public class IEDatos {
                         unaTareaSimple.setAnotacion(
                                 etiquetaTareaSimple.getTextContent().trim());
                         break;
-
+                        
                     case "complejidad":
                         unaTareaSimple.setMiComplejidad(Complejidad.valueOf(
                                 etiquetaTareaSimple.getTextContent().trim()));
