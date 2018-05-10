@@ -71,10 +71,10 @@ public class IEDatos {
     }
 
     /**
+     * Guarda los datos del programa en un archivo XML.
      * @author Alvaro Lovera Almagro
      * @author Juan Jose Luque Morales
-     * Guarda los datos del programa en un archivo XML.
-     *
+     * 
      */
     public static void guardarXml() throws SQLException {
 
