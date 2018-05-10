@@ -74,7 +74,7 @@ public class IEDatos {
      * Guarda los datos del programa en un archivo XML.
      *
      */
-    public static void guardarXml() {
+    public static void guardarXml() throws SQLException {
 
         //Crear DOM vacío
         Document xml = DOMUtil.crearDOMVacio(RAIZ);
@@ -120,12 +120,12 @@ public class IEDatos {
                 escribirProyectoySusTareasProyectoXml(xml, eleProyectos, p);
             }
         }
-        if (!Repositorio.getInstancia().getPapelera().isEmpty()) {
+        if (!Repositorio.getInstancia().getTareasFinalizada().isEmpty()) {
             //Cambiar PAPELERA por TAREASFINALIZADAS
-            Element elePapelera = xml.createElement("papelera");
+            Element elePapelera = xml.createElement("tarea_finalizada");
             xml.getDocumentElement().appendChild(elePapelera);
 
-            for (TareaEntrada tep : Repositorio.getInstancia().getPapelera()) {
+            for (TareaEntrada tep : Repositorio.getInstancia().getTareasFinalizada()) {
                 if (tep.getClass().equals(TareaEntrada.class)) {
                     escribirTareaEntradaXml(xml, elePapelera, tep);                  
                 }
@@ -156,9 +156,9 @@ public class IEDatos {
             for (TareaSimple ts : Repositorio.getInstancia().getAccionesSiguientes()) {
                 if (ts.getClass().equals(TareaSimple.class)) {
                     escribirTareaSimpleXml(xml, eleAccionesSiguientes, ts);
-                } else if (ts.getClass().equals(TareaInmediata.class)) {
-                    TareaInmediata ti = (TareaInmediata) ts;
-                    escribirTareaInmediataXml(xml, eleAccionesSiguientes, ti);
+                } else if (ts.getClass().equals(TareaProyecto.class)) {
+                    //TareaProyecto ti = (TareaProyecto) (TareaSimple) ts;
+                    escribirTareaProyectoXml(xml, eleAccionesSiguientes, (TareaProyecto) ts);
                 }
             }
         }
@@ -173,7 +173,7 @@ public class IEDatos {
         Element eleTareaInmediataTerminadaAcSi = xml.createElement("terminada");
         eleTareaInmediataAcSi.appendChild(eleTareaInmediataTerminadaAcSi);
         eleTareaInmediataTerminadaAcSi.setTextContent(Boolean.toString(ti.isTerminada()));
-        
+/*        
         Element eleTareaInmediataContextoAcSim = xml.createElement("contexto");
         eleTareaInmediataAcSi.appendChild(eleTareaInmediataContextoAcSim);
         eleTareaInmediataContextoAcSim.setTextContent(ti.getContexto());
@@ -185,7 +185,7 @@ public class IEDatos {
         Element eleTareaInmediataAnotacionPape = xml.createElement("anotacion");
         eleTareaInmediataAcSi.appendChild(eleTareaInmediataAnotacionPape);
         eleTareaInmediataAnotacionPape.setTextContent(ti.getAnotacion());
-        
+*/       
         Element eleTareaInmediataNombrePape = xml.createElement("nombre");
         eleTareaInmediataAcSi.appendChild(eleTareaInmediataNombrePape);
         eleTareaInmediataNombrePape.setTextContent(ti.getNombre());
@@ -407,23 +407,23 @@ public class IEDatos {
                         break;
 
                     //Cambiar PAPELERA por TAREASFINALIZADAS
-                    case "papelera":
+                    case "tareas_finalizadas":
 
                         //Lista de nodos dentro de la etiqueta papelera
-                        NodeList papelera = e.getChildNodes();
+                        NodeList tfinalizadas = e.getChildNodes();
 
-                        for (int j = 0; j < papelera.getLength(); j++) {
+                        for (int j = 0; j < tfinalizadas.getLength(); j++) {
 
-                            if (papelera.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                            if (tfinalizadas.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-                                Element tareaEnPapelera = (Element) papelera.item(j);
+                                Element tareaEnPapelera = (Element) tfinalizadas.item(j);
 
                                 TareaEntrada unaTareaEntrada
                                         = procesarTareaEntrada(tareaEnPapelera);
                                 Repositorio.getInstancia().
-                                        agregarEnPapelera(unaTareaEntrada); //metodod agregarTareaFinalizada
+                                        agregarEnPapelera(unaTareaEntrada); //metodo agregarTareaFinalizada 
 
-                                /*
+                                
                                 switch (tareaEnPapelera.getNodeName()) {
 
                                     case "tarea_entrada":
@@ -480,7 +480,7 @@ public class IEDatos {
                                         Repositorio.getInstancia().
                                                 agregarEnPapelera(unaTareaProyecto);
                                         break;
-                                }*/
+                                }
                             }
                         }
                         break;
