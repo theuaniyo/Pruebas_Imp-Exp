@@ -55,7 +55,7 @@ public class Repositorio {
     private ArrayList<TareaEntrada> archivoSeguimiento;
     private ArrayList<TareaEntrada> archivoConsulta;
 
-    private ArrayList<TareaSimple> accionesSiguientes;
+    private ArrayList<TareaSimple> accionesSiguientes; //tareas simples y tarea proyecto
 
     private static Repositorio instancia = null;
 
@@ -590,7 +590,7 @@ public class Repositorio {
         ResultSet rs = s.executeQuery("SELECT codigo from TareaEntrada order by codigo desc limit 1");
 
         id = rs.getString("codigo");
-
+        
         return Integer.parseInt(id);
     }
     
