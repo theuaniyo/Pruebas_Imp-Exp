@@ -33,7 +33,6 @@ import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
 import administradorDeTareas.TareaProyecto;
 import administradorDeTareas.TareaSimple;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import persistencia.Repositorio;
 
@@ -52,7 +51,11 @@ public class IEDatos {
      * Constante con la raíz del archivo XML.
      */
     private static final String RAIZ = "gestor_gtd";
-    
+    public static final short SINCRO_OK = 0;
+    public static final short SINCRO_FICHERO = 1;
+    public static final short SINCRO_BD = 2;
+    public static final short SINCRO_FALLO = -1;
+
     /**
      *
      * @return la ruta del archivo XML.
@@ -72,9 +75,10 @@ public class IEDatos {
 
     /**
      * Guarda los datos del programa en un archivo XML.
+     *
      * @author Alvaro Lovera Almagro
      * @author Juan Jose Luque Morales
-     * 
+     *
      */
     public static void guardarXml() throws SQLException {
 
@@ -190,14 +194,16 @@ public class IEDatos {
         }
         DOMUtil.DOM2XML(xml, ruta);
     }
-/**
- * Crea etiqueta TareaInmediata la etiquetas hijas con sus variables
- * @author Alvaro Lovera Almagro
- * @param xml
- * @param eleAccionesSiguientes
- * @param ti
- * @throws DOMException 
- */
+
+    /**
+     * Crea etiqueta TareaInmediata la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleAccionesSiguientes
+     * @param ti
+     * @throws DOMException
+     */
     private static void escribirTareaInmediataXml(Document xml, Element eleAccionesSiguientes, TareaInmediata ti) throws DOMException {
         Element eleTareaInmediataAcSi = xml.createElement("tarea_inmediata");
         eleAccionesSiguientes.appendChild(eleTareaInmediataAcSi);
@@ -223,14 +229,16 @@ public class IEDatos {
         eleTareaInmediataAcSi.appendChild(eleTareaInmediataNombrePape);
         eleTareaInmediataNombrePape.setTextContent(ti.getNombre());
     }
-/**
- * Crea etiqueta TareaSimple la etiquetas hijas con sus variables
- * @author Alvaro Lovera Almagro
- * @param xml
- * @param eleAccionesSiguientes
- * @param ts
- * @throws DOMException 
- */
+
+    /**
+     * Crea etiqueta TareaSimple la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleAccionesSiguientes
+     * @param ts
+     * @throws DOMException
+     */
     private static void escribirTareaSimpleXml(Document xml, Element eleAccionesSiguientes, TareaSimple ts) throws DOMException {
         Element eleTareaSimpleAcSim = xml.createElement("tarea_simple");
         eleAccionesSiguientes.appendChild(eleTareaSimpleAcSim);
@@ -252,15 +260,17 @@ public class IEDatos {
         eleTareaSimpleAcSim.appendChild(eleTareaSimpleNombreAcSim);
         eleTareaSimpleNombreAcSim.setTextContent(ts.getNombre());
     }
-/**
- * * Crea etiqueta Proyectoetiquetas hijas con sus variables y sus  
- *   TareaProyecto las etiquetas hijas con sus variables
- * @author Alvaro Lovera Almagro
- * @param xml
- * @param eleProyectos
- * @param p
- * @throws DOMException 
- */
+
+    /**
+     * * Crea etiqueta Proyectoetiquetas hijas con sus variables y sus
+     * TareaProyecto las etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleProyectos
+     * @param p
+     * @throws DOMException
+     */
     private static void escribirProyectoySusTareasProyectoXml(Document xml, Element eleProyectos, Proyecto p) throws DOMException {
         Element eleProyecto = xml.createElement("proyecto");
         eleProyectos.appendChild(eleProyecto);
@@ -282,14 +292,16 @@ public class IEDatos {
         eleFechaFinProyecto.setAttribute("fecha", p.getFechaFin().toString());
         eleProyecto.appendChild(eleFechaFinProyecto);
     }
-/**
- * Crea etiqueta TareaProyecto la etiquetas hijas con sus variables
- * @author Alvaro Lovera Almagro
- * @param xml
- * @param eleListaTareasProyectos
- * @param tp
- * @throws DOMException 
- */
+
+    /**
+     * Crea etiqueta TareaProyecto la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleListaTareasProyectos
+     * @param tp
+     * @throws DOMException
+     */
     private static void escribirTareaProyectoXml(Document xml, Element eleListaTareasProyectos, TareaProyecto tp) throws DOMException {
         Element eleTareaProyecto = xml.createElement("tarea_proyecto");
         eleListaTareasProyectos.appendChild(eleTareaProyecto);
@@ -316,14 +328,16 @@ public class IEDatos {
         eleTareaProyecto.appendChild(eleTareaProyecto);
         eleTareaProyectoNombre.setTextContent(tp.getNombre());
     }
-/**
- * Crea etiqueta TareaEntrada la etiquetas hijas con sus variables
- * @author Alvaro Lovera Almagro
- * @param xml
- * @param eleBandejaEntrada
- * @param te
- * @throws DOMException 
- */
+
+    /**
+     * Crea etiqueta TareaEntrada la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleBandejaEntrada
+     * @param te
+     * @throws DOMException
+     */
     private static void escribirTareaEntradaXml(Document xml, Element eleBandejaEntrada, TareaEntrada te) throws DOMException {
         Element eleTareaEntrada = xml.createElement("tarea_entrada");
         eleBandejaEntrada.appendChild(eleTareaEntrada);
@@ -333,14 +347,16 @@ public class IEDatos {
         eleNombreTareaEntrada.setTextContent(te.getNombre());
         eleTareaEntrada.appendChild(eleNombreTareaEntrada);
     }
-/**
- * Crea etiqueta TareaAgenda la etiquetas hijas con sus variables
- * @author Alvaro Lovera Almagro
- * @param xml
- * @param eleListaTareasAgenda
- * @param ta
- * @throws DOMException 
- */
+
+    /**
+     * Crea etiqueta TareaAgenda la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleListaTareasAgenda
+     * @param ta
+     * @throws DOMException
+     */
     private static void escribirTareaAgendaXml(Document xml, Element eleListaTareasAgenda, TareaAgenda ta) throws DOMException {
         Element eleTareaAgenda = xml.createElement("tarea_agenda");
         eleListaTareasAgenda.appendChild(eleTareaAgenda);
@@ -375,6 +391,7 @@ public class IEDatos {
      * @author Juan J. Luque Morales Carga los datos del programa desde un
      * archivo XML. Para cambiar la ruta desde la que se cargará el archivo, hay
      * que usar el método setRuta de esta clase.
+     * @throws java.sql.SQLException
      *
      */
     public static void cargarDesdeXml() throws SQLException {
@@ -488,7 +505,6 @@ public class IEDatos {
                                 Repositorio.getInstancia().
                                         agregarEnPapelera(unaTareaEntrada); //metodod agregarTareaFinalizada
 
-                                /*
                                 switch (tareaEnPapelera.getNodeName()) {
 
                                     case "tarea_entrada":
@@ -524,8 +540,8 @@ public class IEDatos {
                                         break;
 
                                     case "proyecto":
-                                        
-                                        Proyecto unProyecto 
+
+                                        Proyecto unProyecto
                                                 = procesarProyecto(tareaEnPapelera);
                                         Repositorio.getInstancia().agregarEnPapelera(unProyecto);
                                         break;
@@ -545,10 +561,11 @@ public class IEDatos {
                                         Repositorio.getInstancia().
                                                 agregarEnPapelera(unaTareaProyecto);
                                         break;
-                                }*/
+                                }
                             }
                         }
                         break;
+                        
                     case "archivo_seguimiento":
 
                         //Todos los nodos de archivoSeguimiento
@@ -664,7 +681,7 @@ public class IEDatos {
                         unaTareaInmediata.setTerminada(Boolean.valueOf(
                                 etiquetaTareaInmediata.getTextContent().trim()));
                         break;
-/*
+                    /*
                     case "contexto":
 
                         unaTareaInmediata.setContexto(
@@ -682,7 +699,7 @@ public class IEDatos {
                         unaTareaInmediata.setDescripcion(
                                 etiquetaTareaInmediata.getTextContent().trim());
                         break;
-*/
+                     */
                     case "nombre":
 
                         unaTareaInmediata.setNombre(
@@ -820,8 +837,6 @@ public class IEDatos {
      * @param nl una lista de nodos que contiene los contextos.
      * @throws DOMException si hay algún fallo relacionado con el XML.
      */
-    
-
     private static void procesarContextos(NodeList nl) throws DOMException, SQLException {
 
         for (int i = 0; i < nl.getLength(); i++) {
@@ -835,8 +850,6 @@ public class IEDatos {
             }
         }
     }
-    
-
 
     /**
      * @author Juan J. Luque Morales Convierte una etiqueta del XML a un objeto
@@ -879,7 +892,7 @@ public class IEDatos {
                         unaTareaSimple.setAnotacion(
                                 etiquetaTareaSimple.getTextContent().trim());
                         break;
-                        
+
                     case "complejidad":
                         unaTareaSimple.setMiComplejidad(Complejidad.valueOf(
                                 etiquetaTareaSimple.getTextContent().trim()));
@@ -982,27 +995,30 @@ public class IEDatos {
      * @author Juan J. Luque Morales Compara la fecha de modificación del
      * archivo xml con la fecha de la última conexión a la base de datos del
      * programa.
-     *
-     * @param l un long que representa la fecha de la última sincronización de
-     * la base de datos.
+     * @param fechaBD un String que representa la fecha de la última sincronización 
+     * de la base de datos.
      * @return true si están sincronizados y false si no lo están.
      */
-    public static boolean comprobarSincro(String fechaBD) {
+    public static short comprobarSincro(String fechaBD) {
 
-        boolean datosSincro = false;
-        
+        short estadoSincro = SINCRO_FALLO;
+
         Timestamp fecha = Timestamp.valueOf(fechaBD);
-        
-        long fbd = fecha.getTime();
+
+        long fBD = fecha.getTime();
 
         File f = new File(ruta);
-        long fm = f.lastModified();
+        long fFich = f.lastModified();
 
-        if (fm == fbd) {
-            datosSincro = true;
+        if (fFich == fBD) {
+            estadoSincro = SINCRO_OK;
+        } else if (fFich > fBD) {
+            estadoSincro = SINCRO_FICHERO;
+        } else if(fFich < fBD) {
+            estadoSincro = SINCRO_BD;
         }
 
-        return datosSincro;
+        return estadoSincro;
 
     }
 
