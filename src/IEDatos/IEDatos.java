@@ -306,7 +306,7 @@ public class IEDatos {
         Element eleTareaProyecto = xml.createElement("tarea_proyecto");
         eleListaTareasProyectos.appendChild(eleTareaProyecto);
         //eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
-        //eleTareaProyecto.setAttribute("proyecto", Integer.toString(tp.getUnProyecto().getId()));
+        eleTareaProyecto.setAttribute("proyecto", tp.getUnProyecto().getNombreP());
 
         Element eleTareaProyectoPrioridad = xml.createElement("prioridad");
         eleTareaProyecto.appendChild(eleTareaProyectoPrioridad);
