@@ -305,7 +305,7 @@ public class IEDatos {
     private static void escribirTareaProyectoXml(Document xml, Element eleListaTareasProyectos, TareaProyecto tp) throws DOMException {
         Element eleTareaProyecto = xml.createElement("tarea_proyecto");
         eleListaTareasProyectos.appendChild(eleTareaProyecto);
-        eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
+        //eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
         //eleTareaProyecto.setAttribute("proyecto", Integer.toString(tp.getUnProyecto().getId()));
 
         Element eleTareaProyectoPrioridad = xml.createElement("prioridad");
@@ -489,7 +489,7 @@ public class IEDatos {
                         break;
 
                     //Cambiar PAPELERA por TAREASFINALIZADAS
-                    case "papelera":
+                    case "tareas_finalizadas":
 
                         //Lista de nodos dentro de la etiqueta papelera
                         NodeList papelera = e.getChildNodes();
@@ -498,61 +498,66 @@ public class IEDatos {
 
                             if (papelera.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-                                Element tareaEnPapelera = (Element) papelera.item(j);
+                                Element tareaFinalizada = (Element) papelera.item(j);
 
+                                /*
                                 TareaEntrada unaTareaEntrada
                                         = procesarTareaEntrada(tareaEnPapelera);
                                 Repositorio.getInstancia().
                                         agregarEnPapelera(unaTareaEntrada); //metodod agregarTareaFinalizada
+                                */
 
-                                switch (tareaEnPapelera.getNodeName()) {
+                                switch (tareaFinalizada.getNodeName()) {
 
                                     case "tarea_entrada":
 
                                         TareaEntrada unaTareaEntrada
-                                                = procesarTareaEntrada(tareaEnPapelera);
+                                                = procesarTareaEntrada(tareaFinalizada);
                                         Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaEntrada);
+                                                agregarEnFinalizadas(unaTareaEntrada);
                                         break;
 
                                     case "tarea_simple":
 
                                         TareaSimple unaTareaSimple
-                                                = procesarTareaSimple(tareaEnPapelera);
+                                                = procesarTareaSimple(tareaFinalizada);
                                         Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaSimple);
+                                                agregarEnFinalizadas(unaTareaSimple);
                                         break;
 
                                     case "tarea_inmediata":
 
                                         TareaInmediata unaTareaInmediata
-                                                = procesarTareaInmediata(tareaEnPapelera);
+                                                = procesarTareaInmediata(tareaFinalizada);
                                         Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaInmediata);
+                                                agregarEnFinalizadas(unaTareaInmediata);
                                         break;
 
                                     case "tarea_agenda":
 
                                         TareaAgenda unaTareaAgenda
-                                                = procesarTareaAgenda(tareaEnPapelera);
+                                                = procesarTareaAgenda(tareaFinalizada);
                                         Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaAgenda);
+                                                agregarEnFinalizadas(unaTareaAgenda);
                                         break;
 
+                                    /*
+                                        LOS PROYECTOS NO SE GUARDAN AQUÍ (EN PRINCIPIO)
                                     case "proyecto":
 
                                         Proyecto unProyecto
-                                                = procesarProyecto(tareaEnPapelera);
-                                        Repositorio.getInstancia().agregarEnPapelera(unProyecto);
+                                                = procesarProyecto(tareaFinalizada);
+                                        Repositorio.getInstancia().agregarEnFinalizadas(unProyecto);
                                         break;
                                     case "tarea_proyecto":
+                                    
 
                                         TareaProyecto unaTareaProyecto
-                                                = procesarTareaProyecto(tareaEnPapelera);
+                                                = procesarTareaProyecto(tareaFinalizada);
 
-                                        tareaEnPapelera.getAttributes();
+                                        tareaFinalizada.getAttributes();
                                         int id = Integer.parseInt(
-                                                tareaEnPapelera.getAttribute("proyecto"));
+                                                tareaFinalizada.getAttribute("proyecto"));
                                         Proyecto unpProyecto = Repositorio.
                                                 getInstancia().buscarProyecto(id);
 
@@ -560,6 +565,14 @@ public class IEDatos {
 
                                         Repositorio.getInstancia().
                                                 agregarEnPapelera(unaTareaProyecto);
+                                        break;
+                                    */
+                                        
+                                    case "tarea_proyecto":
+                                        TareaProyecto unaTareaProyecto
+                                                = procesarTareaProyecto(tareaFinalizada);
+                                        
+                                        
                                         break;
                                 }
                             }
@@ -723,7 +736,7 @@ public class IEDatos {
      * numérico.
      */
     private static Proyecto procesarProyecto(Element e)
-            throws DOMException, NumberFormatException {
+            throws DOMException, NumberFormatException, SQLException {
 
         Proyecto unProyecto = new Proyecto("", null);
 
@@ -782,7 +795,7 @@ public class IEDatos {
      * @throws NumberFormatException si el id no es un valor numérico.
      */
     private static TareaProyecto procesarTareaProyecto(Element e)
-            throws DOMException, NumberFormatException {
+            throws DOMException, SQLException {
 
         TareaProyecto unaTareaProyecto = new TareaProyecto(
                 null, Prioridad.Media, "", Complejidad.Media, "", "");
@@ -795,9 +808,17 @@ public class IEDatos {
         for (int i = 0; i < nodosTareaProyecto.getLength(); i++) {
 
             if (nodosTareaProyecto.item(i).getNodeType() == Node.ELEMENT_NODE) {
-
+                
                 Element etiquetaTareaProyecto = (Element) nodosTareaProyecto.item(i);
-
+                
+                String nombreProyecto = etiquetaTareaProyecto.getAttribute("proyecto");
+                
+                for (Proyecto p : Repositorio.getInstancia().getProyectos()) {
+                    if (p.getNombreP().equals(nombreProyecto)) {
+                        unaTareaProyecto.setUnProyecto(p);
+                    }
+                }
+                
                 switch (etiquetaTareaProyecto.getTagName()) {
 
                     case "prioridad":

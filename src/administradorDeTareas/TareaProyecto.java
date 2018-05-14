@@ -26,7 +26,6 @@ public class TareaProyecto extends TareaSimple {
      * @param anotacion
      * @param miComplejidad
      * @param nombre
-     * @param id
      */
     public TareaProyecto(Proyecto unProyecto, Prioridad miPrioridad, String contexto, Complejidad miComplejidad, String anotacion, String nombre) {
         super(contexto, miComplejidad, anotacion, nombre);
