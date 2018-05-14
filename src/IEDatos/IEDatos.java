@@ -33,6 +33,7 @@ import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
 import administradorDeTareas.TareaProyecto;
 import administradorDeTareas.TareaSimple;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import persistencia.Repositorio;
 
@@ -392,9 +393,10 @@ public class IEDatos {
      * archivo XML. Para cambiar la ruta desde la que se cargará el archivo, hay
      * que usar el método setRuta de esta clase.
      * @throws java.sql.SQLException
+     * @throws java.io.FileNotFoundException Si no existe el archivo XML
      *
      */
-    public static void cargarDesdeXml() throws SQLException {
+    public static void cargarDesdeXml() throws SQLException, FileNotFoundException {
 
         File f = new File(ruta);
 
@@ -658,6 +660,8 @@ public class IEDatos {
                 }
 
             }
+        } else {
+            throw new FileNotFoundException("El archivo no existe.");
         }
     }
 
