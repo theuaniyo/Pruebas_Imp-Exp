@@ -232,7 +232,7 @@ public class Repositorio {
      * @param email
      * @throws SQLException
      */
-    public void insertarUsuario(String contrasena, String nick, String email) throws SQLException, FileNotFoundException {
+    public void insertarUsuario(String contrasena, String nick, String email) throws SQLException {
 
         Statement stm = accesoBD.abrirConexion().createStatement();
 
@@ -242,7 +242,7 @@ public class Repositorio {
 
         accesoBD.cerrarConexion(accesoBD.abrirConexion());
 
-        IEDatos.guardarXml();
+        //IEDatos.crearXml(nick, contrasena, email);
 
     }
 

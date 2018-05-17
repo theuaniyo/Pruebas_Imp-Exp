@@ -73,6 +73,115 @@ public class IEDatos {
         IEDatos.ruta = ruta;
     }
 
+    public static void crearXml(String nick, String contrasena, String email) {
+        Document xml = DOMUtil.crearDOMVacio(RAIZ);
+
+        Element eleUsuario = xml.createElement("usuario");
+        xml.getDocumentElement().appendChild(eleUsuario);
+
+        Element eleNick = xml.createElement("nick");
+        eleUsuario.appendChild(eleNick);
+        eleNick.setTextContent(nick);
+
+        Element eleContrasena = xml.createElement("contrasena");
+        eleUsuario.appendChild(eleContrasena);
+        eleNick.setTextContent(contrasena);
+
+        Element eleEmail = xml.createElement("email");
+        eleUsuario.appendChild(eleEmail);
+        eleEmail.setTextContent(email);
+
+        DOMUtil.DOM2XML(xml);
+    }
+
+    public static boolean comprobarUsuario(String usuario, String contraseña) {
+        boolean comprobarUsuario = false;
+
+        File f = new File(ruta);
+
+        if (f.exists()) {
+            Document xml = DOMUtil.XML2DOM(ruta);
+            String nick = "";
+            String contrasena = "";
+
+            NodeList nl = xml.getDocumentElement().getChildNodes();
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node n = nl.item(i);
+
+                if (n.getNodeType() == Node.ELEMENT_NODE) {
+                    Element e = (Element) n;
+
+                    if (e.getTagName().equals("usuario")) {
+                        NodeList nl2 = e.getChildNodes();
+
+                        for (int j = 0; j < nl2.getLength(); j++) {
+                            Element e2 = (Element) nl2.item(j);
+
+                            switch (e2.getTagName()) {
+                                case "nick":
+                                    nick = e2.getTextContent().trim();
+                                    break;
+                                case "contrasena":
+                                    contrasena = e2.getTextContent().trim();
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (nick.equals(usuario)) {
+                if (contrasena.equals(contraseña)) {
+                    comprobarUsuario = true;
+                }
+            }
+        }
+
+        return comprobarUsuario;
+    }
+
+    public static void guardarUsuarioBD() throws SQLException, FileNotFoundException {
+        File f = new File(ruta);
+
+        if (f.exists()) {
+            Document xml = DOMUtil.XML2DOM(ruta);
+            String nick = "";
+            String contrasena = "";
+            String email = "";
+
+            NodeList nl = xml.getDocumentElement().getChildNodes();
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node n = nl.item(i);
+
+                if (n.getNodeType() == Node.ELEMENT_NODE) {
+                    Element e = (Element) n;
+
+                    if (e.getTagName().equals("usuario")) {
+                        NodeList nl2 = e.getChildNodes();
+
+                        for (int j = 0; j < nl2.getLength(); j++) {
+                            Element e2 = (Element) nl2.item(j);
+
+                            switch (e2.getTagName()) {
+                                case "nick":
+                                    nick = e2.getTextContent().trim();
+                                    break;
+                                case "contrasena":
+                                    contrasena = e2.getTextContent().trim();
+                                    break;
+                                case "email":
+                                    email = e2.getTextContent().trim();
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            Repositorio.getInstancia().insertarUsuario(contrasena, nick, email);
+        }
+    }
+
     /**
      * Guarda los datos del programa en un archivo XML.
      *
@@ -80,16 +189,13 @@ public class IEDatos {
      * @author Juan Jose Luque Morales
      *
      */
-    public static void guardarXml(String nick, String contrasena, String email) 
-            throws SQLException, FileNotFoundException, UnsupportedEncodingException, 
-            NoSuchAlgorithmException {
+    public static void guardarXml()
+            throws SQLException, FileNotFoundException {
 
-        //Crear DOM vacío
-        Document xml = DOMUtil.crearDOMVacio(RAIZ);
         //xml.createAttribute("usuario");//.setValue(miUsuario.getNick);
         //PONER A GTD SE AÑANDA UN ATRIBUTO USUARIO
-            escribirUsuarioXml(xml, nick, contrasena, email);
-            
+        Document xml = DOMUtil.XML2DOM(ruta);
+
         if (!Repositorio.getInstancia().getContextos().isEmpty()) {
             Element eleContextos = xml.createElement("contextos");
             xml.getDocumentElement().appendChild(eleContextos);
@@ -206,31 +312,6 @@ public class IEDatos {
         }
         DOMUtil.DOM2XML(xml, ruta);
     }
-/**
- * Crea etiqueta usuario y otras hijas de nick , contrasena y email.
- * @author Alvaro Lovera
- * @param xml
- * @param nick
- * @param contrasena
- * @param email
- * @throws DOMException 
- */
-    private static void escribirUsuarioXml(Document xml, String nick, String contrasena, String email) throws DOMException {
-        Element eleUsuario=xml.createElement("usuario");
-        xml.getDocumentElement().appendChild(eleUsuario);
-        
-        Element eleNick=xml.createElement("nick");
-        eleUsuario.appendChild(eleNick);
-        eleNick.setTextContent(nick);
-        
-        Element eleContrasena=xml.createElement("contrasena");
-        eleUsuario.appendChild(eleContrasena);
-        eleNick.setTextContent(contrasena);
-        
-        Element eleEmail=xml.createElement("email");
-        eleUsuario.appendChild(eleEmail);
-        eleEmail.setTextContent(email);
-    }
 
     /**
      * Crea etiqueta TareaInmediata la etiquetas hijas con sus variables
@@ -296,8 +377,8 @@ public class IEDatos {
         Element eleTareaSimpleNombreAcSim = xml.createElement("nombre");
         eleTareaSimpleAcSim.appendChild(eleTareaSimpleNombreAcSim);
         eleTareaSimpleNombreAcSim.setTextContent(ts.getNombre());
-        
-        Element eleTareaSimpleDelegada=xml.createElement("delegada");
+
+        Element eleTareaSimpleDelegada = xml.createElement("delegada");
         eleTareaSimpleAcSim.appendChild(eleTareaSimpleDelegada);
         eleTareaSimpleDelegada.setTextContent(Boolean.toString(ts.isDelegada()));
     }
