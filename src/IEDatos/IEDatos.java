@@ -425,6 +425,13 @@ public class IEDatos {
                     Element e = (Element) nodosRaiz.item(i);
 
                     switch (e.getTagName()) {
+                        
+                        
+                        case "usuario":
+                            
+                            NodeList usuarios = e.getChildNodes();
+                            procesarUsuario(e);
+                            break;
 
                         case "contextos":
                             //Lista de nodos de elementos Contexto
