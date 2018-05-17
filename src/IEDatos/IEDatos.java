@@ -26,14 +26,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import administradorDeTareas.Complejidad;
-import administradorDeTareas.Prioridad;
-import administradorDeTareas.Proyecto;
 import administradorDeTareas.TareaAgenda;
 import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
-import administradorDeTareas.TareaProyecto;
 import administradorDeTareas.TareaSimple;
-import java.lang.reflect.Field;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import persistencia.Repositorio;
 
@@ -52,6 +49,10 @@ public class IEDatos {
      * Constante con la raíz del archivo XML.
      */
     private static final String RAIZ = "gestor_gtd";
+    public static final short SINCRO_OK = 0;
+    public static final short SINCRO_FICHERO = 1;
+    public static final short SINCRO_BD = 2;
+    public static final short SINCRO_FALLO = -1;
 
     /**
      *
@@ -73,8 +74,11 @@ public class IEDatos {
     /**
      * Guarda los datos del programa en un archivo XML.
      *
+     * @author Alvaro Lovera Almagro
+     * @author Juan Jose Luque Morales
+     *
      */
-    public static void guardarXml() throws SQLException {
+    public static void guardarXml() throws SQLException, FileNotFoundException {
 
         //Crear DOM vacío
         Document xml = DOMUtil.crearDOMVacio(RAIZ);
@@ -113,6 +117,7 @@ public class IEDatos {
                 escribirTareaInmediataXml(xml, eleTareasInmediatas, ti);
             }
         }
+        /*
         if (!Repositorio.getInstancia().getProyectos().isEmpty()) {
             Element eleProyectos = xml.createElement("proyectos");
             xml.getDocumentElement().appendChild(eleProyectos);
@@ -120,15 +125,42 @@ public class IEDatos {
                 escribirProyectoySusTareasProyectoXml(xml, eleProyectos, p);
             }
         }
+         */
+        //Hay que tareasfinalizadas tiene todos los tipos de tareas
         if (!Repositorio.getInstancia().getTareasFinalizada().isEmpty()) {
             //Cambiar PAPELERA por TAREASFINALIZADAS
-            Element elePapelera = xml.createElement("tarea_finalizada");
-            xml.getDocumentElement().appendChild(elePapelera);
+            Element eleTareasFinalizadas = xml.createElement("tarea_finalizada");
+            xml.getDocumentElement().appendChild(eleTareasFinalizadas);
 
             for (TareaEntrada tep : Repositorio.getInstancia().getTareasFinalizada()) {
                 if (tep.getClass().equals(TareaEntrada.class)) {
-                    escribirTareaEntradaXml(xml, elePapelera, tep);                  
+                    escribirTareaEntradaXml(xml, eleTareasFinalizadas, tep);
+                } else if (tep.getClass().equals(TareaSimple.class)) {
+
+                    TareaSimple tsp = (TareaSimple) tep;
+                    escribirTareaSimpleXml(xml, eleTareasFinalizadas, tsp);
+
+                } else if (tep.getClass().equals(TareaInmediata.class)) {
+
+                    TareaInmediata tip = (TareaInmediata) tep;
+
+                    escribirTareaInmediataXml(xml, eleTareasFinalizadas, tip);
+
+                } else if (tep.getClass().equals(TareaAgenda.class)) {
+
+                    TareaAgenda tAp = (TareaAgenda) tep;
+
+                    escribirTareaAgendaXml(xml, eleTareasFinalizadas, tAp);
+
                 }
+                /*
+                else if (tep.getClass().equals(TareaProyecto.class)) {
+
+                    TareaProyecto tsp = (TareaProyecto) tep;
+                    escribirTareaProyectoXml(xml, eleTareasFinalizadas, tsp);
+
+                }
+                 */
             }
         }
         if (!Repositorio.getInstancia().getArchivoSeguimiento().isEmpty()) {
@@ -156,15 +188,27 @@ public class IEDatos {
             for (TareaSimple ts : Repositorio.getInstancia().getAccionesSiguientes()) {
                 if (ts.getClass().equals(TareaSimple.class)) {
                     escribirTareaSimpleXml(xml, eleAccionesSiguientes, ts);
-                } else if (ts.getClass().equals(TareaProyecto.class)) {
-                    //TareaProyecto ti = (TareaProyecto) (TareaSimple) ts;
-                    escribirTareaProyectoXml(xml, eleAccionesSiguientes, (TareaProyecto) ts);
                 }
+                /*
+                else if (ts.getClass().equals(TareaProyecto.class)) {
+                    TareaProyecto tp = (TareaProyecto) ts;
+                    escribirTareaProyectoXml(xml, eleAccionesSiguientes, tp);
+                }
+                 */
             }
         }
         DOMUtil.DOM2XML(xml, ruta);
     }
 
+    /**
+     * Crea etiqueta TareaInmediata la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleAccionesSiguientes
+     * @param ti
+     * @throws DOMException
+     */
     private static void escribirTareaInmediataXml(Document xml, Element eleAccionesSiguientes, TareaInmediata ti) throws DOMException {
         Element eleTareaInmediataAcSi = xml.createElement("tarea_inmediata");
         eleAccionesSiguientes.appendChild(eleTareaInmediataAcSi);
@@ -191,6 +235,15 @@ public class IEDatos {
         eleTareaInmediataNombrePape.setTextContent(ti.getNombre());
     }
 
+    /**
+     * Crea etiqueta TareaSimple la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleAccionesSiguientes
+     * @param ts
+     * @throws DOMException
+     */
     private static void escribirTareaSimpleXml(Document xml, Element eleAccionesSiguientes, TareaSimple ts) throws DOMException {
         Element eleTareaSimpleAcSim = xml.createElement("tarea_simple");
         eleAccionesSiguientes.appendChild(eleTareaSimpleAcSim);
@@ -214,6 +267,17 @@ public class IEDatos {
         eleTareaSimpleNombreAcSim.setTextContent(ts.getNombre());
     }
 
+    /**
+     * * Crea etiqueta Proyectoetiquetas hijas con sus variables y sus
+     * TareaProyecto las etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleProyectos
+     * @param p
+     * @throws DOMException
+     */
+    /*
     private static void escribirProyectoySusTareasProyectoXml(Document xml, Element eleProyectos, Proyecto p) throws DOMException {
         Element eleProyecto = xml.createElement("proyecto");
         eleProyectos.appendChild(eleProyecto);
@@ -227,21 +291,31 @@ public class IEDatos {
             Element eleListaTareasProyectos = xml.createElement("lista_tareas_proyecto");
             eleProyecto.appendChild(eleListaTareasProyectos);
             for (TareaProyecto tp : p.getListaTareasProyecto()) {
-                escribirTareaProyectoXml(xml, eleListaTareasProyectos, tp);               
-            }
+                escribirTareaProyectoXml(xml, eleListaTareasProyectos, tp);
+            } 
         }
         
         Element eleFechaFinProyecto = xml.createElement("fecha_fin");
         eleFechaFinProyecto.setAttribute("fecha", p.getFechaFin().toString());
         eleProyecto.appendChild(eleFechaFinProyecto);
     }
-
+     */
+    /**
+     * Crea etiqueta TareaProyecto la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleListaTareasProyectos
+     * @param tp
+     * @throws DOMException
+     */
+    /*
     private static void escribirTareaProyectoXml(Document xml, Element eleListaTareasProyectos, TareaProyecto tp) throws DOMException {
         Element eleTareaProyecto = xml.createElement("tarea_proyecto");
         eleListaTareasProyectos.appendChild(eleTareaProyecto);
-        eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
-        //eleTareaProyecto.setAttribute("proyecto", Integer.toString(tp.getUnProyecto().getId()));
-        
+        //eleTareaProyecto.setAttribute("id", (Integer.toString(tp.getId())));
+        eleTareaProyecto.setAttribute("proyecto", tp.getUnProyecto().getNombreP());
+
         Element eleTareaProyectoPrioridad = xml.createElement("prioridad");
         eleTareaProyecto.appendChild(eleTareaProyectoPrioridad);
         eleTareaProyectoPrioridad.setTextContent(tp.getMiPrioridad().toString());
@@ -262,7 +336,16 @@ public class IEDatos {
         eleTareaProyecto.appendChild(eleTareaProyecto);
         eleTareaProyectoNombre.setTextContent(tp.getNombre());
     }
-
+     */
+    /**
+     * Crea etiqueta TareaEntrada la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleBandejaEntrada
+     * @param te
+     * @throws DOMException
+     */
     private static void escribirTareaEntradaXml(Document xml, Element eleBandejaEntrada, TareaEntrada te) throws DOMException {
         Element eleTareaEntrada = xml.createElement("tarea_entrada");
         eleBandejaEntrada.appendChild(eleTareaEntrada);
@@ -274,6 +357,15 @@ public class IEDatos {
         eleTareaEntrada.appendChild(eleNombreTareaEntrada);
     }
 
+    /**
+     * Crea etiqueta TareaAgenda la etiquetas hijas con sus variables
+     *
+     * @author Alvaro Lovera Almagro
+     * @param xml
+     * @param eleListaTareasAgenda
+     * @param ta
+     * @throws DOMException
+     */
     private static void escribirTareaAgendaXml(Document xml, Element eleListaTareasAgenda, TareaAgenda ta) throws DOMException {
         Element eleTareaAgenda = xml.createElement("tarea_agenda");
         eleListaTareasAgenda.appendChild(eleTareaAgenda);
@@ -310,168 +402,177 @@ public class IEDatos {
      * @author Juan J. Luque Morales Carga los datos del programa desde un
      * archivo XML. Para cambiar la ruta desde la que se cargará el archivo, hay
      * que usar el método setRuta de esta clase.
+     * @throws java.sql.SQLException
+     * @throws java.io.FileNotFoundException Si no existe el archivo XML
      *
      */
-    public static void cargarDesdeXml() throws SQLException {
+    public static void cargarDesdeXml() throws SQLException, FileNotFoundException {
 
-        //Paso de XML a árbol DOM
-        Document doc = DOMUtil.XML2DOM(ruta);
-        //Guardamos las etiquetas hijas de la raíz en una lista de nodos
-        NodeList nodosRaiz = doc.getDocumentElement().getChildNodes();
+        File f = new File(ruta);
 
-        for (int i = 0; i < nodosRaiz.getLength(); i++) {
+        if (f.exists()) {
+            //Paso de XML a árbol DOM
+            Document doc = DOMUtil.XML2DOM(ruta);
+            //Guardamos las etiquetas hijas de la raíz en una lista de nodos
+            NodeList nodosRaiz = doc.getDocumentElement().getChildNodes();
 
-            //Si es un elemento, lo guardamos para filtralo
-            if (nodosRaiz.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                Element e = (Element) nodosRaiz.item(i);
+            for (int i = 0; i < nodosRaiz.getLength(); i++) {
 
-                switch (e.getTagName()) {
+                //Si es un elemento, lo guardamos para filtralo
+                if (nodosRaiz.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    Element e = (Element) nodosRaiz.item(i);
 
-                    case "contextos":
-                        //Lista de nodos de elementos Contexto
-                        NodeList contextos = e.getChildNodes();
-                        procesarContextos(contextos);
-                        break;
-                    case "agenda":
-                        //Lista de nodos de elementos TareaAgenda
-                        NodeList agenda = e.getChildNodes();
+                    switch (e.getTagName()) {
 
-                        for (int j = 0; j < agenda.getLength(); j++) {
+                        case "contextos":
+                            //Lista de nodos de elementos Contexto
+                            NodeList contextos = e.getChildNodes();
+                            procesarContextos(contextos);
+                            break;
+                        case "agenda":
+                            //Lista de nodos de elementos TareaAgenda
+                            NodeList agenda = e.getChildNodes();
 
-                            if (agenda.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                            for (int j = 0; j < agenda.getLength(); j++) {
 
-                                //Una etiqueta TareaAgenda
-                                Element tareaAgenda = (Element) agenda.item(j);
-                                TareaAgenda unaTareaAgenda = procesarTareaAgenda(tareaAgenda);
-                                Repositorio.getInstancia().agregarEnAgenda(unaTareaAgenda);
+                                if (agenda.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                    //Una etiqueta TareaAgenda
+                                    Element tareaAgenda = (Element) agenda.item(j);
+                                    TareaAgenda unaTareaAgenda = procesarTareaAgenda(tareaAgenda);
+                                    Repositorio.getInstancia().agregarEnAgenda(unaTareaAgenda);
+                                }
                             }
-                        }
-                        break;
+                            break;
 
-                    case "bandeja_entrada":
+                        case "bandeja_entrada":
 
-                        //Lista de nodos con todas las TareasEntrada
-                        NodeList bandejaEntrada = e.getChildNodes();
+                            //Lista de nodos con todas las TareasEntrada
+                            NodeList bandejaEntrada = e.getChildNodes();
 
-                        for (int j = 0; j < bandejaEntrada.getLength(); j++) {
+                            for (int j = 0; j < bandejaEntrada.getLength(); j++) {
 
-                            if (bandejaEntrada.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                if (bandejaEntrada.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-                                //Una etiqueta TareaEntrada
-                                Element tareaEntrada
-                                        = (Element) bandejaEntrada.item(j);
-                                TareaEntrada unaTareaEntrada
-                                        = procesarTareaEntrada(tareaEntrada);
-                                Repositorio.getInstancia().agregarEnBandeja(
-                                        unaTareaEntrada);
+                                    //Una etiqueta TareaEntrada
+                                    Element tareaEntrada
+                                            = (Element) bandejaEntrada.item(j);
+                                    TareaEntrada unaTareaEntrada
+                                            = procesarTareaEntrada(tareaEntrada);
+                                    Repositorio.getInstancia().agregarEnBandeja(
+                                            unaTareaEntrada);
+                                }
                             }
-                        }
-                        break;
+                            break;
 
-                    case "tareas_inmediatas":
+                        case "tareas_inmediatas":
 
-                        //Lista de nodos con todas las TareasInmediatas
-                        NodeList tareasInmediatas = e.getChildNodes();
+                            //Lista de nodos con todas las TareasInmediatas
+                            NodeList tareasInmediatas = e.getChildNodes();
 
-                        for (int j = 0; j < tareasInmediatas.getLength(); j++) {
+                            for (int j = 0; j < tareasInmediatas.getLength(); j++) {
 
-                            if (tareasInmediatas.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                if (tareasInmediatas.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-                                //Una etiqueta TareaInmediata
-                                Element tareaInmediata
-                                        = (Element) tareasInmediatas.item(j);
-                                TareaInmediata unaTareaInmediata
-                                        = procesarTareaInmediata(tareaInmediata);
-                                Repositorio.getInstancia().agregarEnInmediatas(
-                                        unaTareaInmediata);
+                                    //Una etiqueta TareaInmediata
+                                    Element tareaInmediata
+                                            = (Element) tareasInmediatas.item(j);
+                                    TareaInmediata unaTareaInmediata
+                                            = procesarTareaInmediata(tareaInmediata);
+                                    Repositorio.getInstancia().agregarEnInmediatas(
+                                            unaTareaInmediata);
+                                }
                             }
-                        }
-                        break;
+                            break;
+                        /*
+                        case "proyectos":
 
-                    case "proyectos":
+                            //Lista de nodos de elementos Proyecto
+                            NodeList proyectos = e.getChildNodes();
 
-                        //Lista de nodos de elementos Proyecto
-                        NodeList proyectos = e.getChildNodes();
+                            for (int j = 0; j < proyectos.getLength(); j++) {
 
-                        for (int j = 0; j < proyectos.getLength(); j++) {
+                                if (proyectos.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-                            if (proyectos.item(j).getNodeType() == Node.ELEMENT_NODE) {
-
-                                Proyecto unProyecto;
-                                //Una etiqueta proyecto.
-                                Element proyecto = (Element) proyectos.item(j);
-                                unProyecto = procesarProyecto(proyecto);
-                                Repositorio.getInstancia().agregarEnProyectos(unProyecto);
+                                    Proyecto unProyecto;
+                                    //Una etiqueta proyecto.
+                                    Element proyecto = (Element) proyectos.item(j);
+                                    unProyecto = procesarProyecto(proyecto);
+                                    Repositorio.getInstancia().agregarEnProyectos(unProyecto);
+                                }
                             }
-                        }
-                        break;
+                            break;
+                         */
 
-                    //Cambiar PAPELERA por TAREASFINALIZADAS
-                    case "tareas_finalizadas":
+                        //Cambiar PAPELERA por TAREASFINALIZADAS
+                        case "tareas_finalizadas":
 
-                        //Lista de nodos dentro de la etiqueta papelera
-                        NodeList tfinalizadas = e.getChildNodes();
+                            //Lista de nodos dentro de la etiqueta papelera
+                            NodeList papelera = e.getChildNodes();
 
-                        for (int j = 0; j < tfinalizadas.getLength(); j++) {
+                            for (int j = 0; j < papelera.getLength(); j++) {
 
-                            if (tfinalizadas.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                if (papelera.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-                                Element tareaEnPapelera = (Element) tfinalizadas.item(j);
+                                    Element tareaFinalizada = (Element) papelera.item(j);
 
+                                    /*
                                 TareaEntrada unaTareaEntrada
                                         = procesarTareaEntrada(tareaEnPapelera);
                                 Repositorio.getInstancia().
-                                        agregarEnPapelera(unaTareaEntrada); //metodo agregarTareaFinalizada 
+                                        agregarEnPapelera(unaTareaEntrada); //metodod agregarTareaFinalizada
+                                     */
+                                    switch (tareaFinalizada.getNodeName()) {
 
-                                
-                                switch (tareaEnPapelera.getNodeName()) {
+                                        case "tarea_entrada":
 
-                                    case "tarea_entrada":
+                                            TareaEntrada unaTareaEntrada
+                                                    = procesarTareaEntrada(tareaFinalizada);
+                                            Repositorio.getInstancia().
+                                                    agregarEnFinalizadas(unaTareaEntrada);
+                                            break;
 
-                                        TareaEntrada unaTareaEntrada
-                                                = procesarTareaEntrada(tareaEnPapelera);
-                                        Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaEntrada);
-                                        break;
+                                        case "tarea_simple":
 
-                                    case "tarea_simple":
+                                            TareaSimple unaTareaSimple
+                                                    = procesarTareaSimple(tareaFinalizada);
+                                            Repositorio.getInstancia().
+                                                    agregarEnFinalizadas(unaTareaSimple);
+                                            break;
 
-                                        TareaSimple unaTareaSimple
-                                                = procesarTareaSimple(tareaEnPapelera);
-                                        Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaSimple);
-                                        break;
+                                        case "tarea_inmediata":
 
-                                    case "tarea_inmediata":
+                                            TareaInmediata unaTareaInmediata
+                                                    = procesarTareaInmediata(tareaFinalizada);
+                                            Repositorio.getInstancia().
+                                                    agregarEnFinalizadas(unaTareaInmediata);
+                                            break;
 
-                                        TareaInmediata unaTareaInmediata
-                                                = procesarTareaInmediata(tareaEnPapelera);
-                                        Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaInmediata);
-                                        break;
+                                        case "tarea_agenda":
 
-                                    case "tarea_agenda":
+                                            TareaAgenda unaTareaAgenda
+                                                    = procesarTareaAgenda(tareaFinalizada);
+                                            Repositorio.getInstancia().
+                                                    agregarEnFinalizadas(unaTareaAgenda);
+                                            break;
 
-                                        TareaAgenda unaTareaAgenda
-                                                = procesarTareaAgenda(tareaEnPapelera);
-                                        Repositorio.getInstancia().
-                                                agregarEnPapelera(unaTareaAgenda);
-                                        break;
-
+                                        /*
+                                        LOS PROYECTOS NO SE GUARDAN AQUÍ (EN PRINCIPIO)
                                     case "proyecto":
-                                        
-                                        Proyecto unProyecto 
-                                                = procesarProyecto(tareaEnPapelera);
-                                        Repositorio.getInstancia().agregarEnPapelera(unProyecto);
+
+                                        Proyecto unProyecto
+                                                = procesarProyecto(tareaFinalizada);
+                                        Repositorio.getInstancia().agregarEnFinalizadas(unProyecto);
                                         break;
                                     case "tarea_proyecto":
+                                    
 
                                         TareaProyecto unaTareaProyecto
-                                                = procesarTareaProyecto(tareaEnPapelera);
+                                                = procesarTareaProyecto(tareaFinalizada);
 
-                                        tareaEnPapelera.getAttributes();
+                                        tareaFinalizada.getAttributes();
                                         int id = Integer.parseInt(
-                                                tareaEnPapelera.getAttribute("proyecto"));
+                                                tareaFinalizada.getAttribute("proyecto"));
                                         Proyecto unpProyecto = Repositorio.
                                                 getInstancia().buscarProyecto(id);
 
@@ -480,88 +581,102 @@ public class IEDatos {
                                         Repositorio.getInstancia().
                                                 agregarEnPapelera(unaTareaProyecto);
                                         break;
+                                         */
+ /*
+                                        case "tarea_proyecto":
+                                            TareaProyecto unaTareaProyecto
+                                                    = procesarTareaProyecto(tareaFinalizada);
+
+                                            break;
+                                         */
+                                    }
                                 }
                             }
-                        }
-                        break;
-                    case "archivo_seguimiento":
+                            break;
 
-                        //Todos los nodos de archivoSeguimiento
-                        NodeList archivoSeguimiento = e.getChildNodes();
+                        case "archivo_seguimiento":
 
-                        for (int j = 0; j < archivoSeguimiento.getLength(); j++) {
+                            //Todos los nodos de archivoSeguimiento
+                            NodeList archivoSeguimiento = e.getChildNodes();
 
-                            if (archivoSeguimiento.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                            for (int j = 0; j < archivoSeguimiento.getLength(); j++) {
 
-                                TareaEntrada unaTareaEntrada;
+                                if (archivoSeguimiento.item(j).getNodeType() == Node.ELEMENT_NODE) {
 
-                                //Una etiqueta TareaEntrada
-                                Element tareaEntrada
-                                        = (Element) archivoSeguimiento.item(j);
-                                unaTareaEntrada
-                                        = procesarTareaEntrada(tareaEntrada);
-                                Repositorio.getInstancia().agregarEnSeguimiento(
-                                        unaTareaEntrada);
-                            }
-                        }
-                        break;
+                                    TareaEntrada unaTareaEntrada;
 
-                    case "archivo_consulta":
-
-                        //Nodos dentro de archivoConsulta
-                        NodeList archivoConsulta = e.getChildNodes();
-
-                        for (int j = 0; j < archivoConsulta.getLength(); j++) {
-
-                            if (archivoConsulta.item(j).getNodeType() == Node.ELEMENT_NODE) {
-
-                                //Una etiqueta TareaEntrada
-                                Element tareaEntrada
-                                        = (Element) archivoConsulta.item(j);
-                                TareaEntrada unaTareaEntrada
-                                        = procesarTareaEntrada(tareaEntrada);
-                                Repositorio.getInstancia().agregarEnConsulta(
-                                        unaTareaEntrada);
-                            }
-                        }
-                        break;
-
-                    //¡Ojo! Aquí se guardan objetos TareaSimple y TareaInmediata.
-                    case "acciones_siguientes":
-
-                        //Nodos dentro de accionesSiguientes.
-                        NodeList accionesSiguientes = e.getChildNodes();
-
-                        for (int j = 0; j < accionesSiguientes.getLength(); j++) {
-
-                            if (accionesSiguientes.item(j).getNodeType() == Node.ELEMENT_NODE) {
-
-                                Element tareaSiguiente = (Element) accionesSiguientes.item(j);
-
-                                switch (tareaSiguiente.getTagName()) {
-
-                                    case "tarea_simple":
-
-                                        TareaSimple unaTareaSimple
-                                                = procesarTareaSimple(tareaSiguiente);
-                                        Repositorio.getInstancia().
-                                                agregarEnSiguientes(unaTareaSimple);
-                                        break;
-
-                                    case "tarea_proyecto":
-
-                                        TareaProyecto unaTareaProyecto
-                                                = procesarTareaProyecto(tareaSiguiente);
-                                        Repositorio.getInstancia().
-                                                agregarEnSiguientes(unaTareaProyecto);
-                                        break;
+                                    //Una etiqueta TareaEntrada
+                                    Element tareaEntrada
+                                            = (Element) archivoSeguimiento.item(j);
+                                    unaTareaEntrada
+                                            = procesarTareaEntrada(tareaEntrada);
+                                    Repositorio.getInstancia().agregarEnSeguimiento(
+                                            unaTareaEntrada);
                                 }
                             }
-                        }
-                        break;
+                            break;
+
+                        case "archivo_consulta":
+
+                            //Nodos dentro de archivoConsulta
+                            NodeList archivoConsulta = e.getChildNodes();
+
+                            for (int j = 0; j < archivoConsulta.getLength(); j++) {
+
+                                if (archivoConsulta.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                    //Una etiqueta TareaEntrada
+                                    Element tareaEntrada
+                                            = (Element) archivoConsulta.item(j);
+                                    TareaEntrada unaTareaEntrada
+                                            = procesarTareaEntrada(tareaEntrada);
+                                    Repositorio.getInstancia().agregarEnConsulta(
+                                            unaTareaEntrada);
+                                }
+                            }
+                            break;
+
+                        //¡Ojo! Aquí se guardan objetos TareaSimple y TareaInmediata.
+                        case "acciones_siguientes":
+
+                            //Nodos dentro de accionesSiguientes.
+                            NodeList accionesSiguientes = e.getChildNodes();
+
+                            for (int j = 0; j < accionesSiguientes.getLength(); j++) {
+
+                                if (accionesSiguientes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+
+                                    Element tareaSiguiente = (Element) accionesSiguientes.item(j);
+
+                                    switch (tareaSiguiente.getTagName()) {
+
+                                        case "tarea_simple":
+
+                                            TareaSimple unaTareaSimple
+                                                    = procesarTareaSimple(tareaSiguiente);
+                                            Repositorio.getInstancia().
+                                                    agregarEnSiguientes(unaTareaSimple);
+                                            break;
+
+                                        /*
+                                        case "tarea_proyecto":
+
+                                            TareaProyecto unaTareaProyecto
+                                                    = procesarTareaProyecto(tareaSiguiente);
+                                            Repositorio.getInstancia().
+                                                    agregarEnSiguientes(unaTareaProyecto);
+                                            break;
+                                         */
+                                    }
+                                }
+                            }
+                            break;
+                    }
                 }
-            }
 
+            }
+        } else {
+            throw new FileNotFoundException("El archivo no existe.");
         }
     }
 
@@ -600,7 +715,7 @@ public class IEDatos {
                         unaTareaInmediata.setTerminada(Boolean.valueOf(
                                 etiquetaTareaInmediata.getTextContent().trim()));
                         break;
-/*
+                    /*
                     case "contexto":
 
                         unaTareaInmediata.setContexto(
@@ -618,7 +733,7 @@ public class IEDatos {
                         unaTareaInmediata.setDescripcion(
                                 etiquetaTareaInmediata.getTextContent().trim());
                         break;
-*/
+                     */
                     case "nombre":
 
                         unaTareaInmediata.setNombre(
@@ -641,8 +756,9 @@ public class IEDatos {
      * @throws NumberFormatException si el id del proyecto no es un valor
      * numérico.
      */
+    /*
     private static Proyecto procesarProyecto(Element e)
-            throws DOMException, NumberFormatException {
+            throws DOMException, NumberFormatException, SQLException, FileNotFoundException {
 
         Proyecto unProyecto = new Proyecto("", null);
 
@@ -691,6 +807,7 @@ public class IEDatos {
         return unProyecto;
     }
 
+     */
     /**
      * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML a un
      * objeto TareaProyecto.
@@ -700,8 +817,9 @@ public class IEDatos {
      * @throws DOMException si hay un error relacionado con el XML.
      * @throws NumberFormatException si el id no es un valor numérico.
      */
+    /*
     private static TareaProyecto procesarTareaProyecto(Element e)
-            throws DOMException, NumberFormatException {
+            throws DOMException, SQLException, FileNotFoundException {
 
         TareaProyecto unaTareaProyecto = new TareaProyecto(
                 null, Prioridad.Media, "", Complejidad.Media, "", "");
@@ -717,6 +835,14 @@ public class IEDatos {
             if (nodosTareaProyecto.item(i).getNodeType() == Node.ELEMENT_NODE) {
 
                 Element etiquetaTareaProyecto = (Element) nodosTareaProyecto.item(i);
+
+                String nombreProyecto = etiquetaTareaProyecto.getAttribute("proyecto");
+
+                //for (Proyecto p : Repositorio.getInstancia().getProyectos()) {
+                //    if (p.getNombreP().equals(nombreProyecto)) {
+                //        unaTareaProyecto.setUnProyecto(p);
+                //    }
+                //}
 
                 switch (etiquetaTareaProyecto.getTagName()) {
 
@@ -749,7 +875,7 @@ public class IEDatos {
         }
         return unaTareaProyecto;
     }
-
+     */
     /**
      * @author Juan J. Luque Morales Guarda los contextos que lea del archivo
      * XML en el la lista "contextos" del repositorio.
@@ -757,9 +883,7 @@ public class IEDatos {
      * @param nl una lista de nodos que contiene los contextos.
      * @throws DOMException si hay algún fallo relacionado con el XML.
      */
-    
-
-    private static void procesarContextos(NodeList nl) throws DOMException, SQLException {
+    private static void procesarContextos(NodeList nl) throws DOMException, SQLException, FileNotFoundException {
 
         for (int i = 0; i < nl.getLength(); i++) {
 
@@ -772,8 +896,6 @@ public class IEDatos {
             }
         }
     }
-    
-
 
     /**
      * @author Juan J. Luque Morales Convierte una etiqueta del XML a un objeto
@@ -816,7 +938,7 @@ public class IEDatos {
                         unaTareaSimple.setAnotacion(
                                 etiquetaTareaSimple.getTextContent().trim());
                         break;
-                        
+
                     case "complejidad":
                         unaTareaSimple.setMiComplejidad(Complejidad.valueOf(
                                 etiquetaTareaSimple.getTextContent().trim()));
@@ -919,23 +1041,30 @@ public class IEDatos {
      * @author Juan J. Luque Morales Compara la fecha de modificación del
      * archivo xml con la fecha de la última conexión a la base de datos del
      * programa.
-     *
-     * @param l un long que representa la fecha de la última sincronización de
-     * la base de datos.
+     * @param fechaBD un String que representa la fecha de la última
+     * sincronización de la base de datos.
      * @return true si están sincronizados y false si no lo están.
      */
-    public static boolean comprobarSincro(long l) {
+    public static short comprobarSincro(String fechaBD) {
 
-        boolean datosSincro = false;
+        short estadoSincro = SINCRO_FALLO;
+
+        Timestamp fecha = Timestamp.valueOf(fechaBD);
+
+        long fBD = fecha.getTime();
 
         File f = new File(ruta);
-        long fm = f.lastModified();
+        long fFich = f.lastModified();
 
-        if (fm == l) {
-            datosSincro = true;
+        if (fFich == fBD) {
+            estadoSincro = SINCRO_OK;
+        } else if (fFich > fBD) {
+            estadoSincro = SINCRO_FICHERO;
+        } else if (fFich < fBD) {
+            estadoSincro = SINCRO_BD;
         }
 
-        return datosSincro;
+        return estadoSincro;
 
     }
 

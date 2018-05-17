@@ -18,20 +18,18 @@ import persistencia.Repositorio;
 public class TareaEntrada {
     
     private String nombre;
-    private static int cantidad = 0;
-    private int id;
+ 
 
     /**
      *
      * @param nombre
-     * @param id
+
      */
     public TareaEntrada(String nombre) {
 
         this.nombre = nombre;
-        cantidad++;
-        
-        this.id=cantidad;
+ 
+
     }
 
     /**
@@ -50,13 +48,7 @@ public class TareaEntrada {
         this.nombre = Nombre;
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getId() {
-        return id;
-    }
+
 
 
    

@@ -20,7 +20,6 @@ public class TareaInmediata extends TareaEntrada {
      * @param miComplejidad
      * @param anotacion
      * @param nombre
-     * @param id
      */
     public TareaInmediata(boolean terminada, String nombre) {
         super(nombre);

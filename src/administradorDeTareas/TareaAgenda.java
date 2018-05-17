@@ -26,12 +26,15 @@ public class TareaAgenda extends TareaSimple {
      * @param miComplejidad
      * @param anotacion
      * @param nombre
-     * @param id
      */
     public TareaAgenda(Timestamp fechaFin, Timestamp fechaInicio, String contexto, Complejidad miComplejidad, String anotacion, String nombre) {
-        super(contexto, miComplejidad, anotacion, nombre);
-        this.fechaFin = fechaFin;
-        this.fechaInicio = fechaInicio;
+       super(contexto, miComplejidad, anotacion, nombre);
+        if (compruebaFechas(fechaInicio, fechaFin)) {
+            this.fechaFin = fechaFin;
+            this.fechaInicio = fechaInicio;
+        } else {
+            throw new IllegalArgumentException("Las fechas no son válidas");
+        }
     }
 
     /**
@@ -64,6 +67,16 @@ public class TareaAgenda extends TareaSimple {
      */
     public void setFechaInicio(Timestamp fechaInicio) {
         this.fechaInicio = fechaInicio;
+    }
+    
+    private boolean compruebaFechas(Timestamp fechaInicio, Timestamp fechaFin) {
+        boolean correcto = false;
+        if (fechaFin.after(fechaInicio)) {
+            correcto = true;
+        } else if (fechaFin.equals(fechaInicio)) {
+            correcto = true;
+        }
+        return correcto;
     }
 
 }
