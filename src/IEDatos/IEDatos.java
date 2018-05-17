@@ -31,6 +31,8 @@ import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
 import administradorDeTareas.TareaSimple;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import persistencia.Repositorio;
 
@@ -78,12 +80,16 @@ public class IEDatos {
      * @author Juan Jose Luque Morales
      *
      */
-    public static void guardarXml() throws SQLException, FileNotFoundException {
+    public static void guardarXml(String nick, String contrasena, String email) 
+            throws SQLException, FileNotFoundException, UnsupportedEncodingException, 
+            NoSuchAlgorithmException {
 
         //Crear DOM vacío
         Document xml = DOMUtil.crearDOMVacio(RAIZ);
         //xml.createAttribute("usuario");//.setValue(miUsuario.getNick);
         //PONER A GTD SE AÑANDA UN ATRIBUTO USUARIO
+            escribirUsuarioXml(xml, nick, contrasena, email);
+            
         if (!Repositorio.getInstancia().getContextos().isEmpty()) {
             Element eleContextos = xml.createElement("contextos");
             xml.getDocumentElement().appendChild(eleContextos);
@@ -200,6 +206,31 @@ public class IEDatos {
         }
         DOMUtil.DOM2XML(xml, ruta);
     }
+/**
+ * Crea etiqueta usuario y otras hijas de nick , contrasena y email.
+ * @author Alvaro Lovera
+ * @param xml
+ * @param nick
+ * @param contrasena
+ * @param email
+ * @throws DOMException 
+ */
+    private static void escribirUsuarioXml(Document xml, String nick, String contrasena, String email) throws DOMException {
+        Element eleUsuario=xml.createElement("usuario");
+        xml.getDocumentElement().appendChild(eleUsuario);
+        
+        Element eleNick=xml.createElement("nick");
+        eleUsuario.appendChild(eleNick);
+        eleNick.setTextContent(nick);
+        
+        Element eleContrasena=xml.createElement("contrasena");
+        eleUsuario.appendChild(eleContrasena);
+        eleNick.setTextContent(contrasena);
+        
+        Element eleEmail=xml.createElement("email");
+        eleUsuario.appendChild(eleEmail);
+        eleEmail.setTextContent(email);
+    }
 
     /**
      * Crea etiqueta TareaInmediata la etiquetas hijas con sus variables
@@ -265,6 +296,10 @@ public class IEDatos {
         Element eleTareaSimpleNombreAcSim = xml.createElement("nombre");
         eleTareaSimpleAcSim.appendChild(eleTareaSimpleNombreAcSim);
         eleTareaSimpleNombreAcSim.setTextContent(ts.getNombre());
+        
+        Element eleTareaSimpleDelegada=xml.createElement("delegada");
+        eleTareaSimpleAcSim.appendChild(eleTareaSimpleDelegada);
+        eleTareaSimpleDelegada.setTextContent(Boolean.toString(ts.isDelegada()));
     }
 
     /**
