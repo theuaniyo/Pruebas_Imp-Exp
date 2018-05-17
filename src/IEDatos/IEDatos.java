@@ -30,8 +30,10 @@ import administradorDeTareas.TareaAgenda;
 import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
 import administradorDeTareas.TareaSimple;
+import administradorDeTareas.Usuario;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import static javax.xml.bind.DatatypeConverter.parseString;
 import persistencia.Repositorio;
 
 /**
@@ -896,6 +898,43 @@ public class IEDatos {
             }
         }
     }
+    
+    
+    private static Usuario procesarUsuario(Element e)
+            throws NumberFormatException, DOMException {
+        String contrasena="", email="", nick="";  
+        Usuario unUsuario = null;
+        NodeList nodosUsuario = e.getChildNodes();
+
+        for (int i = 0; i < nodosUsuario.getLength(); i++) {
+
+            if (nodosUsuario.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+                Element etiquetaUsuario = (Element) nodosUsuario.item(i);
+
+                switch (etiquetaUsuario.getTagName()) {
+                    case "contrasena":
+                        contrasena=
+                                etiquetaUsuario.getTextContent().trim();
+                        break;
+
+                    case "nick":
+                        nick=
+                                etiquetaUsuario.getTextContent().trim();
+                        break;
+
+                    case "email":
+                        email=
+                                etiquetaUsuario.getTextContent().trim();
+                        break;
+                }
+
+            }
+            unUsuario = new Usuario(contrasena, nick, email);
+        }
+        
+        return unUsuario;
+    }
 
     /**
      * @author Juan J. Luque Morales Convierte una etiqueta del XML a un objeto
@@ -908,9 +947,12 @@ public class IEDatos {
      */
     private static TareaSimple procesarTareaSimple(Element e)
             throws NumberFormatException, DOMException {
+        
+        String nombre="", contexto="", anotacion="";
+        boolean delegada=true;
+        Complejidad complejidad=null;
+        TareaSimple unaTareaSimple=null;
 
-        TareaSimple unaTareaSimple = new TareaSimple(
-                "", Complejidad.Media, "", "");
         //Atributo id.
         //unaTareaSimple.setId(Integer.parseInt(e.getAttribute("id")));
 
@@ -925,27 +967,35 @@ public class IEDatos {
 
                 switch (etiquetaTareaSimple.getTagName()) {
                     case "nombre":
-                        unaTareaSimple.setNombre(
-                                etiquetaTareaSimple.getTextContent().trim());
+                        nombre=
+                                etiquetaTareaSimple.getTextContent().trim();
                         break;
 
                     case "contexto":
-                        unaTareaSimple.setContexto(
-                                etiquetaTareaSimple.getTextContent().trim());
+                        contexto=
+                                etiquetaTareaSimple.getTextContent().trim();
                         break;
 
                     case "anotacion":
-                        unaTareaSimple.setAnotacion(
-                                etiquetaTareaSimple.getTextContent().trim());
+                        anotacion=
+                                etiquetaTareaSimple.getTextContent().trim();
                         break;
 
                     case "complejidad":
-                        unaTareaSimple.setMiComplejidad(Complejidad.valueOf(
-                                etiquetaTareaSimple.getTextContent().trim()));
+                        complejidad= Complejidad.valueOf(etiquetaTareaSimple.getTextContent().trim());
+                                
                         break;
+                    case "delegada":
+                        
+                        delegada = Boolean.valueOf(etiquetaTareaSimple.getTextContent().trim());
+                                
+                        break;
+                       
                 }
             }
+            unaTareaSimple = new TareaSimple(contexto, complejidad ,anotacion, nombre , delegada);
         }
+        
         return unaTareaSimple;
     }
 
