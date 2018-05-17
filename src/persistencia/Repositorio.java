@@ -1,15 +1,20 @@
 package persistencia;
 
 import administradorDeTareas.Complejidad;
-import administradorDeTareas.Proyecto;
 import administradorDeTareas.TareaAgenda;
 import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
-import administradorDeTareas.TareaProyecto;
 import administradorDeTareas.TareaSimple;
 import administradorDeTareas.Usuario;
 //import GoogleCalendar.CalendarioIO;
-import administradorDeTareas.Prioridad;
+//import GoogleCalendar.Conexion;
+import IEDatos.IEDatos;
+//import com.google.api.client.util.DateTime;
+//import com.google.api.services.calendar.model.CalendarList;
+//import com.google.api.services.calendar.model.CalendarListEntry;
+//import com.google.api.services.calendar.model.Event;
+//import com.google.api.services.calendar.model.Events;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -25,6 +30,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /*
@@ -34,7 +43,7 @@ import java.util.Date;
  */
 /**
  *
- * @author Xaxo 
+ * @author Xaxo
  * @author Pedro A Alcantara
  * @author Jesus Budía
  * @author Álvaro Luque
@@ -49,8 +58,6 @@ public class Repositorio {
     private ArrayList<TareaInmediata> tareasInmediatas;
     private ArrayList<TareaEntrada> tareasFinalizada;
     private ArrayList<TareaSimple> tareasSimples;
-    private ArrayList<Proyecto> proyectos;
-    private ArrayList<Usuario> usuarios;
     private ArrayList<TareaEntrada> papelera;
 
     //Archivar las tareas descartas en una papelera o borrar definitivamente?
@@ -66,7 +73,7 @@ public class Repositorio {
     private AccesoBD accesoBD;
 
     //Devuelve la instancia, necesario por usar el patrón de diseño Singleton.
-    public static Repositorio getInstancia() throws SQLException {
+    public static Repositorio getInstancia() throws SQLException, FileNotFoundException {
         if (instancia == null) {
             instancia = new Repositorio();
         }
@@ -75,26 +82,30 @@ public class Repositorio {
     }
 
     //Constructor
-    private Repositorio() throws SQLException {
+    private Repositorio() throws SQLException, FileNotFoundException {
         //Conectar con base de datos e inicializar todos los conjuntos.
         accesoBD = new AccesoBD();
         contextos = new ArrayList<>();
         agenda = new ArrayList<>();
         bandejaEntrada = new ArrayList<>();
         tareasInmediatas = new ArrayList<>();
-        proyectos = new ArrayList<>();
-        usuarios = new ArrayList<>();
         archivoSeguimiento = new ArrayList<>();
         archivoConsulta = new ArrayList<>();
         accionesSiguientes = new ArrayList<>();
         tareasFinalizada = new ArrayList<>();
         tareasSimples = new ArrayList<>();
 
-        cargarTareasEntrada();
-        cargarTareasAgenda();
-        cargarTareasInmediatas();
-        cargarTareasFinalizadas();
-        cargarTareasSimples();
+        try {
+
+            cargarTareasEntrada();
+            cargarTareasAgenda();
+            cargarTareasInmediatas();
+            cargarTareasFinalizadas();
+            cargarTareasSimples();
+
+        } catch (SQLException e) {
+            IEDatos.cargarDesdeXml();
+        }
 
     }
 
@@ -104,14 +115,6 @@ public class Repositorio {
 
     public ArrayList<TareaInmediata> getTareasInmediatas() {
         return tareasInmediatas;
-    }
-
-    public ArrayList<Proyecto> getProyectos() {
-        return proyectos;
-    }
-
-    public ArrayList<Usuario> getUsuarios() {
-        return usuarios;
     }
 
     public ArrayList<TareaEntrada> getPapelera() {
@@ -125,8 +128,6 @@ public class Repositorio {
     public ArrayList<TareaSimple> getTareasSimples() {
         return tareasSimples;
     }
-    
-    
 
     public ArrayList<TareaEntrada> getArchivoConsulta() {
         return archivoConsulta;
@@ -152,7 +153,7 @@ public class Repositorio {
         bandejaEntrada.add(nuevaTarea);
 
     }
-    
+
     public void agregarEnSimples(TareaSimple nuevaTarea) {
         tareasSimples.add(nuevaTarea);
 
@@ -160,14 +161,6 @@ public class Repositorio {
 
     public void agregarEnInmediatas(TareaInmediata nuevaTarea) {
         tareasInmediatas.add(nuevaTarea);
-    }
-
-    public void agregarEnProyectos(Proyecto nuevoProyecto) {
-        proyectos.add(nuevoProyecto);
-    }
-
-    public void agregarEnUsuarios(Usuario nuevoUsuario) {
-        usuarios.add(nuevoUsuario);
     }
 
     public void agregarEnSeguimiento(TareaEntrada nuevaTarea) {
@@ -181,8 +174,8 @@ public class Repositorio {
     public void agregarEnSiguientes(TareaSimple nuevaTarea) {
         accionesSiguientes.add(nuevaTarea);
     }
-    
-    public void agregarEnFinalizadas(TareaEntrada nuevaTarea){
+
+    public void agregarEnFinalizadas(TareaEntrada nuevaTarea) {
         tareasFinalizada.add(nuevaTarea);
     }
 
@@ -190,15 +183,12 @@ public class Repositorio {
         return tareasFinalizada;
     }
 
-    
     /**
      * Agrega una tarea a un proyecto.
      *
      * @param nuevaTarea
      */
-    public void agregarTareaEnProyecto(TareaProyecto nuevaTarea, Proyecto seleccionado) {
-        //seleccionado.agregarTarea(nuevaTarea);
-    }
+
 
     public void quitarEnAgenda(TareaAgenda nuevaTarea) {
         agenda.remove(nuevaTarea);
@@ -210,14 +200,6 @@ public class Repositorio {
 
     public void quitarEnInmediatas(TareaSimple nuevaTarea) {
         tareasInmediatas.remove(nuevaTarea);
-    }
-
-    public void quitarEnProyectos(Proyecto nuevoProyecto) {
-        proyectos.remove(nuevoProyecto);
-    }
-
-    public void quitarEnUsuarios(Usuario nuevoUsuario) {
-        usuarios.remove(nuevoUsuario);
     }
 
     public void quitarEnSeguimiento(TareaEntrada nuevaTarea) {
@@ -236,16 +218,12 @@ public class Repositorio {
         contextos.remove(contexto);
     }
 
-    /**
-     * Quita una tarea a un proyecto, si es que la contiene.
-     *
-     * @param nuevaTarea
-     * @param seleccionado
-     */
-    public void quitarTareaEnProyecto(TareaProyecto nuevaTarea, Proyecto seleccionado) {
-        //seleccionado.quitarTarea(nuevaTarea);
+    public void quitarEnSimples(TareaSimple tareaSimple) {
+        tareasSimples.remove(tareaSimple);
     }
 
+
+    
     /**
      * Author Álvaro Luque Jiménez
      *
@@ -254,7 +232,7 @@ public class Repositorio {
      * @param email
      * @throws SQLException
      */
-    public void insertarUsuario(String contrasena, String nick, String email) throws SQLException {
+    public void insertarUsuario(String contrasena, String nick, String email) throws SQLException, FileNotFoundException {
 
         Statement stm = accesoBD.abrirConexion().createStatement();
 
@@ -263,6 +241,8 @@ public class Repositorio {
         stm.execute(insertar);
 
         accesoBD.cerrarConexion(accesoBD.abrirConexion());
+
+        IEDatos.guardarXml();
 
     }
 
@@ -324,16 +304,16 @@ public class Repositorio {
         papelera.add(nuevaTarea);
     }
 
-    public void procesarTarea(TareaEntrada aProcesar, TareaSimple procesada) throws SQLException {
+    public void procesarTarea(TareaEntrada aProcesar, TareaSimple procesada) throws SQLException, FileNotFoundException {
         if (!aProcesar.getNombre().equals(procesada.getNombre())) {
             throw new IllegalArgumentException("Las tareas no tienen el mismo nombre");
         } //Sí coinciden los nombres
         else {
             quitarEnBandeja(aProcesar);
             //Comprobamos el tipo
-            if (procesada instanceof TareaAgenda) {       
+            if (procesada instanceof TareaAgenda) {
                 agregarEnAgenda((TareaAgenda) procesada);
-                agregarTareasAgendaBD((TareaAgenda)procesada);
+                agregarTareasAgendaBD((TareaAgenda) procesada);
             } else if (procesada instanceof TareaSimple) {
                 agregarEnSimples(procesada);
                 agregarTareasSimplesBD(procesada);
@@ -392,7 +372,7 @@ public class Repositorio {
         String complejidad = "";
 
         String contexto = "";
-        
+
         boolean delegada;
 
         TareaSimple nuevaTarea = null;
@@ -409,7 +389,7 @@ public class Repositorio {
             complejidad = rs.getString("complejidad");
             contexto = rs.getString("contexto");
             delegada = rs.getBoolean("delegada");
-            
+
             nuevaTarea = new TareaSimple(contexto, Complejidad.valueOf(complejidad), anotacion, nombre, delegada);
 
             agregarEnSimples(nuevaTarea);
@@ -479,26 +459,18 @@ public class Repositorio {
 
             contexto = rs.getString("contexto");
 
-            System.out.println(nombre);
-            
             nuevaTarea = new TareaAgenda(Timestamp.valueOf(fechafin), Timestamp.valueOf(fechainicio), contexto, Complejidad.valueOf(complejidad), anotacion, nombre);
 
             agregarEnAgenda(nuevaTarea);
-            /*System.out.println(nuevaTarea.getNombre());
-            System.out.println(nuevaTarea.getAnotacion());
-            System.out.println(nuevaTarea.getContexto());
-            System.out.println(nuevaTarea.getMiComplejidad());
-            System.out.println(nuevaTarea.getNombre());
-            System.out.print(nuevaTarea.getId());*/
+
         }
 
         accesoBD.cerrarConexion(con);
 
     }
-    
+
     public void cargarTareasFinalizadas() throws SQLException {
 
-       
         String nombre = "";
 
         TareaEntrada nuevaTarea = null;
@@ -512,8 +484,6 @@ public class Repositorio {
 
             nombre = rs.getString("nombre");
 
-            System.out.println(nombre);
-            
             nuevaTarea = new TareaEntrada(nombre);
 
             agregarEnFinalizadas(nuevaTarea);
@@ -531,18 +501,20 @@ public class Repositorio {
      *
      * Author Álvaro Luque Jiménez
      */
-    public void agregarTareasEntradaBD(TareaEntrada tareaEntradaAgregar, String usuarioConectado) throws SQLException {
+    public void agregarTareasEntradaBD(TareaEntrada tareaEntradaAgregar) throws SQLException, FileNotFoundException {
 
         Connection con = accesoBD.abrirConexion();
 
         Statement stm = con.createStatement();
 
-        stm.executeUpdate("INSERT INTO TareaEntrada (nombre, nickUsuario) VALUES('" + tareaEntradaAgregar.getNombre() + "', '" + usuarioConectado + "');");
+        stm.executeUpdate("INSERT INTO TareaEntrada (nombre) VALUES('" + tareaEntradaAgregar.getNombre() + "');");
 
         accesoBD.cerrarConexion(con);
 
+        IEDatos.guardarXml();
+
     }
-    
+
     /**
      *
      * @param tareaEntradaEliminar
@@ -550,7 +522,7 @@ public class Repositorio {
      *
      * Author Álvaro Luque Jiménez
      */
-    public void quitarTareasEntradaBD(TareaEntrada tareaEntradaEliminar) throws SQLException {
+    public void quitarTareasEntradaBD(TareaEntrada tareaEntradaEliminar) throws SQLException, FileNotFoundException {
 
         Connection con = accesoBD.abrirConexion();
 
@@ -560,10 +532,26 @@ public class Repositorio {
 
         accesoBD.cerrarConexion(con);
 
+        IEDatos.guardarXml();
+
     }
 
-    public void agregarTareasAgendaBD(TareaAgenda tareaAgenda) throws SQLException {
-        
+    public void quitarTareasSimplesBD(TareaSimple tareaSimpleEliminar) throws SQLException, FileNotFoundException {
+
+        Connection con = accesoBD.abrirConexion();
+
+        Statement stm = con.createStatement();
+
+        stm.executeUpdate("DELETE FROM TareaSimple WHERE nombre = \"" + tareaSimpleEliminar.getNombre() + "\"");
+
+        accesoBD.cerrarConexion(con);
+
+        IEDatos.guardarXml();
+
+    }
+
+    public void agregarTareasAgendaBD(TareaAgenda tareaAgenda) throws SQLException, FileNotFoundException {
+
         Connection con = accesoBD.abrirConexion();
 
         Statement stm = con.createStatement();
@@ -572,9 +560,11 @@ public class Repositorio {
 
         accesoBD.cerrarConexion(con);
 
+        IEDatos.guardarXml();
+
     }
-    
-    public void quitarTareasAgendaBD(TareaAgenda tareaAgendaEliminar) throws SQLException {
+
+    public void quitarTareasAgendaBD(TareaAgenda tareaAgendaEliminar) throws SQLException, FileNotFoundException {
 
         Connection con = accesoBD.abrirConexion();
 
@@ -584,10 +574,12 @@ public class Repositorio {
 
         accesoBD.cerrarConexion(con);
 
+        IEDatos.guardarXml();
+
     }
-    
-    public void agregarTareasSimplesBD(TareaSimple tareaSimple) throws SQLException {
-        
+
+    public void agregarTareasSimplesBD(TareaSimple tareaSimple) throws SQLException, FileNotFoundException {
+
         Connection con = accesoBD.abrirConexion();
 
         Statement stm = con.createStatement();
@@ -596,10 +588,12 @@ public class Repositorio {
 
         accesoBD.cerrarConexion(con);
 
+        IEDatos.guardarXml();
+
     }
-    
-    public void agregarTareasInmediatasBD(TareaInmediata tareaInmediata) throws SQLException {
-        
+
+    public void agregarTareasInmediatasBD(TareaInmediata tareaInmediata) throws SQLException, FileNotFoundException {
+
         Connection con = accesoBD.abrirConexion();
 
         Statement stm = con.createStatement();
@@ -608,59 +602,236 @@ public class Repositorio {
 
         accesoBD.cerrarConexion(con);
 
+        IEDatos.guardarXml();
+
     }
 
-     /**
+    /**
      *
      * @param tareaEntradaFinalizada
      * @throws SQLException
      *
-     * Author Pedro A Alcantara
-     * Author Jesús Budía
+     * Author Pedro A Alcantara Author Jesús Budía
      */
-    public void moverAFinalizadas(TareaEntrada tareaEntradaFinalizada) throws SQLException {
+    public void moverAFinalizadas(TareaEntrada tareaEntradaFinalizada) throws SQLException, FileNotFoundException {
         agregarEnFinalizadas(tareaEntradaFinalizada);
         quitarEnBandeja(tareaEntradaFinalizada);
         //Comprobamos el tipo
         if (tareaEntradaFinalizada instanceof TareaAgenda) {
             quitarEnAgenda((TareaAgenda) tareaEntradaFinalizada);
-        
+
             Connection con = accesoBD.abrirConexion();
 
             Statement stm = con.createStatement();
 
             stm.executeUpdate("INSERT INTO Finalizada (nombre) VALUES(\"" + tareaEntradaFinalizada.getNombre() + "\")");
-            
+
             stm.executeUpdate("DELETE FROM TareaDeAgenda WHERE nombre = \"" + tareaEntradaFinalizada.getNombre() + "\"");
 
-            accesoBD.cerrarConexion(con);            
-            
-            
-            
-        } else  if(tareaEntradaFinalizada instanceof TareaInmediata){
-            
+            accesoBD.cerrarConexion(con);
+
+            IEDatos.guardarXml();
+
+        } else if (tareaEntradaFinalizada instanceof TareaInmediata) {
+
             Connection con = accesoBD.abrirConexion();
 
             Statement stm = con.createStatement();
 
             stm.executeUpdate("INSERT INTO Finalizada (nombre) VALUES(\"" + tareaEntradaFinalizada.getNombre() + "\")");
-            
+
             stm.executeUpdate("DELETE FROM TareaEntrada WHERE nombre = \"" + tareaEntradaFinalizada.getNombre() + "\"");
 
             accesoBD.cerrarConexion(con);
-            
+
+            IEDatos.guardarXml();
+
+        } else if (tareaEntradaFinalizada instanceof TareaEntrada) {
+
+            Connection con = accesoBD.abrirConexion();
+
+            Statement stm = con.createStatement();
+
+            stm.executeUpdate("INSERT INTO Finalizada (nombre) VALUES(\"" + tareaEntradaFinalizada.getNombre() + "\")");
+
+            stm.executeUpdate("DELETE FROM TareaEntrada WHERE nombre = \"" + tareaEntradaFinalizada.getNombre() + "\"");
+
+            accesoBD.cerrarConexion(con);
+
+            IEDatos.guardarXml();
+
         }
     }
-    
+
+    /**
+     * Exporta todas las tareas agenda en forma de eventos, en el caso de que ya
+     * se hubiese exportado con anterioridad se comprueba para que no se
+     * duplique.
+     *
+     * @throws IOException
+     */
+    /*
     public void exportarEventos() throws IOException {
         String descripcion = "";
-
+        String delegada = "";
         for (TareaAgenda tarea : agenda) {
-            descripcion = tarea.getMiComplejidad() + "|" + tarea.getAnotacion();
-            //CalendarioIO.crearEvento(tarea.getNombre(), tarea.getContexto(), descripcion, tarea.getFechaInicio(), tarea.getFechaFin());
+            if (!CalendarioIO.comprobarExistente(tarea.getNombre())) {
+                if (tarea.isDelegada()) {
+                    delegada = "Es delegada";
+                } else {
+                    delegada = "No es delegada";
+                }
+                descripcion = tarea.getAnotacion() + "|" + tarea.getMiComplejidad();
+                CalendarioIO.crearEvento(tarea.getNombre(), tarea.getContexto(), descripcion, tarea.getFechaInicio(), tarea.getFechaFin());
+            }
         }
     }
-    
-   
+    */
+
+    /**
+     * Importa todas las tareas desde googlecalendar en forma de tareas agenda,
+     * en el caso de que ya se hubiese importado con anterioridad se comprueba
+     * para que no se duplique.
+     *
+     * @throws IOException
+     */
+    /*
+    public void importarEventos() throws IOException {
+        String titulo = "";
+        String contexto = "";
+        String descripcion = "";
+        String cadenaComplejidad = "";
+        Complejidad complejidad = Complejidad.Baja;
+        String anotacion = "";
+        boolean delegada = false;
+        String cadenaDelegada = "";
+        String rutaFichero = "";
+        Timestamp fechaInicio;
+        Timestamp fechaFin;
+
+        Events eventos = null;
+
+        com.google.api.services.calendar.Calendar service
+                = Conexion.getCalendarService();
+
+        DateTime now = new DateTime(System.currentTimeMillis());
+        CalendarList listaCalendarios = service.calendarList().list().execute();
+        List<CalendarListEntry> lista = listaCalendarios.getItems();
+
+        //Por cada calendario creamos su lista de eventos
+        for (CalendarListEntry entradaCalendario : lista) {
+            eventos = CalendarioIO.generarEventosCalendario(service, now, eventos, entradaCalendario.getId());
+            List<Event> listaEventos = eventos.getItems();
+
+            //Se importa cada evento si es que no estaba importado ya.
+            for (Event evento : listaEventos) {
+
+                //Comprobar si ya existe una tarea con el nombre del evento para no duplicarla
+                if (!existeTarea(evento.getSummary())) {
+
+                    //Generar una tarea a partir del a partir del Evento
+                    titulo = evento.getSummary();
+
+                    String fecha = "";
+
+                    if (!(evento.getStart().getDateTime() == null)) {
+                        fecha = evento.getStart().getDateTime().toString();
+                        fecha = fecha.replace("T", " ");
+                        fecha = fecha.substring(0, 19);
+
+                        fechaInicio = Timestamp.valueOf(fecha);
+                    } else {
+                        Timestamp ahora = new Timestamp(System.currentTimeMillis());
+
+                        fechaInicio = ahora;
+
+                    }
+
+                    if (!(evento.getEnd().getDateTime() == null)) {
+                        fecha = evento.getEnd().getDateTime().toString();
+                        fecha = fecha.replace("T", " ");
+                        fecha = fecha.substring(0, 19);
+
+                        fechaFin = Timestamp.valueOf(fecha);
+                    } else {
+                        Timestamp ahora = new Timestamp(System.currentTimeMillis());
+
+                        fechaFin = ahora;
+
+                    }
+
+                    contexto = entradaCalendario.getSummary();
+                    descripcion = evento.getDescription();
+
+                    //Generamos los campos a partir de la descripción
+                    //System.out.println(descripcion);
+                    TareaAgenda tareaImportada = null;
+
+                    String[] campos = null;
+
+                    if (descripcion != null) {
+                        campos = descripcion.split("\\|");
+
+                        if (campos.length == 1) {
+                            anotacion = campos[0];
+
+                            //Generamos una tarea
+                            tareaImportada = new TareaAgenda(fechaFin, fechaInicio, contexto, Complejidad.Baja, anotacion, titulo);
+                        } else if (campos.length == 2) {
+                            anotacion = campos[0];
+                            cadenaComplejidad = campos[1];
+                            cadenaComplejidad = cadenaComplejidad.trim();
+                            complejidad = Complejidad.valueOf(cadenaComplejidad);
+
+                            tareaImportada = new TareaAgenda(fechaFin, fechaInicio, contexto, complejidad, anotacion, titulo);
+
+                            //RutaFichero
+                        }
+
+                    } else {
+                        anotacion = "";
+                        complejidad = Complejidad.Baja;
+
+                        tareaImportada = new TareaAgenda(fechaFin, fechaInicio, contexto, complejidad, anotacion, titulo);
+
+                    }
+
+                    //Añade la tarea generada al repositorio
+                    agenda.add(tareaImportada);
+                    try {
+                        System.out.println(titulo);
+                        TareaEntrada temp = new TareaEntrada(titulo);
+                        agregarTareasEntradaBD(temp);
+                        TareaSimple aux = new TareaSimple(tareaImportada.getContexto(), tareaImportada.getMiComplejidad(),
+                                tareaImportada.getAnotacion(), tareaImportada.getNombre(), false);
+                        agregarTareasSimplesBD(aux);
+                        agregarTareasAgendaBD(tareaImportada);
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Repositorio.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                //Reseteamos la lista de eventos
+                eventos = null;
+            }
+        }
+
+    }
+*/
+
+    //Comprueba si existe una tarea en el repositorio con el nombre indicado
+    private boolean existeTarea(String nombre) {
+        boolean yaExiste = false;
+
+        Iterator<TareaAgenda> miIterador = agenda.iterator();
+        while (miIterador.hasNext() && !yaExiste) {
+            if (miIterador.next().getNombre().equals(nombre)) {
+                yaExiste = true;
+            }
+        }
+
+        return yaExiste;
+    }
 
 }

@@ -26,12 +26,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import administradorDeTareas.Complejidad;
-import administradorDeTareas.Prioridad;
-import administradorDeTareas.Proyecto;
 import administradorDeTareas.TareaAgenda;
 import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
-import administradorDeTareas.TareaProyecto;
 import administradorDeTareas.TareaSimple;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
@@ -81,7 +78,7 @@ public class IEDatos {
      * @author Juan Jose Luque Morales
      *
      */
-    public static void guardarXml() throws SQLException {
+    public static void guardarXml() throws SQLException, FileNotFoundException {
 
         //Crear DOM vacío
         Document xml = DOMUtil.crearDOMVacio(RAIZ);
@@ -120,6 +117,7 @@ public class IEDatos {
                 escribirTareaInmediataXml(xml, eleTareasInmediatas, ti);
             }
         }
+        /*
         if (!Repositorio.getInstancia().getProyectos().isEmpty()) {
             Element eleProyectos = xml.createElement("proyectos");
             xml.getDocumentElement().appendChild(eleProyectos);
@@ -127,6 +125,7 @@ public class IEDatos {
                 escribirProyectoySusTareasProyectoXml(xml, eleProyectos, p);
             }
         }
+         */
         //Hay que tareasfinalizadas tiene todos los tipos de tareas
         if (!Repositorio.getInstancia().getTareasFinalizada().isEmpty()) {
             //Cambiar PAPELERA por TAREASFINALIZADAS
@@ -153,12 +152,15 @@ public class IEDatos {
 
                     escribirTareaAgendaXml(xml, eleTareasFinalizadas, tAp);
 
-                } else if (tep.getClass().equals(TareaProyecto.class)) {
+                }
+                /*
+                else if (tep.getClass().equals(TareaProyecto.class)) {
 
                     TareaProyecto tsp = (TareaProyecto) tep;
                     escribirTareaProyectoXml(xml, eleTareasFinalizadas, tsp);
 
                 }
+                 */
             }
         }
 
@@ -187,10 +189,13 @@ public class IEDatos {
             for (TareaSimple ts : Repositorio.getInstancia().getAccionesSiguientes()) {
                 if (ts.getClass().equals(TareaSimple.class)) {
                     escribirTareaSimpleXml(xml, eleAccionesSiguientes, ts);
-                } else if (ts.getClass().equals(TareaProyecto.class)) {
+                }
+                /*
+                else if (ts.getClass().equals(TareaProyecto.class)) {
                     TareaProyecto tp = (TareaProyecto) ts;
                     escribirTareaProyectoXml(xml, eleAccionesSiguientes, tp);
                 }
+                 */
             }
         }
         DOMUtil.DOM2XML(xml, ruta);
@@ -272,6 +277,7 @@ public class IEDatos {
      * @param p
      * @throws DOMException
      */
+    /*
     private static void escribirProyectoySusTareasProyectoXml(Document xml, Element eleProyectos, Proyecto p) throws DOMException {
         Element eleProyecto = xml.createElement("proyecto");
         eleProyectos.appendChild(eleProyecto);
@@ -286,14 +292,14 @@ public class IEDatos {
             eleProyecto.appendChild(eleListaTareasProyectos);
             for (TareaProyecto tp : p.getListaTareasProyecto()) {
                 escribirTareaProyectoXml(xml, eleListaTareasProyectos, tp);
-            }
+            } 
         }
 
         Element eleFechaFinProyecto = xml.createElement("fecha_fin");
         eleFechaFinProyecto.setAttribute("fecha", p.getFechaFin().toString());
         eleProyecto.appendChild(eleFechaFinProyecto);
     }
-
+     */
     /**
      * Crea etiqueta TareaProyecto la etiquetas hijas con sus variables
      *
@@ -303,6 +309,7 @@ public class IEDatos {
      * @param tp
      * @throws DOMException
      */
+    /*
     private static void escribirTareaProyectoXml(Document xml, Element eleListaTareasProyectos, TareaProyecto tp) throws DOMException {
         Element eleTareaProyecto = xml.createElement("tarea_proyecto");
         eleListaTareasProyectos.appendChild(eleTareaProyecto);
@@ -329,7 +336,7 @@ public class IEDatos {
         eleTareaProyecto.appendChild(eleTareaProyecto);
         eleTareaProyectoNombre.setTextContent(tp.getNombre());
     }
-
+     */
     /**
      * Crea etiqueta TareaEntrada la etiquetas hijas con sus variables
      *
@@ -474,7 +481,7 @@ public class IEDatos {
                                 }
                             }
                             break;
-
+                        /*
                         case "proyectos":
 
                             //Lista de nodos de elementos Proyecto
@@ -492,6 +499,7 @@ public class IEDatos {
                                 }
                             }
                             break;
+                         */
 
                         //Cambiar PAPELERA por TAREASFINALIZADAS
                         case "tareas_finalizadas":
@@ -571,11 +579,13 @@ public class IEDatos {
                                                 agregarEnPapelera(unaTareaProyecto);
                                         break;
                                          */
+ /*
                                         case "tarea_proyecto":
                                             TareaProyecto unaTareaProyecto
                                                     = procesarTareaProyecto(tareaFinalizada);
 
                                             break;
+                                         */
                                     }
                                 }
                             }
@@ -645,6 +655,7 @@ public class IEDatos {
                                                     agregarEnSiguientes(unaTareaSimple);
                                             break;
 
+                                        /*
                                         case "tarea_proyecto":
 
                                             TareaProyecto unaTareaProyecto
@@ -652,6 +663,7 @@ public class IEDatos {
                                             Repositorio.getInstancia().
                                                     agregarEnSiguientes(unaTareaProyecto);
                                             break;
+                                         */
                                     }
                                 }
                             }
@@ -740,8 +752,9 @@ public class IEDatos {
      * @throws NumberFormatException si el id del proyecto no es un valor
      * numérico.
      */
+    /*
     private static Proyecto procesarProyecto(Element e)
-            throws DOMException, NumberFormatException, SQLException {
+            throws DOMException, NumberFormatException, SQLException, FileNotFoundException {
 
         Proyecto unProyecto = new Proyecto("", null);
 
@@ -790,6 +803,7 @@ public class IEDatos {
         return unProyecto;
     }
 
+     */
     /**
      * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML a un
      * objeto TareaProyecto.
@@ -799,8 +813,9 @@ public class IEDatos {
      * @throws DOMException si hay un error relacionado con el XML.
      * @throws NumberFormatException si el id no es un valor numérico.
      */
+    /*
     private static TareaProyecto procesarTareaProyecto(Element e)
-            throws DOMException, SQLException {
+            throws DOMException, SQLException, FileNotFoundException {
 
         TareaProyecto unaTareaProyecto = new TareaProyecto(
                 null, Prioridad.Media, "", Complejidad.Media, "", "");
@@ -818,11 +833,11 @@ public class IEDatos {
 
                 String nombreProyecto = etiquetaTareaProyecto.getAttribute("proyecto");
 
-                for (Proyecto p : Repositorio.getInstancia().getProyectos()) {
-                    if (p.getNombreP().equals(nombreProyecto)) {
-                        unaTareaProyecto.setUnProyecto(p);
-                    }
-                }
+                //for (Proyecto p : Repositorio.getInstancia().getProyectos()) {
+                //    if (p.getNombreP().equals(nombreProyecto)) {
+                //        unaTareaProyecto.setUnProyecto(p);
+                //    }
+                //}
 
                 switch (etiquetaTareaProyecto.getTagName()) {
 
@@ -855,7 +870,7 @@ public class IEDatos {
         }
         return unaTareaProyecto;
     }
-
+     */
     /**
      * @author Juan J. Luque Morales Guarda los contextos que lea del archivo
      * XML en el la lista "contextos" del repositorio.
@@ -863,7 +878,7 @@ public class IEDatos {
      * @param nl una lista de nodos que contiene los contextos.
      * @throws DOMException si hay algún fallo relacionado con el XML.
      */
-    private static void procesarContextos(NodeList nl) throws DOMException, SQLException {
+    private static void procesarContextos(NodeList nl) throws DOMException, SQLException, FileNotFoundException {
 
         for (int i = 0; i < nl.getLength(); i++) {
 
