@@ -31,8 +31,6 @@ import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
 import administradorDeTareas.TareaSimple;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import persistencia.Repositorio;
 
@@ -519,7 +517,7 @@ public class IEDatos {
      * @throws java.io.FileNotFoundException Si no existe el archivo XML
      *
      */
-    public static void cargarDesdeXml() throws SQLException, FileNotFoundException {
+    public static void cargarDesdeXml() throws FileNotFoundException {
 
         File f = new File(ruta);
 
@@ -918,7 +916,7 @@ public class IEDatos {
         }
         return unProyecto;
     }
-
+    
      */
     /**
      * @author Juan J. Luque Morales Convierte una etiqueta del archivo XML a un
@@ -994,7 +992,7 @@ public class IEDatos {
      * @param nl una lista de nodos que contiene los contextos.
      * @throws DOMException si hay algún fallo relacionado con el XML.
      */
-    private static void procesarContextos(NodeList nl) throws DOMException, SQLException, FileNotFoundException {
+    private static void procesarContextos(NodeList nl) throws DOMException, FileNotFoundException {
 
         for (int i = 0; i < nl.getLength(); i++) {
 

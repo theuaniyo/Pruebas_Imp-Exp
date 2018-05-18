@@ -16,19 +16,17 @@ import persistencia.Repositorio;
  * @author xisko
  */
 public class TareaEntrada {
-    
+
     private String nombre;
- 
 
     /**
      *
      * @param nombre
-
+     *
      */
     public TareaEntrada(String nombre) {
 
         this.nombre = nombre;
- 
 
     }
 
@@ -48,8 +46,4 @@ public class TareaEntrada {
         this.nombre = Nombre;
     }
 
-
-
-
-   
 }

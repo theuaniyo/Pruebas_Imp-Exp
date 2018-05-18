@@ -16,7 +16,7 @@ public class TareaSimple extends TareaEntrada {
     private String contexto;
     private Complejidad miComplejidad;
     private String anotacion;
-    
+
     private boolean delegada;
 
     /**
@@ -33,7 +33,7 @@ public class TareaSimple extends TareaEntrada {
         this.anotacion = anotacion;
         this.delegada = delegada;
     }
-    
+
     public TareaSimple(String contexto, Complejidad miComplejidad, String anotacion, String nombre) {
         super(nombre);
         this.contexto = contexto;
@@ -92,7 +92,5 @@ public class TareaSimple extends TareaEntrada {
     public boolean isDelegada() {
         return delegada;
     }
-    
-    
 
 }

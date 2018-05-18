@@ -28,7 +28,7 @@ public class TareaAgenda extends TareaSimple {
      * @param nombre
      */
     public TareaAgenda(Timestamp fechaFin, Timestamp fechaInicio, String contexto, Complejidad miComplejidad, String anotacion, String nombre) {
-       super(contexto, miComplejidad, anotacion, nombre);
+        super(contexto, miComplejidad, anotacion, nombre);
         if (compruebaFechas(fechaInicio, fechaFin)) {
             this.fechaFin = fechaFin;
             this.fechaInicio = fechaInicio;
@@ -68,7 +68,7 @@ public class TareaAgenda extends TareaSimple {
     public void setFechaInicio(Timestamp fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
-    
+
     private boolean compruebaFechas(Timestamp fechaInicio, Timestamp fechaFin) {
         boolean correcto = false;
         if (fechaFin.after(fechaInicio)) {
@@ -78,5 +78,4 @@ public class TareaAgenda extends TareaSimple {
         }
         return correcto;
     }
-
 }

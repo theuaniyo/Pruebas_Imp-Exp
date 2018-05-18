@@ -18,18 +18,15 @@ import persistencia.Repositorio;
  * @author xisko
  */
 public class Usuario {
-    
+
     //Declaración de variables
     private String contrasena;
     private String nick;
     private String email;
-    //private String passPatern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
+    private String passPatern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
     private String nickPattern = "[a-zA-Z0-9-_]{3,32}";
     private String emailPattern = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-    
-    private String passPatern = "[a-zA-Z0-9-_]{3,32}";
-    
-    
+
     /*
 	 * -La contraseña deberá tener como mínimo 8 caracteres -La contraseá deberá
 	 * tener como mínimo 1 mayúscula -La contraseña deberá tener como mínimo 1
@@ -49,8 +46,8 @@ public class Usuario {
      * @param email
      * @throws IllegalArgumentException
      */
-    public Usuario(String contrasena, String nick, String email) throws IllegalArgumentException{
-        
+    public Usuario(String contrasena, String nick, String email) throws IllegalArgumentException {
+
         //Crear usuario
         setContrasena(contrasena);
         setNick(nick);
@@ -177,9 +174,5 @@ public class Usuario {
         }
 
     }
-    
-    
-    
-    
-    
+
 }

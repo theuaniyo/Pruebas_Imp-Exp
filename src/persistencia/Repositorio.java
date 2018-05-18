@@ -5,7 +5,6 @@ import administradorDeTareas.TareaAgenda;
 import administradorDeTareas.TareaEntrada;
 import administradorDeTareas.TareaInmediata;
 import administradorDeTareas.TareaSimple;
-import administradorDeTareas.Usuario;
 //import GoogleCalendar.CalendarioIO;
 //import GoogleCalendar.Conexion;
 import IEDatos.IEDatos;
@@ -26,10 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -73,7 +69,7 @@ public class Repositorio {
     private AccesoBD accesoBD;
 
     //Devuelve la instancia, necesario por usar el patrón de diseño Singleton.
-    public static Repositorio getInstancia() throws SQLException, FileNotFoundException {
+    public static Repositorio getInstancia() throws FileNotFoundException {
         if (instancia == null) {
             instancia = new Repositorio();
         }
@@ -82,9 +78,9 @@ public class Repositorio {
     }
 
     //Constructor
-    private Repositorio() throws SQLException, FileNotFoundException {
+    private Repositorio() throws FileNotFoundException {
         //Conectar con base de datos e inicializar todos los conjuntos.
-        accesoBD = new AccesoBD();
+
         contextos = new ArrayList<>();
         agenda = new ArrayList<>();
         bandejaEntrada = new ArrayList<>();
@@ -96,12 +92,13 @@ public class Repositorio {
         tareasSimples = new ArrayList<>();
 
         try {
-
+            accesoBD = new AccesoBD();
             cargarTareasEntrada();
             cargarTareasAgenda();
             cargarTareasInmediatas();
             cargarTareasFinalizadas();
             cargarTareasSimples();
+            cargarContextos();
 
         } catch (SQLException e) {
             IEDatos.cargarDesdeXml();
@@ -188,8 +185,6 @@ public class Repositorio {
      *
      * @param nuevaTarea
      */
-
-
     public void quitarEnAgenda(TareaAgenda nuevaTarea) {
         agenda.remove(nuevaTarea);
     }
@@ -222,8 +217,6 @@ public class Repositorio {
         tareasSimples.remove(tareaSimple);
     }
 
-
-    
     /**
      * Author Álvaro Luque Jiménez
      *
@@ -232,7 +225,7 @@ public class Repositorio {
      * @param email
      * @throws SQLException
      */
-    public void insertarUsuario(String contrasena, String nick, String email) throws SQLException {
+    public void insertarUsuario(String contrasena, String nick, String email) throws SQLException, FileNotFoundException {
 
         Statement stm = accesoBD.abrirConexion().createStatement();
 
@@ -242,7 +235,7 @@ public class Repositorio {
 
         accesoBD.cerrarConexion(accesoBD.abrirConexion());
 
-        //IEDatos.crearXml(nick, contrasena, email);
+        IEDatos.guardarXml();
 
     }
 
@@ -493,6 +486,42 @@ public class Repositorio {
 
     }
 
+    public void cargarContextos() throws SQLException {
+
+        String nombre = "";
+
+        Connection con = accesoBD.abrirConexion();
+
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("SELECT nombre FROM Contexto");
+
+        while (rs.next()) {
+
+            nombre = rs.getString("nombre");
+
+            agregarEnContextos(nombre);
+        }
+
+        accesoBD.cerrarConexion(con);
+
+    }
+
+    public void agregarContextoBD(String contexto) throws SQLException, FileNotFoundException {
+
+        Connection con = accesoBD.abrirConexion();
+
+        Statement stm = con.createStatement();
+
+        stm.executeUpdate("INSERT INTO Contexto VALUES('" + contexto + "');");
+
+        accesoBD.cerrarConexion(con);
+
+        agregarEnContextos(contexto);
+
+        IEDatos.guardarXml();
+
+    }
+
     /**
      *
      * @param tareaEntradaAgregar
@@ -664,14 +693,86 @@ public class Repositorio {
     }
 
     /**
+     * @author Juan J. Luque Morales
+     * Primero carga los datos desde el archivo XML al repositorio. Luego borra 
+     * los registros de las tareas y contextos que haya en la BD e inserta los
+     * datos cargados en el repositorio.
+     * @throws FileNotFoundException si el archivo XML no existe.
+     * @throws SQLException si hay algún problema con la BD.
+     */
+    public void agregarTareasDesdeXmlEnBD() throws FileNotFoundException, SQLException {
+
+        //Cargar los datos del XML al Repositorio
+        IEDatos.cargarDesdeXml();
+        
+        
+        //HACE FALTA IMPLEMENTAR UN MÉTODO QUE BORRE LAS TAREAS Y CONTEXTOS DE LA BD ANTES DE INSERTARLAS
+        
+
+        //Recorrer arraylist accionesSiguientes
+        for (TareaSimple ts : accionesSiguientes) {
+            //Insertar en BD
+            agregarTareasSimplesBD(ts);
+        }
+
+        //Recorrer arraylist agenda
+        for (TareaAgenda ta : agenda) {
+            //Insertar en BD
+            agregarTareasAgendaBD(ta);
+        }
+
+        //Recorrer arraylist archivoConsulta
+        for (TareaEntrada te : archivoConsulta) {
+            //Insertar en BD
+            agregarTareasEntradaBD(te);
+        }
+
+        //Recorrer arraylist archivoSeguimiento
+        for (TareaEntrada te : archivoSeguimiento) {
+            //Insertar en BD
+            agregarTareasEntradaBD(te);
+        }
+
+        //Recorrer arraylist bandejaEntrada
+        for (TareaEntrada te : bandejaEntrada) {
+            //Insertar en BD
+            agregarTareasEntradaBD(te);
+        }
+        
+        //Recorrer arraylist contextos
+        for (String c : contextos) {
+            //Insertar en BD
+            agregarContextoBD(c);
+        }
+        
+        //Recorrer arraylist tareasFinalizadas
+        for (TareaEntrada te : tareasFinalizada) {
+            //Insertar en BD
+            agregarTareasEntradaBD(te);
+        }
+        
+        //Recorrer arraylist tareasInmediatas
+        for (TareaInmediata ti : tareasInmediatas) {
+            //Insertar en BD
+            agregarTareasInmediatasBD(ti);
+        }
+        
+        //Recorrer arraylist tareasSimples
+        for (TareaSimple ts : tareasSimples) {
+            //Insertar en BD
+            agregarTareasSimplesBD(ts);
+        }
+    }
+
+    /**
      * Exporta todas las tareas agenda en forma de eventos, en el caso de que ya
      * se hubiese exportado con anterioridad se comprueba para que no se
      * duplique.
      *
      * @throws IOException
      */
-    /*
     public void exportarEventos() throws IOException {
+        /*
         String descripcion = "";
         String delegada = "";
         for (TareaAgenda tarea : agenda) {
@@ -685,8 +786,8 @@ public class Repositorio {
                 CalendarioIO.crearEvento(tarea.getNombre(), tarea.getContexto(), descripcion, tarea.getFechaInicio(), tarea.getFechaFin());
             }
         }
+        */
     }
-    */
 
     /**
      * Importa todas las tareas desde googlecalendar en forma de tareas agenda,
@@ -695,7 +796,6 @@ public class Repositorio {
      *
      * @throws IOException
      */
-    /*
     public void importarEventos() throws IOException {
         String titulo = "";
         String contexto = "";
@@ -709,6 +809,7 @@ public class Repositorio {
         Timestamp fechaInicio;
         Timestamp fechaFin;
 
+        /*
         Events eventos = null;
 
         com.google.api.services.calendar.Calendar service
@@ -816,9 +917,8 @@ public class Repositorio {
                 eventos = null;
             }
         }
-
-    }
 */
+    }
 
     //Comprueba si existe una tarea en el repositorio con el nombre indicado
     private boolean existeTarea(String nombre) {
